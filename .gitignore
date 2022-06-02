@@ -1,5 +1,8 @@
 build/
 
+# Database settings
+database.properties
+
 # Compiled class file
 *.class
 

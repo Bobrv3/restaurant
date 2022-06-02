@@ -4,12 +4,12 @@
   <display-name>Archetype Created Web Application</display-name>
 
   <servlet>
-    <servlet-name>Hello</servlet-name>
-    <servlet-class>com.epam.restaurant.HelloServlet</servlet-class>
+    <servlet-name>BooksGetter</servlet-name>
+    <servlet-class>com.epam.restaurant.BooksGetterServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>Hello</servlet-name>
-    <url-pattern>/hello</url-pattern>
+    <servlet-name>BooksGetter</servlet-name>
+    <url-pattern>/books</url-pattern>
   </servlet-mapping>
 </web-app>
