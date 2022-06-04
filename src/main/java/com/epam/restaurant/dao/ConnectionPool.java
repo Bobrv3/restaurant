@@ -3,8 +3,6 @@ package com.epam.restaurant.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -23,69 +21,68 @@ import java.sql.Statement;
 import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+
 // TODO закрывать соединение, если к нему долго никто не обращается
-// TODO правильно обработать исключения
 public class ConnectionPool {
     private enum DBProperties {URL, USER, PASSWORD, DRIVER_NAME, CONNECTION_POOL_SIZE}
 
-    private static final String DB_PROPERTIES_PATH = "/database.properties";
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
     private static final ConnectionPool instance = new ConnectionPool();
-    private final BlockingQueue<MyConnection> connections;
+    private BlockingQueue<MyConnection> connections;
+    private final String driverName;
     private final String url;
     private final String username;
     private final String password;
+    private final int poolSize;
 
+    // Initializing variables for database connection
     private ConnectionPool() {
-        // 1. Initializing variables for database connection
-        Properties props = new Properties();
-        try (InputStream in = getClass().getResourceAsStream(DB_PROPERTIES_PATH)) {
-            props.load(in);
-        } catch (IOException e) {
-            LOGGER.error("Error reading the database properties file: {}", e.getMessage());
-        }
+        ResourceBundle dbProperty = ResourceBundle.getBundle("database");
 
-        url = props.getProperty(DBProperties.URL.toString());
-        username = props.getProperty(DBProperties.USER.toString());
-        password = props.getProperty(DBProperties.PASSWORD.toString());
-        String driverName = props.getProperty(DBProperties.DRIVER_NAME.toString());
-        int poolSize = Integer.parseInt(props.getProperty(DBProperties.CONNECTION_POOL_SIZE.toString()));
+        url = dbProperty.getString(DBProperties.URL.toString());
+        username = dbProperty.getString(DBProperties.USER.toString());
+        password = dbProperty.getString(DBProperties.PASSWORD.toString());
+        driverName = dbProperty.getString(DBProperties.DRIVER_NAME.toString());
+        poolSize = Integer.parseInt(dbProperty.getString(DBProperties.CONNECTION_POOL_SIZE.toString()));
+    }
 
-        // 2. Loading the db driver
+    // Initializing storage for db connections
+    public void initConnectionPool() throws DAOException {
         try {
             Class.forName(driverName);
-        } catch (ClassNotFoundException e) {
-            LOGGER.error("invalid database driver: {}", e.getMessage());
-        }
 
-        // 3. Initializing storage for db connections
-        connections = new ArrayBlockingQueue<>(poolSize);
-        for (int i = 0; i < poolSize; i++) {
-            try {
+            connections = new ArrayBlockingQueue<>(poolSize);
+            for (int i = 0; i < poolSize; i++) {
                 connections.put(new MyConnection(getConnection()));
-            } catch (InterruptedException e) {
-                LOGGER.error("Interrupted exception when put connection: {}", e.getMessage());
-                Thread.currentThread().interrupt();
             }
+        } catch (ClassNotFoundException e) {
+            throw new DAOException("Error loading the database driver...", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when it trying to put connection to the pool", e);
         }
-
     }
 
     /**
-     * getting a connection to a database of the Connection type. Used to fill the connections array
+     * Getting a connection to a database of the Connection type.
+     * Used to fill the connections array.
      *
      * @return (Connection) connection
      */
-    private Connection getConnection() {
+    private Connection getConnection() throws DAOException {
+        Connection connection = null;
+
         try {
-            return DriverManager.getConnection(url, username, password);
+            connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
-            LOGGER.error("connection failed... {}", e.getMessage());
-            return null;
+            throw new DAOException("Connection failed...", e);
         }
+
+        return connection;
     }
 
     public static ConnectionPool getInstance() {
@@ -97,28 +94,36 @@ public class ConnectionPool {
      *
      * @return (MyConnection) connection
      */
-    public Connection takeConnection() {
+    public Connection takeConnection() throws DAOException {
+        Connection connection = null;
+
         try {
-            return connections.take();
+            connection = connections.take();
         } catch (InterruptedException e) {
-            LOGGER.error("Interrupted exception when take connection: {}", e.getMessage());
             Thread.currentThread().interrupt();
-            return null;
+            throw new DAOException("error taking a connection", e);
         }
+
+        return connection;
     }
 
-    public void closeConnection(Connection connection) throws SQLException {
-        if (connection.getAutoCommit() == false) {
-            connection.commit();
+    public void closeConnection(Connection connection) throws DAOException {
+        try {
+            if (!connection.getAutoCommit()) {
+                connection.commit();
+            }
+        } catch (SQLException e) {
+            throw new DAOException("error when trying to close the connection...", e);
         }
         ((MyConnection) connection).reallyClose();
     }
 
-    public void closeConnections() throws SQLException {
-        for (int i = 0; i < connections.size(); i++) {
+    public void closeConnections() throws DAOException {
+        for (int i = connections.size(); i > 0; i--) {
             Connection connection = this.takeConnection();
-            this.closeConnection(connection);
-            i--;
+            if (connection != null) {
+                this.closeConnection(connection);
+            }
         }
     }
 
@@ -134,24 +139,27 @@ public class ConnectionPool {
 
         private void putConnection(MyConnection connection) throws InterruptedException {
             connections.put(connection);
+
         }
 
         /**
          * Instead of closing the connection, returns it to the connections array
          */
         @Override
-        public void close() throws SQLException {
+        public void close() {
             try {
                 putConnection(this);
             } catch (InterruptedException e) {
-                LOGGER.error("Interrupted exception when close connection: {}", e.getMessage());
+                LOGGER.error("Error when trying to put a connection in the pool... {}", e.getMessage());
                 Thread.currentThread().interrupt();
             }
         }
 
         public void reallyClose() {
             try {
-                connection.close();
+                if (connection != null){
+                    connection.close();
+                }
             } catch (SQLException e) {
                 LOGGER.error("error to close connection: {}", e.getMessage());
             }
@@ -224,7 +232,7 @@ public class ConnectionPool {
 
         @Override
         public String getCatalog() throws SQLException {
-            return null;
+            return connection.getCatalog();
         }
 
         @Override
@@ -239,7 +247,7 @@ public class ConnectionPool {
 
         @Override
         public SQLWarning getWarnings() throws SQLException {
-            return null;
+            return connection.getWarnings();
         }
 
         @Override
