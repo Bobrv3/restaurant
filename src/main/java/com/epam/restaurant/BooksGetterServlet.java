@@ -1,10 +1,10 @@
 package com.epam.restaurant;
 
 import com.epam.restaurant.dao.ConnectionPool;
+import com.epam.restaurant.dao.DAOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,12 +23,18 @@ public class BooksGetterServlet extends HttpServlet {
         resp.setContentType("text/html; charset=utf-8");
         PrintWriter writer = resp.getWriter();
 
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
 
-        try (Connection connection = connectionPool.takeConnection();
-             Statement statement = connection.createStatement()){
+        ConnectionPool connectionPool = null;
+        try {
+            connectionPool = ConnectionPool.getInstance();
+            connectionPool.initConnectionPool();
 
-            ResultSet resultSet = statement.executeQuery("Select * from books;");
+            connection = connectionPool.takeConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("Select * from books;");
 
             while (resultSet.next()) {
                 writer.print(resultSet.getString(1));
@@ -41,12 +47,40 @@ public class BooksGetterServlet extends HttpServlet {
                 writer.print("<br>");
             }
 
+        } catch (DAOException e) {
+            e.printStackTrace();
         } catch (SQLException e) {
-            LOGGER.error("failed to get statement: {}", e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    LOGGER.error("error to close resultSet...");
+                }
+            }
+
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    LOGGER.error("error to close statement...");
+                }
+            }
+
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LOGGER.error("error to put connection into the pool...");
+                }
+            }
         }
+
+
         try {
             connectionPool.closeConnections();
-        } catch (SQLException e) {
+        } catch (DAOException e) {
             e.printStackTrace();
         }
     }
