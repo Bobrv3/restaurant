@@ -12,6 +12,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -39,7 +40,6 @@ public class ConnectionPool {
     private final String password;
     private final int poolSize;
 
-    // Initializing variables for database connection
     private ConnectionPool() {
         ResourceBundle dbProperty = ResourceBundle.getBundle("database");
 
@@ -51,7 +51,10 @@ public class ConnectionPool {
         connections = new ArrayBlockingQueue<>(poolSize);
     }
 
-    // Initializing storage for db connections
+    /**
+     * Initializing storage for db connections
+     * @throws DAOException
+     */
     public void initConnectionPool() throws DAOException {
         if (connections.isEmpty()) {
             try {
@@ -101,32 +104,61 @@ public class ConnectionPool {
 
         try {
             connection = connections.take();
+            connection.setAutoCommit(true);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("error taking a connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("error when trying to set an autocommit for a connection", e);
         }
 
         return connection;
     }
 
-    public void closeConnection(Connection connection) throws DAOException {
+    public void closeConnection(Connection con, PreparedStatement ps, ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                LOGGER.error("error to close resultSet...");
+            }
+        }
+
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                LOGGER.error("error to close statement...");
+            }
+        }
+
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                LOGGER.error("error to put connection into the pool...");
+            }
+        }
+    }
+
+    public void dispose() throws DAOException {
+        for (int i = connections.size(); i > 0; i--) {
+            Connection connection = this.takeConnection();
+            if (connection != null) {
+                this.reallyCloseConnection((MyConnection) connection);
+            }
+        }
+    }
+
+    public void reallyCloseConnection(MyConnection connection) throws DAOException {
         try {
             if (!connection.getAutoCommit()) {
                 connection.commit();
             }
         } catch (SQLException e) {
-            throw new DAOException("error when trying to close the connection...", e);
+            throw new DAOException("error to commit connection...", e);
         }
-        ((MyConnection) connection).reallyClose();
-    }
-
-    public void closeConnections() throws DAOException {
-        for (int i = connections.size(); i > 0; i--) {
-            Connection connection = this.takeConnection();
-            if (connection != null) {
-                this.closeConnection(connection);
-            }
-        }
+        connection.reallyClose();
     }
 
     /**
