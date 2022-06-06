@@ -48,6 +48,7 @@ public class ConnectionPool {
         password = dbProperty.getString(DBProperties.PASSWORD.toString());
         driverName = dbProperty.getString(DBProperties.DRIVER_NAME.toString());
         poolSize = Integer.parseInt(dbProperty.getString(DBProperties.CONNECTION_POOL_SIZE.toString()));
+        connections = new ArrayBlockingQueue<>(poolSize);
     }
 
     // Initializing storage for db connections
@@ -56,7 +57,6 @@ public class ConnectionPool {
             try {
                 Class.forName(driverName);
 
-                connections = new ArrayBlockingQueue<>(poolSize);
                 for (int i = 0; i < poolSize; i++) {
                     connections.put(new MyConnection(getConnection()));
                 }
