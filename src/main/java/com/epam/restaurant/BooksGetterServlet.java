@@ -2,6 +2,8 @@ package com.epam.restaurant;
 
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.User;
+import com.epam.restaurant.bean.criteria.Criteria;
+import com.epam.restaurant.bean.criteria.SearchCriteria.*;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOFactory;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.Locale;
 
 
 public class BooksGetterServlet extends HttpServlet {
@@ -30,17 +34,30 @@ public class BooksGetterServlet extends HttpServlet {
 
         UserDAO userDAO = daoFactory.getUserDAO();
         try {
-            String login = "test4";
+            String login = "ant98";
             String pswd = "1";
             String name = "Pavel";
             String phone_number = "375447896931";
             String email = null;
             int roles_id = 2;
 
+            // РЕГИСТРАЦИЯ
 //            userDAO.registration(new RegistrationUserData(login, pswd, name, phone_number, email, roles_id));
-            User user = userDAO.signIn(login, pswd);
-            writer.print(user);
-        } catch (DAOException e) {
+
+            // АВТОРИЗАЦИЯ
+//            User user = userDAO.signIn(login, pswd);
+
+            // ПОИСК ПО КРИТЕРИЯМ
+            Criteria userCriteria = new Criteria();
+            userCriteria.add(Users.NAME.toString(), "Pavel");
+            userCriteria.add(Users.PHONE_NUMBER.toString(), "+375447896931");
+            List<User> users = userDAO.find(userCriteria);
+            for (User user : users) {
+                writer.print(user + "<br>");
+            }
+
+        }
+        catch (DAOException e) {
             e.printStackTrace();
         }
 

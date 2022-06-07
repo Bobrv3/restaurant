@@ -2,6 +2,7 @@ package com.epam.restaurant.dao.impl;
 
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.User;
+import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.UserDAO;
@@ -12,6 +13,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class SQLUserDAO implements UserDAO {
     private static final Logger LOGGER = LogManager.getLogger(SQLUserDAO.class);
@@ -19,6 +24,9 @@ public class SQLUserDAO implements UserDAO {
     private static final String USER_AUTHORIZATION_QUERY = "SELECT id, roles_id FROM users WHERE login=? AND password=?";
     private static final String CHECK_USER_EXISTENCE_QUERY = "SELECT id, roles_id FROM users WHERE login=?";
     private static final String REGISTER_USER_QUERY = "INSERT INTO users(login, password, name, phone_number, email, roles_id) VALUES(?,?,?,?,?,?)";
+    private static final String FIND_USER_BY_CRITERIA_QUERY = "Select id, roles_id from users where ";
+
+    private static final String AND = "AND ";
 
     private ConnectionPool connectionPool = ConnectionPool.getInstance();
     private Connection connection = null;
@@ -80,6 +88,44 @@ public class SQLUserDAO implements UserDAO {
 
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a prepared user registration query", e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+        }
+    }
+
+    // TODO сделать для prepared statement: придумать как избавиться от '' после вставки на место ?
+    @Override
+    public List<User> find(Criteria criteria) throws DAOException {
+        Map<String, Object> criterias = criteria.getCriteria();
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            StringBuffer queryBuilder = new StringBuffer(FIND_USER_BY_CRITERIA_QUERY);
+            for (String key : criterias.keySet()) {
+                queryBuilder.append(key.toLowerCase() +"='" + (String) criterias.get(key) + "' " + AND);
+            }
+            queryBuilder = new StringBuffer(queryBuilder.substring(0,queryBuilder.length() - AND.length()));
+
+            Statement statement = connection.createStatement();
+            resultSet = statement.executeQuery(queryBuilder.toString());
+
+            if (!resultSet.next()) {
+                return null;
+            }
+
+            List<User> users = new ArrayList<>();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt(1));
+                user.setRoleId(resultSet.getInt(2));
+                users.add(user);
+            }
+
+            return users;
+
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to create a statement user find query", e);
         } finally {
             connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
