@@ -7,7 +7,7 @@ import com.epam.restaurant.bean.User;
 import java.util.List;
 
 public interface UserDAO {
-    User signIn(String login, String password) throws DAOException;
+    User signIn(String login, char[] password) throws DAOException;
     boolean registration(RegistrationUserData userData) throws DAOException;
     List<User> find(Criteria criteria) throws DAOException;
 }

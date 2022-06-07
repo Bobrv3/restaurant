@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class RegistrationUserData {
     private String login;
-    private String password;
+    private char[] password;
     private String name;
     private String phoneNumber;
     private String email;
@@ -13,7 +13,7 @@ public class RegistrationUserData {
     public RegistrationUserData() {
     }
 
-    public RegistrationUserData(String login, String password, String name, String phoneNumber, String email, int roleId) {
+    public RegistrationUserData(String login, char[] password, String name, String phoneNumber, String email, int roleId) {
         this.login = login;
         this.password = password;
         this.name = name;
@@ -30,11 +30,11 @@ public class RegistrationUserData {
         this.login = login;
     }
 
-    public String getPassword() {
+    public char[] getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(char[] password) {
         this.password = password;
     }
 

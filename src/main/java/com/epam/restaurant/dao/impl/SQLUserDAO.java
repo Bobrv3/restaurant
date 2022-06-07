@@ -15,16 +15,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class SQLUserDAO implements UserDAO {
     private static final Logger LOGGER = LogManager.getLogger(SQLUserDAO.class);
 
-    private static final String USER_AUTHORIZATION_QUERY = "SELECT id, roles_id FROM users WHERE login=? AND password=?";
-    private static final String CHECK_USER_EXISTENCE_QUERY = "SELECT id, roles_id FROM users WHERE login=?";
-    private static final String REGISTER_USER_QUERY = "INSERT INTO users(login, password, name, phone_number, email, roles_id) VALUES(?,?,?,?,?,?)";
-    private static final String FIND_USER_BY_CRITERIA_QUERY = "Select id, roles_id from users where ";
+    private static final String USER_AUTHORIZATION_QUERY = "SELECT id, role_id FROM users WHERE login=? AND password=?";
+    private static final String CHECK_USER_EXISTENCE_QUERY = "SELECT id, role_id FROM users WHERE login=?";
+    private static final String REGISTER_USER_QUERY = "INSERT INTO users(login, password, name, phone_number, email, role_id) VALUES(?,?,?,?,?,?)";
+    private static final String FIND_USER_BY_CRITERIA_QUERY = "Select id, role_id from users where ";
 
     private static final String AND = "AND ";
 
@@ -34,14 +35,17 @@ public class SQLUserDAO implements UserDAO {
     private ResultSet resultSet = null;
 
     @Override
-    public User signIn(String login, String password) throws DAOException {
+    public User signIn(String login, char[] password) throws DAOException {
+        // TODO в слое сервисов посмотреть в куки: был ли пользователь авторизован или нет
         try {
             connection = connectionPool.takeConnection();
 
             preparedStatement = connection.prepareStatement(USER_AUTHORIZATION_QUERY);
             preparedStatement.setString(1, login);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(2, new String(password));
             resultSet = preparedStatement.executeQuery();
+
+            Arrays.fill(password, ' ');
 
             if (!resultSet.next()) {
                 return null;
@@ -64,6 +68,7 @@ public class SQLUserDAO implements UserDAO {
     // TODO make it concurrency
     @Override
     public boolean registration(RegistrationUserData userData) throws DAOException {
+        // TODO на слое сервисов добавить валидацию введенных значений
         try {
             connection = connectionPool.takeConnection();
 
@@ -77,12 +82,14 @@ public class SQLUserDAO implements UserDAO {
 
             preparedStatement = connection.prepareStatement(REGISTER_USER_QUERY);
             preparedStatement.setString(1, userData.getLogin());
-            preparedStatement.setString(2, userData.getPassword()); // TODO insert password with bcrypt
+            preparedStatement.setString(2, new String(userData.getPassword())); // TODO insert password with bcrypt
             preparedStatement.setString(3, userData.getName());
             preparedStatement.setString(4, userData.getPhoneNumber());
             preparedStatement.setString(5, userData.getEmail());
             preparedStatement.setInt(6, userData.getRoleId());
             preparedStatement.executeUpdate();
+
+            Arrays.fill(userData.getPassword(), ' ');
 
             return true;
 

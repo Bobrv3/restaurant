@@ -34,27 +34,28 @@ public class BooksGetterServlet extends HttpServlet {
 
         UserDAO userDAO = daoFactory.getUserDAO();
         try {
-            String login = "ant98";
-            String pswd = "1";
+            String login = "test1";
+            String pswd = "1223";
             String name = "Pavel";
             String phone_number = "375447896931";
             String email = null;
             int roles_id = 2;
 
             // РЕГИСТРАЦИЯ
-//            userDAO.registration(new RegistrationUserData(login, pswd, name, phone_number, email, roles_id));
+            userDAO.registration(new RegistrationUserData(login, pswd.toCharArray(), name, phone_number, email, roles_id));
 
             // АВТОРИЗАЦИЯ
-//            User user = userDAO.signIn(login, pswd);
+            User user = userDAO.signIn(login, pswd.toCharArray());
+            writer.print(user);
 
             // ПОИСК ПО КРИТЕРИЯМ
-            Criteria userCriteria = new Criteria();
-            userCriteria.add(Users.NAME.toString(), "Pavel");
-            userCriteria.add(Users.PHONE_NUMBER.toString(), "+375447896931");
-            List<User> users = userDAO.find(userCriteria);
-            for (User user : users) {
-                writer.print(user + "<br>");
-            }
+//            Criteria userCriteria = new Criteria();
+//            userCriteria.add(Users.NAME.toString(), "Pavel");
+//            userCriteria.add(Users.PHONE_NUMBER.toString(), "+375447896931");
+//            List<User> users = userDAO.find(userCriteria);
+//            for (User user : users) {
+//                writer.print(user + "<br>");
+//            }
 
         }
         catch (DAOException e) {

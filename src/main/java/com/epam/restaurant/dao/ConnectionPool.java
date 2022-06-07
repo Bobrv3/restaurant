@@ -33,7 +33,7 @@ public class ConnectionPool {
 
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
     private static final ConnectionPool instance = new ConnectionPool();
-    private BlockingQueue<MyConnection> connections;
+    private BlockingQueue<Connection> connections;
     private final String driverName;
     private final String url;
     private final String username;
@@ -61,7 +61,7 @@ public class ConnectionPool {
                 Class.forName(driverName);
 
                 for (int i = 0; i < poolSize; i++) {
-                    connections.put(new MyConnection(getConnection()));
+                    connections.put(new PooledConnection(getConnection()));
                 }
             } catch (ClassNotFoundException e) {
                 throw new DAOException("Error loading the database driver...", e);
@@ -100,19 +100,19 @@ public class ConnectionPool {
      * @return (MyConnection) connection
      */
     public Connection takeConnection() throws DAOException {
-        Connection connection = null;
-
         try {
-            connection = connections.take();
+            Connection connection = connections.take();
+
             connection.setAutoCommit(true);
+
+            return connection;
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("error taking a connection", e);
         } catch (SQLException e) {
             throw new DAOException("error when trying to set an autocommit for a connection", e);
         }
-
-        return connection;
     }
 
     public void closeConnection(Connection con, PreparedStatement ps, ResultSet rs) {
@@ -145,18 +145,18 @@ public class ConnectionPool {
         for (int i = connections.size(); i > 0; i--) {
             Connection connection = this.takeConnection();
             if (connection != null) {
-                this.reallyCloseConnection((MyConnection) connection);
+                this.reallyCloseConnection((PooledConnection) connection);
             }
         }
     }
 
-    public void reallyCloseConnection(MyConnection connection) throws DAOException {
+    private void reallyCloseConnection(PooledConnection connection) throws DAOException {
         try {
             if (!connection.getAutoCommit()) {
                 connection.commit();
             }
         } catch (SQLException e) {
-            throw new DAOException("error to commit connection...", e);
+            throw new DAOException("error to commit connection during closure...", e);
         }
         connection.reallyClose();
     }
@@ -164,14 +164,14 @@ public class ConnectionPool {
     /**
      * Wraps the Connection class to override the close method and some others
      */
-    private class MyConnection implements Connection {
+    private class PooledConnection implements Connection {
         private final Connection connection;
 
-        public MyConnection(Connection connection) {
+        public PooledConnection(Connection connection) {
             this.connection = connection;
         }
 
-        private void putConnection(MyConnection connection) throws InterruptedException {
+        private void putConnection(PooledConnection connection) throws InterruptedException {
             connections.put(connection);
 
         }
