@@ -5,7 +5,7 @@
 
   <servlet>
     <servlet-name>BooksGetter</servlet-name>
-    <servlet-class>com.epam.restaurant.BooksGetterServlet</servlet-class>
+    <servlet-class>com.epam.restaurant.controller.BooksGetterServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>

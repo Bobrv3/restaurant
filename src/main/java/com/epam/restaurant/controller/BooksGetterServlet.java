@@ -1,9 +1,7 @@
-package com.epam.restaurant;
+package com.epam.restaurant.controller;
 
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.User;
-import com.epam.restaurant.bean.criteria.Criteria;
-import com.epam.restaurant.bean.criteria.SearchCriteria.*;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOFactory;
@@ -17,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.Locale;
 
 
 public class BooksGetterServlet extends HttpServlet {

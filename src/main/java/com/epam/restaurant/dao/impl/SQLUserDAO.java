@@ -29,14 +29,15 @@ public class SQLUserDAO implements UserDAO {
 
     private static final String AND = "AND ";
 
-    private ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private Connection connection = null;
-    private PreparedStatement preparedStatement = null;
-    private ResultSet resultSet = null;
-
     @Override
     public User signIn(String login, char[] password) throws DAOException {
         // TODO в слое сервисов посмотреть в куки: был ли пользователь авторизован или нет
+
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
         try {
             connection = connectionPool.takeConnection();
 
@@ -69,6 +70,12 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public boolean registration(RegistrationUserData userData) throws DAOException {
         // TODO на слое сервисов добавить валидацию введенных значений
+
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
         try {
             connection = connectionPool.takeConnection();
 
@@ -103,6 +110,11 @@ public class SQLUserDAO implements UserDAO {
     // TODO сделать для prepared statement: придумать как избавиться от '' после вставки на место ?
     @Override
     public List<User> find(Criteria criteria) throws DAOException {
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
         Map<String, Object> criterias = criteria.getCriteria();
 
         try {
