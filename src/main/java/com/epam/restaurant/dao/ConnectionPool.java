@@ -53,6 +53,7 @@ public class ConnectionPool {
 
     /**
      * Initializing storage for db connections
+     *
      * @throws DAOException
      */
     public void initConnectionPool() throws DAOException {
@@ -153,10 +154,10 @@ public class ConnectionPool {
     private void reallyCloseConnection(PooledConnection connection) throws DAOException {
         try {
             if (!connection.getAutoCommit()) {
-                connection.commit();
+                connection.rollback();
             }
         } catch (SQLException e) {
-            throw new DAOException("error to commit connection during closure...", e);
+            throw new DAOException("error to rollback connection during closure...", e);
         }
         connection.reallyClose();
     }
@@ -173,7 +174,6 @@ public class ConnectionPool {
 
         private void putConnection(PooledConnection connection) throws InterruptedException {
             connections.put(connection);
-
         }
 
         /**
@@ -191,7 +191,7 @@ public class ConnectionPool {
 
         public void reallyClose() {
             try {
-                if (connection != null){
+                if (connection != null) {
                     connection.close();
                 }
             } catch (SQLException e) {

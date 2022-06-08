@@ -60,6 +60,9 @@ public class BooksGetterServlet extends HttpServlet {
         }
         catch (DAOException e) {
             e.printStackTrace();
+        } finally {
+            writer.flush();
+            writer.close();
         }
 
 //        try {
