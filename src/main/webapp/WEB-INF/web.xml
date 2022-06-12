@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+  <display-name>Restaurant</display-name>
 
   <servlet>
-    <servlet-name>BooksGetter</servlet-name>
-    <servlet-class>com.epam.restaurant.controller.BooksGetterServlet</servlet-class>
+    <servlet-name>Controller</servlet-name>
+    <servlet-class>com.epam.restaurant.controller.RestaurantController</servlet-class>
   </servlet>
-
   <servlet-mapping>
-    <servlet-name>BooksGetter</servlet-name>
-    <url-pattern>/books</url-pattern>
+    <servlet-name>Controller</servlet-name>
+    <url-pattern>/restaurant</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>AuthorizationPage</servlet-name>
+    <jsp-file>/WEB-INF/jsp/Authorization.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AuthorizationPage</servlet-name>
+    <url-pattern>/authorizationPage</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>RegistrationPage</servlet-name>
+    <jsp-file>/WEB-INF/jsp/Registration.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegistrationPage</servlet-name>
+    <url-pattern>/registrationPage</url-pattern>
   </servlet-mapping>
 </web-app>
