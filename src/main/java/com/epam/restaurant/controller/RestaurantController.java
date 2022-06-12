@@ -1,13 +1,11 @@
 package com.epam.restaurant.controller;
 
-import com.epam.restaurant.bean.RegistrationUserData;
-import com.epam.restaurant.bean.User;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.controller.command.CommandProvider;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
-import com.epam.restaurant.dao.DAOFactory;
-import com.epam.restaurant.dao.UserDAO;
+import com.epam.restaurant.dao.DAOProvider;
+import com.epam.restaurant.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,23 +15,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Locale;
 
 
 public class RestaurantController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(RestaurantController.class);
     private final CommandProvider commandProvider = new CommandProvider();
-    private final DAOFactory daoFactory = DAOFactory.getInstance();
+    private final DAOProvider daoFactory = DAOProvider.getInstance();
     // TODO инициализировать и уничтожать Pool в листнерах
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static final String COMMAND_PARAM = "command";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html; charset=utf-8");
-        PrintWriter writer = resp.getWriter();
 
-        Command command = commandProvider.getCommand(req.getParameter("command").toUpperCase());
-        command.execute(req, resp);
+        Command command = commandProvider.getCommand(req.getParameter(COMMAND_PARAM).toUpperCase());
+        try {
+            command.execute(req, resp);
+        } catch (ServiceException e) {
+            // TODO обработать
+            e.printStackTrace();
+        }
 
 //        UserDAO userDAO = daoFactory.getUserDAO();
 //        try {
@@ -74,6 +76,19 @@ public class RestaurantController extends HttpServlet {
 //            e.printStackTrace();
 //        }
 
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html; charset=utf-8");
+
+        Command command = commandProvider.getCommand(req.getParameter(COMMAND_PARAM).toUpperCase());
+        try {
+            command.execute(req, resp);
+        } catch (ServiceException e) {
+            // TODO обработать
+//            e.printStackTrace();
+        }
     }
 
     @Override

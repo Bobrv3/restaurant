@@ -21,6 +21,7 @@ import java.util.Map;
 
 public class SQLUserDAO implements UserDAO {
     private static final Logger LOGGER = LogManager.getLogger(SQLUserDAO.class);
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     private static final String USER_AUTHORIZATION_QUERY = "SELECT id, role_id FROM users WHERE login=? AND password=?";
     private static final String CHECK_USER_EXISTENCE_QUERY = "SELECT id, role_id FROM users WHERE login=?";
@@ -33,7 +34,6 @@ public class SQLUserDAO implements UserDAO {
     public User signIn(String login, char[] password) throws DAOException {
         // TODO в слое сервисов посмотреть в куки: был ли пользователь авторизован или нет
 
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -68,10 +68,9 @@ public class SQLUserDAO implements UserDAO {
 
     // TODO make it concurrency
     @Override
-    public boolean registration(RegistrationUserData userData) throws DAOException {
+    public boolean signUp(RegistrationUserData userData) throws DAOException {
         // TODO на слое сервисов добавить валидацию введенных значений
 
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -110,7 +109,6 @@ public class SQLUserDAO implements UserDAO {
     // TODO сделать для prepared statement: придумать как избавиться от '' после вставки на место ?
     @Override
     public List<User> find(Criteria criteria) throws DAOException {
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

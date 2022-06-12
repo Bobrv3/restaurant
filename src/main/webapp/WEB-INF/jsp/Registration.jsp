@@ -9,17 +9,23 @@
     <title>Registration</title>
 </head>
 <body>
-	<form action="Registration" method="post">
+	<form action="restaurant" method="post">
 		<input type="hidden" name="command" value="registration"/>
-		
-		login: <input type="text" name="login" value=""/><br>
-		password: <input type="password" name="password" value=""/><br>
-		name: <input type="text" name="name" value=""/><br>
-		phone number: <input type="text" placeholder="+375" name="phoneNumber" value=""/><br>
-		email: <input type="email" name="email" value=""/><br>
-		<input type="hidden" name="roleId" value=""/><br>
-		
-		<input type="submit" value="Sign up">
+
+        <label>login: </label>
+            <input type="text" name="login" value=""/><br>
+        <label>password: </label>
+            <input type="password" name="password" value=""/><br>
+        <label>name: </label>
+            <input type="text" name="name" value=""/><br>
+        <label>phone number: </label>
+            <input type="text" placeholder="+375" name="phoneNumber" value=""/><br>
+        <label>email: </label>
+            <input type="email" name="email" value=""/><br>
+
+        <input type="hidden" name="roleId" value=""/><br>
+
+        <input type="submit" value="Sign up">
 	</form>
 </body>
 </html>

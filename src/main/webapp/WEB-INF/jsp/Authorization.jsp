@@ -9,13 +9,15 @@
     <title>Authorization</title>
 </head>
 <body>
-	<form action="Authorization" method="get">
+	<form action="restaurant" method="get">
 		<input type="hidden" name="command" value="authorization"/>
-		
-		Enter login: <input type="text" name="login" value=""/><br>
-		Enter password: <input type="password" name="password" value=""/><br>
-		
-		<input type="submit" value="Sign in">
+
+        <label>Enter login: </label>
+        <input type="text" name="login" value=""/><br>
+        <label>Enter password: </label>
+        <input type="password" name="password" value=""/><br>
+
+        <input type="submit" value="sign in">
 	</form>
 </body>
 </html>
