@@ -128,7 +128,7 @@ public class SQLUserDAO implements UserDAO {
             Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(queryBuilder.toString());
 
-            if (!resultSet.next()) {
+            if (!resultSet.isBeforeFirst()) {
                 return null;
             }
 

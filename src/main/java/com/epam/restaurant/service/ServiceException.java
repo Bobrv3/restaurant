@@ -1,6 +1,8 @@
 package com.epam.restaurant.service;
 
 public class ServiceException extends Exception{
+    private static final long serialVersionUID = 2585357278908575546L;
+
     public ServiceException() {
         super();
     }
