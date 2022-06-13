@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 
 public class RestaurantController extends HttpServlet {
@@ -52,11 +53,11 @@ public class RestaurantController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+        // TODO обрабоать ошибки
         try {
             connectionPool.initConnectionPool();
-        } catch (DAOException e) {
-            // TODO выбросить ошшибку уровня
-            e.printStackTrace();
+        } catch (ClassNotFoundException | InterruptedException | SQLException e) {
+            throw new RuntimeException(e);
         }
         super.init();
     }
@@ -65,10 +66,12 @@ public class RestaurantController extends HttpServlet {
     public void destroy() {
         try {
             connectionPool.dispose();
-        } catch (DAOException e) {
-            // TODO выбросить ошшибку уровня
-            e.printStackTrace();
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        } catch (InterruptedException e) {
+            LOGGER.error(e);
         }
+
         super.destroy();
     }
 }

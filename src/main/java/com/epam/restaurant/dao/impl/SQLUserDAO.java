@@ -62,8 +62,15 @@ public class SQLUserDAO implements UserDAO {
 
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a prepared user authorization query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
         } finally {
-            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            try {
+                connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
         }
     }
 
@@ -102,8 +109,15 @@ public class SQLUserDAO implements UserDAO {
 
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a prepared user registration query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
         } finally {
-            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            try {
+                connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
         }
     }
 
@@ -145,8 +159,15 @@ public class SQLUserDAO implements UserDAO {
 
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a statement user find query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
         } finally {
-            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            try {
+                connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
         }
     }
 }

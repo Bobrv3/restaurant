@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +31,13 @@ class SQLUserDAOTest {
     private final RegistrationUserData existentUser = new RegistrationUserData("testUs1", "123".toCharArray(), "TestUser", "+375446785678", "ant@gmail.com", 2);
 
     @BeforeAll
-    static void beforeAll() throws DAOException {
+    static void beforeAll() throws SQLException, ClassNotFoundException, InterruptedException {
         connectionPool = ConnectionPool.getInstance();
         connectionPool.initConnectionPool();
     }
 
     @AfterAll
-    static void afterAll() throws DAOException {
+    static void afterAll() throws SQLException, InterruptedException {
         connectionPool.dispose();
     }
 
@@ -51,20 +52,16 @@ class SQLUserDAOTest {
 
     @Test
     void signIn_UserNotExist_Null() throws DAOException {
-        AuthorizedUser expected = null;
-
         AuthorizedUser actual = userDAO.signIn(non_existent_login, non_existent_password);
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertNull(actual);
     }
 
     @Test
     void signIn_UserExistPasswordNotCorrect_Null() throws DAOException {
-        AuthorizedUser expected = null;
-
         AuthorizedUser actual = userDAO.signIn(existing_login, non_existent_password);
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertNull(actual);
     }
 
 //    @Test
@@ -78,11 +75,9 @@ class SQLUserDAOTest {
 
     @Test
     void signUp_ThisUserAlreadyExist_false() throws DAOException {
-        boolean expected = false;
-
         boolean actual = userDAO.signUp(existentUser);
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertFalse(actual);
     }
 
     @Test
@@ -105,10 +100,8 @@ class SQLUserDAOTest {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Users.LOGIN.toString(), "fgfdsgdsfg");
 
-        List<AuthorizedUser> expected = null;
-
         List<AuthorizedUser> actual = userDAO.find(criteria);
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertNull(actual);
     }
 }

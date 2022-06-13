@@ -33,7 +33,8 @@ public class ConnectionPool {
 
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
     private static final ConnectionPool instance = new ConnectionPool();
-    private BlockingQueue<Connection> connections;
+    private static final String DB_PROPERTIES_PATH = "database";
+    private final BlockingQueue<Connection> connections;
     private final String driverName;
     private final String url;
     private final String username;
@@ -41,7 +42,7 @@ public class ConnectionPool {
     private final int poolSize;
 
     private ConnectionPool() {
-        ResourceBundle dbProperty = ResourceBundle.getBundle("database");
+        ResourceBundle dbProperty = ResourceBundle.getBundle(DB_PROPERTIES_PATH);
 
         url = dbProperty.getString(DBProperties.URL.toString());
         username = dbProperty.getString(DBProperties.USER.toString());
@@ -53,42 +54,17 @@ public class ConnectionPool {
 
     /**
      * Initializing storage for db connections
-     *
-     * @throws DAOException
      */
-    public void initConnectionPool() throws DAOException {
+    public void initConnectionPool() throws ClassNotFoundException, InterruptedException, SQLException {
         if (connections.isEmpty()) {
-            try {
-                Class.forName(driverName);
+            Class.forName(driverName);
 
-                for (int i = 0; i < poolSize; i++) {
-                    connections.put(new PooledConnection(getConnection()));
-                }
-            } catch (ClassNotFoundException e) {
-                throw new DAOException("Error loading the database driver...", e);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new DAOException("Error when it trying to put connection to the pool", e);
+            Connection connection = null;
+            for (int i = 0; i < poolSize; i++) {
+                connection = DriverManager.getConnection(url, username, password);
+                connections.put(new PooledConnection(connection));
             }
         }
-    }
-
-    /**
-     * Getting a connection to a database of the Connection type.
-     * Used to fill the connections array.
-     *
-     * @return (Connection) connection
-     */
-    private Connection getConnection() throws DAOException {
-        Connection connection = null;
-
-        try {
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
-            throw new DAOException("Connection failed...", e);
-        }
-
-        return connection;
     }
 
     public static ConnectionPool getInstance() {
@@ -98,51 +74,30 @@ public class ConnectionPool {
     /**
      * takes a free connection from an array of connections
      *
-     * @return (MyConnection) connection
+     * @return wrapped connection
      */
-    public Connection takeConnection() throws DAOException {
-        try {
-            Connection connection = connections.take();
+    public Connection takeConnection() throws InterruptedException, SQLException {
+        Connection connection = connections.take();
+        connection.setAutoCommit(true);
 
-            connection.setAutoCommit(true);
-
-            return connection;
-
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new DAOException("error taking a connection", e);
-        } catch (SQLException e) {
-            throw new DAOException("error when trying to set an autocommit for a connection", e);
-        }
+        return connection;
     }
 
-    public void closeConnection(Connection con, PreparedStatement ps, ResultSet rs) {
+    public void closeConnection(Connection con, PreparedStatement ps, ResultSet rs) throws SQLException {
         if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                LOGGER.error("error to close resultSet...");
-            }
+            rs.close();
         }
 
         if (ps != null) {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                LOGGER.error("error to close statement...");
-            }
+            ps.close();
         }
 
         if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                LOGGER.error("error to put connection into the pool...");
-            }
+            con.close();
         }
     }
 
-    public void dispose() throws DAOException {
+    public void dispose() throws SQLException, InterruptedException {
         for (int i = connections.size(); i > 0; i--) {
             Connection connection = this.takeConnection();
             if (connection != null) {
@@ -151,19 +106,16 @@ public class ConnectionPool {
         }
     }
 
-    private void reallyCloseConnection(PooledConnection connection) throws DAOException {
-        try {
-            if (!connection.getAutoCommit()) {
-                connection.rollback();
-            }
-        } catch (SQLException e) {
-            throw new DAOException("error to rollback connection during closure...", e);
+    private void reallyCloseConnection(PooledConnection connection) throws SQLException {
+        if (!connection.getAutoCommit()) {
+            connection.rollback();
         }
+
         connection.reallyClose();
     }
 
     /**
-     * Wraps the Connection class to override the close method and some others
+     * Wraps the Connection class to override the close() method and some others
      */
     private class PooledConnection implements Connection {
         private final Connection connection;
@@ -189,13 +141,9 @@ public class ConnectionPool {
             }
         }
 
-        public void reallyClose() {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                LOGGER.error("error to close connection: {}", e.getMessage());
+        public void reallyClose() throws SQLException {
+            if (connection != null) {
+                connection.close();
             }
         }
 
