@@ -97,6 +97,20 @@ public class ConnectionPool {
         }
     }
 
+    public void closeConnection(Connection con, Statement st, ResultSet rs) throws SQLException {
+        if (rs != null) {
+            rs.close();
+        }
+
+        if (st != null) {
+            st.close();
+        }
+
+        if (con != null) {
+            con.close();
+        }
+    }
+
     public void dispose() throws SQLException, InterruptedException {
         for (int i = connections.size(); i > 0; i--) {
             Connection connection = this.takeConnection();

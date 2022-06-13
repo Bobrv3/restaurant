@@ -20,5 +20,10 @@
                 <input type="submit" value="Sign up"/>
         </form>
     </div>
+    <h1>Main page</h1>
+    <ul>
+        <li>Dish</li>
+        <li>Dish</li>
+    </ul>
 </body>
 </html>

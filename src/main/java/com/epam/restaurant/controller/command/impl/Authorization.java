@@ -49,10 +49,10 @@ public class Authorization implements Command {
                 LOGGER.error("Invalid address getRequestDispatcher(/authorizationFailed) in the authorization command..", ex);
             }
         } finally {
-            Arrays.fill(password, ' ');
-
-            writer.flush();
-            writer.close();
+            if (writer != null) {
+                writer.flush();
+                writer.close();
+            }
         }
     }
 }

@@ -4,10 +4,9 @@ import com.epam.restaurant.service.impl.UserImpl;
 
 public class ServiceProvider {
     private static final ServiceProvider instance = new ServiceProvider();
-    private final UserService userService;
+    private final UserService userService = new UserImpl();
 
     private ServiceProvider() {
-        userService = new UserImpl();
     }
 
     public static ServiceProvider getInstance() {

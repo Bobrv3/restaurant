@@ -21,14 +21,14 @@ class SQLUserDAOTest {
     private static ConnectionPool connectionPool;
     private static final UserDAO userDAO = DAOProvider.getInstance().getUserDAO();
 
-    private final String existing_login = "anton98";
-    private final char[] existing_password = new char[] {'1'};
+    private final RegistrationUserData newUser = new RegistrationUserData("testUs4", "123".toCharArray(), "TestUser", "+375446785678", "ant@gmail.com", 2);
+    private final RegistrationUserData existentUser = new RegistrationUserData("testUs4", "123".toCharArray(), "TestUser", "+375446785678", "ant@gmail.com", 2);
+
+    private final String existing_login = newUser.getLogin();
+    private final char[] existing_password = newUser.getPassword();
 
     private final String non_existent_login = "jhgjhj";
-    private final char[] non_existent_password = new char[] {'1', '5', '8'};
-
-    private final RegistrationUserData newUser = new RegistrationUserData("testUs1", "123".toCharArray(), "TestUser", "+375446785678", "ant@gmail.com", 2);
-    private final RegistrationUserData existentUser = new RegistrationUserData("testUs1", "123".toCharArray(), "TestUser", "+375446785678", "ant@gmail.com", 2);
+    private final char[] non_correct_password = new char[] {'1', '5', '8'};
 
     @BeforeAll
     static void beforeAll() throws SQLException, ClassNotFoundException, InterruptedException {
@@ -43,8 +43,7 @@ class SQLUserDAOTest {
 
     @Test
     void signIn_UserExist_AuthorizedUser() throws DAOException {
-        AuthorizedUser expected = new AuthorizedUser(2, "Anton", 2);
-
+        AuthorizedUser expected = new AuthorizedUser(10, newUser.getName(), newUser.getRoleId());
         AuthorizedUser actual = userDAO.signIn(existing_login, existing_password);
 
         Assertions.assertEquals(expected, actual);
@@ -52,25 +51,23 @@ class SQLUserDAOTest {
 
     @Test
     void signIn_UserNotExist_Null() throws DAOException {
-        AuthorizedUser actual = userDAO.signIn(non_existent_login, non_existent_password);
+        AuthorizedUser actual = userDAO.signIn(non_existent_login, non_correct_password);
 
         Assertions.assertNull(actual);
     }
 
     @Test
     void signIn_UserExistPasswordNotCorrect_Null() throws DAOException {
-        AuthorizedUser actual = userDAO.signIn(existing_login, non_existent_password);
+        AuthorizedUser actual = userDAO.signIn(existing_login, non_correct_password);
 
         Assertions.assertNull(actual);
     }
 
 //    @Test
 //    void signUp_NewUser_true() throws DAOException {
-//        boolean expected = true;
-//
 //        boolean actual = userDAO.signUp(newUser);
 //
-//        Assertions.assertEquals(expected, actual);
+//        Assertions.assertTrue(actual);
 //    }
 
     @Test
@@ -83,9 +80,9 @@ class SQLUserDAOTest {
     @Test
     void find_UserWithCriteriaExist_authorizedUser() throws DAOException {
         Criteria criteria = new Criteria();
-        criteria.add(SearchCriteria.Users.LOGIN.toString(), "anton98");
+        criteria.add(SearchCriteria.Users.LOGIN.toString(), "testUs4");
 
-        AuthorizedUser authorizedUser = new AuthorizedUser(2, "Anton", 2);
+        AuthorizedUser authorizedUser = new AuthorizedUser(10, "TestUser", 2);
 
         List<AuthorizedUser> expected = new ArrayList<>();
         expected.add(authorizedUser);

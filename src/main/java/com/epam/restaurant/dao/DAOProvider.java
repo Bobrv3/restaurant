@@ -4,10 +4,9 @@ import com.epam.restaurant.dao.impl.SQLUserDAO;
 
 public class DAOProvider {
     private static final DAOProvider instance = new DAOProvider();
-    private final UserDAO userDAOImpl;
+    private final UserDAO userDAOImpl = new SQLUserDAO();
 
     private DAOProvider() {
-        userDAOImpl = new SQLUserDAO();
     }
 
     public static DAOProvider getInstance() {

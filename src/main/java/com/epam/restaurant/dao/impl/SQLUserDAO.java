@@ -8,12 +8,14 @@ import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.UserDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +25,7 @@ public class SQLUserDAO implements UserDAO {
     private static final Logger LOGGER = LogManager.getLogger(SQLUserDAO.class);
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-    private static final String USER_AUTHORIZATION_QUERY = "SELECT id, name, role_id FROM users WHERE login=? AND password=?";
+    private static final String USER_AUTHORIZATION_QUERY = "SELECT id, name, role_id, password FROM users WHERE login=?";
     private static final String CHECK_USER_EXISTENCE_QUERY = "SELECT id FROM users WHERE login=?";
     private static final String REGISTER_USER_QUERY = "INSERT INTO users(login, password, name, phone_number, email, role_id) VALUES(?,?,?,?,?,?)";
     private static final String FIND_USER_BY_CRITERIA_QUERY = "Select id, name, role_id from users where ";
@@ -43,12 +45,14 @@ public class SQLUserDAO implements UserDAO {
 
             preparedStatement = connection.prepareStatement(USER_AUTHORIZATION_QUERY);
             preparedStatement.setString(1, login);
-            preparedStatement.setString(2, new String(password));
             resultSet = preparedStatement.executeQuery();
 
-            Arrays.fill(password, ' ');
-
             if (!resultSet.next()) {
+                return null;
+            }
+            if (!BCrypt.checkpw(
+                    Arrays.toString(password),                   // auth user psw
+                        resultSet.getString(4))) {   // psw from db
                 return null;
             }
 
@@ -66,6 +70,8 @@ public class SQLUserDAO implements UserDAO {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);
         } finally {
+            Arrays.fill(password, ' ');
+
             try {
                 connectionPool.closeConnection(connection, preparedStatement, resultSet);
             } catch (SQLException e) {
@@ -96,7 +102,7 @@ public class SQLUserDAO implements UserDAO {
 
             preparedStatement = connection.prepareStatement(REGISTER_USER_QUERY);
             preparedStatement.setString(1, userData.getLogin());
-            preparedStatement.setString(2, new String(userData.getPassword())); // TODO insert password with bcrypt
+            preparedStatement.setString(2, BCrypt.hashpw(Arrays.toString(userData.getPassword()), BCrypt.gensalt()));
             preparedStatement.setString(3, userData.getName());
             preparedStatement.setString(4, userData.getPhoneNumber());
             preparedStatement.setString(5, userData.getEmail());
@@ -125,7 +131,7 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public List<AuthorizedUser> find(Criteria criteria) throws DAOException {
         Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        Statement statement = null;
         ResultSet resultSet = null;
 
         Map<String, Object> criterias = criteria.getCriteria();
@@ -133,13 +139,13 @@ public class SQLUserDAO implements UserDAO {
         try {
             connection = connectionPool.takeConnection();
 
-            StringBuffer queryBuilder = new StringBuffer(FIND_USER_BY_CRITERIA_QUERY);
+            StringBuilder queryBuilder = new StringBuilder(FIND_USER_BY_CRITERIA_QUERY);
             for (String key : criterias.keySet()) {
-                queryBuilder.append(key.toLowerCase() +"='" + (String) criterias.get(key) + "' " + AND);
+                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), AND));
             }
-            queryBuilder = new StringBuffer(queryBuilder.substring(0,queryBuilder.length() - AND.length()));
+            queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
 
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(queryBuilder.toString());
 
             if (!resultSet.isBeforeFirst()) {
@@ -164,7 +170,7 @@ public class SQLUserDAO implements UserDAO {
             throw new DAOException("Error when trying to take connection", e);
         } finally {
             try {
-                connectionPool.closeConnection(connection, preparedStatement, resultSet);
+                connectionPool.closeConnection(connection, statement, resultSet);
             } catch (SQLException e) {
                 LOGGER.error("Error to close connection...", e);
             }
