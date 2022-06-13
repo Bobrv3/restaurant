@@ -1,16 +1,20 @@
 package com.epam.restaurant.bean;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class User {
+public class AuthorizedUser implements Serializable {
+    private static final long serialVersionUID = 3350492538842423262L;
     private int id;
+    private String name;
     private int roleId;
 
-    public User() {
+    public AuthorizedUser() {
     }
 
-    public User(int id, int roleId) {
+    public AuthorizedUser(int id, String name, int roleId) {
         this.id = id;
+        this.name = name;
         this.roleId = roleId;
     }
 
@@ -20,6 +24,14 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getRoleId() {
@@ -34,19 +46,20 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id && roleId == user.roleId;
+        AuthorizedUser that = (AuthorizedUser) o;
+        return id == that.id && roleId == that.roleId && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleId);
+        return Objects.hash(id, name, roleId);
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " {" +
                 "id=" + id +
+                ", name='" + name + '\'' +
                 ", roleId=" + roleId +
                 '}';
     }

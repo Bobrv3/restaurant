@@ -1,7 +1,7 @@
 package com.epam.restaurant.dao.impl;
 
 import com.epam.restaurant.bean.RegistrationUserData;
-import com.epam.restaurant.bean.User;
+import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
@@ -23,15 +23,15 @@ public class SQLUserDAO implements UserDAO {
     private static final Logger LOGGER = LogManager.getLogger(SQLUserDAO.class);
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-    private static final String USER_AUTHORIZATION_QUERY = "SELECT id, role_id FROM users WHERE login=? AND password=?";
-    private static final String CHECK_USER_EXISTENCE_QUERY = "SELECT id, role_id FROM users WHERE login=?";
+    private static final String USER_AUTHORIZATION_QUERY = "SELECT id, name, role_id FROM users WHERE login=? AND password=?";
+    private static final String CHECK_USER_EXISTENCE_QUERY = "SELECT id FROM users WHERE login=?";
     private static final String REGISTER_USER_QUERY = "INSERT INTO users(login, password, name, phone_number, email, role_id) VALUES(?,?,?,?,?,?)";
-    private static final String FIND_USER_BY_CRITERIA_QUERY = "Select id, role_id from users where ";
+    private static final String FIND_USER_BY_CRITERIA_QUERY = "Select id, name, role_id from users where ";
 
     private static final String AND = "AND ";
 
     @Override
-    public User signIn(String login, char[] password) throws DAOException {
+    public AuthorizedUser signIn(String login, char[] password) throws DAOException {
         // TODO в слое сервисов посмотреть в куки: был ли пользователь авторизован или нет
 
         Connection connection = null;
@@ -52,10 +52,11 @@ public class SQLUserDAO implements UserDAO {
                 return null;
             }
 
-            User user = new User();
+            AuthorizedUser user = new AuthorizedUser();
 
             user.setId(resultSet.getInt(1));
-            user.setRoleId(resultSet.getInt(2));
+            user.setName(resultSet.getString(2));
+            user.setRoleId(resultSet.getInt(3));
 
             return user;
 
@@ -108,7 +109,7 @@ public class SQLUserDAO implements UserDAO {
 
     // TODO сделать для prepared statement: придумать как избавиться от '' после вставки на место ?
     @Override
-    public List<User> find(Criteria criteria) throws DAOException {
+    public List<AuthorizedUser> find(Criteria criteria) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -131,11 +132,12 @@ public class SQLUserDAO implements UserDAO {
                 return null;
             }
 
-            List<User> users = new ArrayList<>();
+            List<AuthorizedUser> users = new ArrayList<>();
             while (resultSet.next()) {
-                User user = new User();
+                AuthorizedUser user = new AuthorizedUser();
                 user.setId(resultSet.getInt(1));
-                user.setRoleId(resultSet.getInt(2));
+                user.setName(resultSet.getString(2));
+                user.setRoleId(resultSet.getInt(3));
                 users.add(user);
             }
 

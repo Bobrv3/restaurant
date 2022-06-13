@@ -1,6 +1,6 @@
 package com.epam.restaurant.controller.command.impl;
 
-import com.epam.restaurant.bean.User;
+import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
@@ -29,12 +29,12 @@ public class Authorization implements Command {
         String login = request.getParameter(LOGIN_PARAM);
         char[] password = request.getParameter(PASSWORD_PARAM).toCharArray();
 
-        User user = null;
+        AuthorizedUser user = null;
         PrintWriter writer = null;
         try {
             user = userService.signIn(login, password);
             writer = response.getWriter();
-            writer.println("Hello " + user.getId());
+            writer.println("Hello " + user.getName());
         } catch (IOException e) {
             // TODO обработать искл
             e.printStackTrace();

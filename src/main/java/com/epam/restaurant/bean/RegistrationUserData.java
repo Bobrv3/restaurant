@@ -1,8 +1,11 @@
 package com.epam.restaurant.bean;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class RegistrationUserData {
+public class RegistrationUserData implements Serializable {
+    private static final long serialVersionUID = -3734494546116300742L;
     private String login;
     private char[] password;
     private String name;
