@@ -80,11 +80,8 @@ public class SQLUserDAO implements UserDAO {
         }
     }
 
-    // TODO make it concurrency
     @Override
-    public boolean signUp(RegistrationUserData userData) throws DAOException {
-        // TODO на слое сервисов добавить валидацию введенных значений
-
+    public synchronized boolean signUp( RegistrationUserData userData) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

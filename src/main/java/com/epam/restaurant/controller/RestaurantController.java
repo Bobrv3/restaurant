@@ -3,7 +3,6 @@ package com.epam.restaurant.controller;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.controller.command.CommandProvider;
 import com.epam.restaurant.dao.ConnectionPool;
-import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
@@ -19,17 +18,17 @@ import java.sql.SQLException;
 
 public class RestaurantController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(RestaurantController.class);
-    private final CommandProvider commandProvider = new CommandProvider();
+    private static final CommandProvider commandProvider = new CommandProvider();
     private final DAOProvider daoFactory = DAOProvider.getInstance();
     // TODO инициализировать и уничтожать Pool в листнерах
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private static final String COMMAND_PARAM = "command";
+    private static final String PARAMETER_COMMAND = "command";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html; charset=utf-8");
 
-        Command command = commandProvider.getCommand(req.getParameter(COMMAND_PARAM).toUpperCase());
+        Command command = commandProvider.getCommand(req.getParameter(PARAMETER_COMMAND).toUpperCase());
         try {
             command.execute(req, resp);
         } catch (ServiceException e) {
@@ -42,7 +41,7 @@ public class RestaurantController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html; charset=utf-8");
 
-        Command command = commandProvider.getCommand(req.getParameter(COMMAND_PARAM).toUpperCase());
+        Command command = commandProvider.getCommand(req.getParameter(PARAMETER_COMMAND).toUpperCase());
         try {
             command.execute(req, resp);
         } catch (ServiceException e) {
