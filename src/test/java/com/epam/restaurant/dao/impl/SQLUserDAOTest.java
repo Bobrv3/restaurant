@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,63 @@ class SQLUserDAOTest {
 //
 //        Assertions.assertTrue(actual);
 //    }
+
+    @Test
+    void signUp_NewUserConcurrReg_true() throws DAOException, InterruptedException {
+        UserWhoWantReg user1 = new UserWhoWantReg("TestUser3", new char[] {'1'});
+        UserWhoWantReg user2 = new UserWhoWantReg("TestUser3", new char[] {'2'});
+        UserWhoWantReg user3 = new UserWhoWantReg("TestUser3", new char[] {'3'});
+        UserWhoWantReg user4 = new UserWhoWantReg("TestUser3", new char[] {'4'});
+
+        Thread thred1 = new Thread(user1);
+        Thread thred2 = new Thread(user2);
+        Thread thred3 = new Thread(user3);
+        Thread thred4 = new Thread(user4);
+
+        thred1.start();
+        thred2.start();
+        thred3.start();
+        thred4.start();
+
+        thred1.join();
+        thred2.join();
+        thred3.join();
+        thred4.join();
+
+        List<Boolean> registrationResults = new ArrayList<>();
+        registrationResults.add(user1.resultOfRegistr);
+        registrationResults.add(user2.resultOfRegistr);
+        registrationResults.add(user3.resultOfRegistr);
+        registrationResults.add(user4.resultOfRegistr);
+
+        boolean oneResSuccess = registrationResults.stream().findAny().equals(true);
+
+        Assertions.assertTrue(oneResSuccess);
+    }
+
+    private class UserWhoWantReg implements Runnable {
+        private boolean resultOfRegistr = false;
+        private RegistrationUserData userData;
+
+        public UserWhoWantReg(String login, char[] password) {
+            userData = new RegistrationUserData(
+                    login,
+                    password,
+                    Thread.currentThread().getName(),
+                    "8028",
+                    "fgh@hg.com",
+                    2);
+        }
+
+        @Override
+        public void run() {
+            try {
+                resultOfRegistr = userDAO.signUp(userData);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Test
     void signUp_ThisUserAlreadyExist_false() throws DAOException {
