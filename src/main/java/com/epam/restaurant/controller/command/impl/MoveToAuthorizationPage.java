@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AuthorizationPage implements Command {
+public class MoveToAuthorizationPage implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         // TODO проверка на null

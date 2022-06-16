@@ -7,7 +7,7 @@ import java.util.Objects;
 public class RegistrationUserData implements Serializable {
     private static final long serialVersionUID = -3734494546116300742L;
     private String login;
-    private char[] password;
+    private transient char[] password;
     private String name;
     private String phoneNumber;
     private String email;

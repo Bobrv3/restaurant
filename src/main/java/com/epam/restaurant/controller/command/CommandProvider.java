@@ -1,10 +1,10 @@
 package com.epam.restaurant.controller.command;
 
 import com.epam.restaurant.controller.command.impl.Authorization;
-import com.epam.restaurant.controller.command.impl.AuthorizationPage;
+import com.epam.restaurant.controller.command.impl.MoveToAuthorizationPage;
 import com.epam.restaurant.controller.command.impl.NoNameCommand;
 import com.epam.restaurant.controller.command.impl.Registration;
-import com.epam.restaurant.controller.command.impl.RegistrationPage;
+import com.epam.restaurant.controller.command.impl.MoveToRegistrationPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,8 +17,8 @@ public final class CommandProvider {
 
     public CommandProvider () {
         repository.put(CommandName.AUTHORIZATION, new Authorization());
-        repository.put(CommandName.AUTHORIZATION_PAGE, new AuthorizationPage());
-        repository.put(CommandName.REGISTRATION_PAGE, new RegistrationPage());
+        repository.put(CommandName.MOVE_TO_AUTHORIZATION_PAGE, new MoveToAuthorizationPage());
+        repository.put(CommandName.MOVE_TO_REGISTRATION_PAGE, new MoveToRegistrationPage());
         repository.put(CommandName.REGISTRATION, new Registration());
         repository.put(CommandName.NONAME_COMMAND, new NoNameCommand());
     }

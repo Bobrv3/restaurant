@@ -17,7 +17,7 @@
   
   <servlet>
     <servlet-name>AuthorizationPage</servlet-name>
-    <jsp-file>/WEB-INF/jsp/Authorization.jsp</jsp-file>
+    <jsp-file>/WEB-INF/jsp/AuthorizationPage.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
     <servlet-name>AuthorizationPage</servlet-name>
@@ -26,7 +26,7 @@
 
   <servlet>
     <servlet-name>RegistrationPage</servlet-name>
-    <jsp-file>/WEB-INF/jsp/Registration.jsp</jsp-file>
+    <jsp-file>/WEB-INF/jsp/RegistrationPage.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
     <servlet-name>RegistrationPage</servlet-name>
