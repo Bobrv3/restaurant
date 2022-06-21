@@ -39,8 +39,9 @@ public class Registration implements Command {
 
         UserService userService = serviceProvider.getUserService();
         if (!userService.signUp(userData)) {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/registrationPage");
             try {
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/registrationFailed");
+                request.setAttribute("invalidSignUp", true);
                 requestDispatcher.forward(request, response);
             } catch (ServletException e) {
                 LOGGER.error("Error to forward in the registration command..", e);

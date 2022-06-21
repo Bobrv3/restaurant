@@ -42,12 +42,4 @@
     <url-pattern>/errorPage</url-pattern>
   </servlet-mapping>
 
-  <servlet>
-    <servlet-name>RegistrationFailed</servlet-name>
-    <jsp-file>/WEB-INF/jsp/RegistrationFailed.jsp</jsp-file>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>RegistrationFailed</servlet-name>
-    <url-pattern>/registrationFailed</url-pattern>
-  </servlet-mapping>
 </web-app>
