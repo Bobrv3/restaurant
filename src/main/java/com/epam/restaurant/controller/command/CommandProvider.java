@@ -1,6 +1,8 @@
 package com.epam.restaurant.controller.command;
 
 import com.epam.restaurant.controller.command.impl.Authorization;
+import com.epam.restaurant.controller.command.impl.ChangeLocaleToEng;
+import com.epam.restaurant.controller.command.impl.ChangeLocaleToRu;
 import com.epam.restaurant.controller.command.impl.MoveToAuthorizationPage;
 import com.epam.restaurant.controller.command.impl.NoNameCommand;
 import com.epam.restaurant.controller.command.impl.Registration;
@@ -21,6 +23,8 @@ public final class CommandProvider {
         repository.put(CommandName.MOVE_TO_REGISTRATION_PAGE, new MoveToRegistrationPage());
         repository.put(CommandName.REGISTRATION, new Registration());
         repository.put(CommandName.NONAME_COMMAND, new NoNameCommand());
+        repository.put(CommandName.CHANGE_LOCALE_TO_ENG, new ChangeLocaleToEng());
+        repository.put(CommandName.CHANGE_LOCALE_TO_RU, new ChangeLocaleToRu());
     }
 
     public Command getCommand(String name) {

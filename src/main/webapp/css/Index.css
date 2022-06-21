@@ -3,3 +3,9 @@ div.login {
      justify-content: space-between;
      width: 130px;
 }
+
+div.locale {
+     display: flex;
+     justify-content: space-between;
+     width: 90px;
+}
