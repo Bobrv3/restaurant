@@ -43,15 +43,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>AuthorizationFailed</servlet-name>
-    <jsp-file>/WEB-INF/jsp/AuthorizationFailed.jsp</jsp-file>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AuthorizationFailed</servlet-name>
-    <url-pattern>/authorizationFailed</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>RegistrationFailed</servlet-name>
     <jsp-file>/WEB-INF/jsp/RegistrationFailed.jsp</jsp-file>
   </servlet>

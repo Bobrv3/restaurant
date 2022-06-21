@@ -40,13 +40,16 @@ public class Authorization implements Command {
             e.printStackTrace();
         } catch (NullPointerException e) {
             LOGGER.info("Invalid username or password...", e);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/authorizationFailed");
+            request.setAttribute("invalidSignIn", true);
+
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/authorizationPage");
+
             try {
                 requestDispatcher.forward(request, response);
             } catch (ServletException ex) {
                 LOGGER.error("Error to forward in the authorization command..", ex);
             } catch (IOException ex) {
-                LOGGER.error("Invalid address getRequestDispatcher(/authorizationFailed) in the authorization command..", ex);
+                LOGGER.error("Invalid address getRequestDispatcher(/authorizationPage) in the authorization command..", ex);
             }
         } finally {
             if (writer != null) {
