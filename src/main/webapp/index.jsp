@@ -46,6 +46,14 @@
 
     <h1>Menu</h1>
 
+    <c:if test="${category == null}">
+        <c:url value="/restaurant" var="controller">
+            <c:param name="command" value="get_menu"/>
+        </c:url>
+
+        <c:redirect url = "${controller}"/>
+    </c:if>
+
     <sql:setDataSource var="db" driver="com.mysql.cj.jdbc.Driver"
          url="jdbc:mysql://localhost:3306/restaurant"
          user="root"  password="1234"/>

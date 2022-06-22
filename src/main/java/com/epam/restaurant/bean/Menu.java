@@ -1,10 +1,13 @@
 package com.epam.restaurant.bean;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Menu {
-    private List<Dish> dishes;
+public class Menu implements Serializable {
+    private static final long serialVersionUID = -1445447307917783855L;
+    private List<Dish> dishes = new ArrayList<>();
 
     public Menu() {
     }
