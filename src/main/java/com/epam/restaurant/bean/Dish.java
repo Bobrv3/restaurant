@@ -27,6 +27,10 @@ public class Dish implements Serializable {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -53,6 +57,10 @@ public class Dish implements Serializable {
 
     public int getCategory_id() {
         return category_id;
+    }
+
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
     }
 
     @Override

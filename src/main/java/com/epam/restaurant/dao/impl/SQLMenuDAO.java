@@ -1,8 +1,10 @@
 package com.epam.restaurant.dao.impl;
 
+import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.bean.Category;
 import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Menu;
+import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.MenuDAO;
@@ -14,8 +16,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SQLMenuDAO implements MenuDAO {
     private static final Logger LOGGER = LogManager.getLogger(SQLMenuDAO.class);
@@ -23,6 +27,9 @@ public class SQLMenuDAO implements MenuDAO {
 
     private static final String GET_ALL_CATEGORIES_QUERY = "SELECT * FROM categories ORDER BY id";
     private static final String GET_MENU_QUERY = "SELECT dishes_id, name, description, price, category_id FROM menu where status != 1;";
+    private static final String FIND_DISH_BY_CRITERIA_QUERY = "Select dishes_id, name, description, price, category_id FROM menu where ";
+
+    private static final String AND = "AND ";
 
     @Override
     public Menu getMenu() throws DAOException {
@@ -94,7 +101,7 @@ public class SQLMenuDAO implements MenuDAO {
                 categories.add(new Category(id, name));
             }
         } catch (SQLException e) {
-            throw new DAOException("Error when trying to get menu", e);
+            throw new DAOException("Error when trying to get categories", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);
@@ -107,5 +114,57 @@ public class SQLMenuDAO implements MenuDAO {
         }
 
         return categories;
+    }
+
+    @Override
+    public List<Dish> find(Criteria criteria) throws DAOException {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        Map<String, Object> criterias = criteria.getCriteria();
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            StringBuilder queryBuilder = new StringBuilder(FIND_DISH_BY_CRITERIA_QUERY);
+            for (String key : criterias.keySet()) {
+                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), AND));
+            }
+            queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(queryBuilder.toString());
+
+            if (!resultSet.isBeforeFirst()) {
+                return null;
+            }
+
+            List<Dish> dishes = new ArrayList<>();
+            while (resultSet.next()) {
+                Dish dish = new Dish();
+                dish.setId(resultSet.getInt(1));
+                dish.setName(resultSet.getString(2));
+                dish.setDescription(resultSet.getString(3));
+                dish.setPrice(BigDecimal.valueOf(resultSet.getDouble(4)));
+                dish.setCategory_id(resultSet.getInt(5));
+
+                dishes.add(dish);
+            }
+
+            return dishes;
+
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to create a statement dish find query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
     }
 }
