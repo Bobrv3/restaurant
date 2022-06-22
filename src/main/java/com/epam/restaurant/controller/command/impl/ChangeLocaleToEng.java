@@ -14,6 +14,7 @@ public class ChangeLocaleToEng implements Command {
         request.getSession(true).setAttribute("local", "en");
 
         try {
+            // TODO перенаправлять на страницу, на которой был вызван метод изменения языка (Решение: попробовать через листнер записывать последний созданный реквест в сессию и его потом вызывать)
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } catch (ServletException e) {
             // TODO обработать искл

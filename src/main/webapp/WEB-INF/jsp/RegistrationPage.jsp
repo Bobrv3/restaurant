@@ -19,13 +19,13 @@
         </c:if>
 
         <label>login: </label>
-            <input type="text" name="login" value=""/><br>
+            <input type="text" name="login" value="" required/><br>
         <label>password: </label>
-            <input type="password" name="password" value=""/><br>
+            <input type="password" name="password" value="" required/><br>
         <label>name: </label>
-            <input type="text" name="name" value=""/><br>
+            <input type="text" name="name" value="" required/><br>
         <label>phone number: </label>
-            <input type="text" placeholder="+375" name="phoneNumber" value=""/><br>
+            <input type="text" placeholder="+375" name="phoneNumber" value="" required/><br>
         <label>email: </label>
             <input type="email" name="email" value=""/><br>
 

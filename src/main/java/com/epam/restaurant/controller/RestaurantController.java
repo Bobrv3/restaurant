@@ -52,11 +52,11 @@ public class RestaurantController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        // TODO обрабоать ошибки
         try {
             connectionPool.initConnectionPool();
         } catch (ClassNotFoundException | InterruptedException | SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error("Connection pool initialization error...", e);
+            throw new ServletException("Connection pool initialization error", e);
         }
         super.init();
     }
@@ -72,5 +72,11 @@ public class RestaurantController extends HttpServlet {
         }
 
         super.destroy();
+    }
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        super.service(req, resp);
     }
 }
