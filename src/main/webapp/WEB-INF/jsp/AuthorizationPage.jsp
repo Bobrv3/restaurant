@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/AuthorizationFailed.css">
 </head>
 <body>
-	<form action="restaurant" method="get">
+	<form action="restaurant" method="post">
 		<input type="hidden" name="command" value="authorization"/>
 
         <c:if test="${invalidSignIn == true}">
