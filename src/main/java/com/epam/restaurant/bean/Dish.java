@@ -78,7 +78,7 @@ public class Dish implements Serializable {
 
     @Override
     public String toString() {
-        return "Menu{" +
+        return getClass().getSimpleName() + " {" +
                 "dishes_id=" + id +
                 ", price=" + price +
                 ", name='" + name + '\'' +

@@ -1,7 +1,9 @@
 package com.epam.restaurant.service.impl;
 
 import com.epam.restaurant.bean.Category;
+import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Menu;
+import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.MenuDAO;
@@ -39,5 +41,19 @@ public class MenuImpl implements MenuService {
         }
 
         return categories;
+    }
+
+    @Override
+    public List<Dish> find(Criteria criteria) throws ServiceException {
+        MenuDAO menuDAO = daoProvider.getMenuDAO();
+
+        List<Dish> dishes = null;
+        try {
+            dishes = menuDAO.find(criteria);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+
+        return dishes;
     }
 }

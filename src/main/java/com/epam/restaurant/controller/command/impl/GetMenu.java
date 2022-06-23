@@ -1,5 +1,6 @@
 package com.epam.restaurant.controller.command.impl;
 
+import com.epam.restaurant.bean.Category;
 import com.epam.restaurant.bean.Menu;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.MenuService;
@@ -10,7 +11,9 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 public class GetMenu implements Command {
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
@@ -20,7 +23,10 @@ public class GetMenu implements Command {
         MenuService menuService = serviceProvider.getMenuService();
 
         Menu menu = menuService.getMenu();
+        List<Category> categories = menuService.getCategories();
+
         request.setAttribute("menu", menu);
+        request.setAttribute("categories", categories);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
         try {

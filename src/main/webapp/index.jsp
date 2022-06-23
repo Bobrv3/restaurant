@@ -44,53 +44,7 @@
             </form>
     </div><br>
 
-    <h1>Menu</h1>
-
-    <c:if test="${category == null}">
-        <c:url value="/restaurant" var="controller">
-            <c:param name="command" value="get_menu"/>
-        </c:url>
-
-        <c:redirect url = "${controller}"/>
-    </c:if>
-
-    <sql:setDataSource var="db" driver="com.mysql.cj.jdbc.Driver"
-         url="jdbc:mysql://localhost:3306/restaurant"
-         user="root"  password="1234"/>
-
-    <sql:query dataSource="${db}" var="rs_category">
-        SELECT * FROM categories ORDER BY id;
-    </sql:query>
-
-    <c:forEach items="${rs_category.rows}" var="category">
-        <sql:query dataSource="${db}" var="rs_menu">
-            SELECT name, description, price, category_id
-            FROM menu
-            where status != 1 AND category_id = ${category.id};
-        </sql:query>
-
-        <h2 class="CategoryName">${category.name}</h2>
-
-        <table>
-            <c:forEach items="${rs_menu.rows}" var="dish">
-                <tr>
-                    <td>
-                        <h3 class="DishName"><li/>${dish.name}</h3>
-                        ${dish.description}
-                    </td>
-                    <td>
-                        ${dish.price}
-                    </td>
-                    <td>
-                        <form action="restaurant" method="get">
-                            <input type="hidden" name="command" value="add_${dish}_to_order"/>
-                            <input type="checkbox"/>
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
-        </table>
-    </c:forEach>
+    <jsp:include page="/WEB-INF/jsp/Menu.jsp"/>
 
 
 

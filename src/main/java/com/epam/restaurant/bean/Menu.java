@@ -47,7 +47,7 @@ public class Menu implements Serializable {
 
     @Override
     public String toString() {
-        return "Menu{" +
+        return getClass().getSimpleName() + " {" +
                 "dishes=" + dishes +
                 '}';
     }

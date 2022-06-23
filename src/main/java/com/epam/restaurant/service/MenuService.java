@@ -10,5 +10,5 @@ import java.util.List;
 public interface MenuService {
     Menu getMenu() throws ServiceException;
     List<Category> getCategories() throws ServiceException;
-//    TODO List<Dish> find(Criteria criteria) throws ServiceException;
+    List<Dish> find(Criteria criteria) throws ServiceException;
 }
