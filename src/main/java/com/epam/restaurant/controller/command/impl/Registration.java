@@ -46,7 +46,7 @@ public class Registration implements Command {
             } catch (ServletException e) {
                 LOGGER.error("Error to forward in the registration command..", e);
             } catch (IOException e) {
-                LOGGER.error("Invalid address getRequestDispatcher(/registrationFailed) in the registration command..", e);
+                LOGGER.error("Invalid address getRequestDispatcher(/registrationPage) in the registration command..", e);
             }
         }
 

@@ -12,5 +12,6 @@ public enum CommandName {
     CHANGE_LOCALE_TO_RU,
     GET_MENU,
     GET_CATEGORIES,
-    FIND_DISHES_BY
+    FIND_DISHES_BY,
+    ADD_TO_ORDER
 }

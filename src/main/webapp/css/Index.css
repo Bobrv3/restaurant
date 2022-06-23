@@ -44,3 +44,15 @@ td {
 tr:hover td {
     background: #e8edff;
 }
+
+input[type=text] {
+    display: inline-block;
+        margin: 2px;
+        text-align: center;
+    width: 10%;
+}
+
+button {
+display: inline-block;
+    margin: auto;
+

@@ -1,6 +1,7 @@
 package com.epam.restaurant.controller;
 
 import com.epam.restaurant.controller.command.Command;
+import com.epam.restaurant.controller.command.CommandName;
 import com.epam.restaurant.controller.command.CommandProvider;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOProvider;
@@ -32,8 +33,10 @@ public class RestaurantController extends HttpServlet {
         try {
             command.execute(req, resp);
         } catch (ServiceException e) {
-            // TODO обработать
-            e.printStackTrace();
+            resp.sendRedirect("/errorPage");
+        } catch (ServletException e) {
+            LOGGER.error(e);
+            resp.sendRedirect("/errorPage");
         }
     }
 
@@ -45,8 +48,10 @@ public class RestaurantController extends HttpServlet {
         try {
             command.execute(req, resp);
         } catch (ServiceException e) {
-            // TODO обработать
-//            e.printStackTrace();
+            resp.sendRedirect("/errorPage");
+        } catch (ServletException e) {
+            LOGGER.error(e);
+            resp.sendRedirect("/errorPage");
         }
     }
 

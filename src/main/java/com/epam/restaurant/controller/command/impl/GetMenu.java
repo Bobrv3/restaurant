@@ -25,8 +25,9 @@ public class GetMenu implements Command {
         Menu menu = menuService.getMenu();
         List<Category> categories = menuService.getCategories();
 
-        request.setAttribute("menu", menu);
-        request.setAttribute("categories", categories);
+        HttpSession session = request.getSession();
+        session.setAttribute("menu", menu);
+        session.setAttribute("categories", categories);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
         try {

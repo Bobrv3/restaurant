@@ -1,5 +1,6 @@
 package com.epam.restaurant.controller.command;
 
+import com.epam.restaurant.controller.command.impl.AddToOrder;
 import com.epam.restaurant.controller.command.impl.Authorization;
 import com.epam.restaurant.controller.command.impl.ChangeLocaleToEng;
 import com.epam.restaurant.controller.command.impl.ChangeLocaleToRu;
@@ -31,6 +32,7 @@ public final class CommandProvider {
         repository.put(CommandName.GET_CATEGORIES, new GetCategories());
         repository.put(CommandName.GET_MENU, new GetMenu());
         repository.put(CommandName.FIND_DISHES_BY, new FindDishesBy());
+        repository.put(CommandName.ADD_TO_ORDER, new AddToOrder());
     }
 
     public Command getCommand(String name) {

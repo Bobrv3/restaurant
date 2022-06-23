@@ -44,9 +44,13 @@
             </form>
     </div><br>
 
+    <c:if test="${order != null}">
+        <label style="float: right; border: 1px solid black; padding: 10px">
+                Order: ${order.getDishes().size()}
+        </label>
+    </c:if>
+
     <jsp:include page="/WEB-INF/jsp/Menu.jsp"/>
-
-
 
 </body>
 </html>

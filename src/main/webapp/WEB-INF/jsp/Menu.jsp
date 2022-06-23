@@ -22,9 +22,12 @@
                         ${dish.price}
                     </td>
                     <td>
-                        <form action="restaurant" method="post">
+                        <form action="restaurant" method="post" class="container">
                             <input type="hidden" name="command" value="add_to_order"/>
                             <input type="hidden" name="dish_id" value="${dish.id}"/>
+                            <button>-</button>
+                            <input type="text" name="quantity" value="1" value="" required/>
+                            <button>+</button> <br>
                             <input type="submit" value="add"/>
                         </form>
                     </td>
