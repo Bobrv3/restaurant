@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<link rel="stylesheet" href="css/Menu.css">
 
 <h1>Menu</h1>
 
@@ -22,13 +23,13 @@
                         ${dish.price}
                     </td>
                     <td>
-                        <form action="restaurant" method="post" class="container">
+                        <form action="restaurant" method="post">
                             <input type="hidden" name="command" value="add_to_order"/>
                             <input type="hidden" name="dish_id" value="${dish.id}"/>
                             <button>-</button>
                             <input type="text" name="quantity" value="1" value="" required/>
                             <button>+</button> <br>
-                            <input type="submit" value="add"/>
+                            <input type="submit" value="add" class="yellow_button" id="td_add_button"/>
                         </form>
                     </td>
                 </tr>

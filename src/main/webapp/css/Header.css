@@ -1,0 +1,59 @@
+header {
+    text-align: justify;
+    padding: 1em 10%;
+    background: #212529;
+    color: #fff;
+}
+
+form {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+header::after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+}
+
+header div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+header h1 {
+    width: 50%;
+    text-align: left;
+    padding-top: 0.5em;
+}
+
+header div {
+    padding-top: 1em;
+}
+
+#signUp_button {
+    background: #ffc107;
+    border-color: #ffc107;
+    transition-duration: 0.4s;
+}
+
+#signUp_button:hover {
+    background: #fff;
+        border-color: #fff;
+        color: #212529;
+}
+
+#signIn_button {
+    background: #212529;
+    border-color: #fff;
+    color: #fff;
+    transition-duration: 0.4s;
+}
+
+#signIn_button:hover {
+    background: #fff;
+    border-color: #fff;
+    color: #212529;
+}
+
+
