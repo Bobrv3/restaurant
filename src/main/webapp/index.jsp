@@ -17,5 +17,7 @@
 
     <jsp:include page="/WEB-INF/jsp/Menu.jsp"/>
 
+    <jsp:include page="/WEB-INF/jsp/Footer.jsp"/>
+
 </body>
 </html>
