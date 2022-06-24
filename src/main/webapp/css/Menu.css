@@ -1,18 +1,18 @@
 h1 {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    text-align:center;
+    text-align: center;
 }
 
 .CategoryName {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    margin-left:8%;
-    margin-right:8%;
-    border-bottom-style:solid;
+    margin-left: 8%;
+    margin-right: 8%;
+    border-bottom-style: solid;
 }
 
 .DishName {
-    text-align:left;
-    margin-left:8%;
+    text-align: left;
+    margin-left: 8%;
 }
 
 table {
@@ -24,20 +24,22 @@ table {
     border-collapse: collapse;
     text-align: left;
 }
+
 td {
     color: #669;
     border-top: 0px solid #e8edff;
     padding: 10px 15px;
-    text-align:center;
+    text-align: center;
 }
+
 tr:hover td {
     background: #e8edff;
 }
 
 input[type=text] {
     display: inline-block;
-        margin: 2px;
-        text-align: center;
+    margin: 2px;
+    text-align: center;
     width: 10%;
 }
 
@@ -46,7 +48,7 @@ button {
     margin: auto;
 }
 
-#td_add_button {
+#addToOrderBtn {
     display: inline-block;
     border-radius: 30px;
     background: #ffc107;
@@ -56,9 +58,8 @@ button {
     transition-duration: 0.4s;
 }
 
-#td_add_button:hover {
+#addToOrderBtn:hover {
     background: #212529;
     color: #ffc107;
     border-color: #212529;
 }
-
