@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class AddToOrder implements Command {
     private static final ServiceProvider serviceProvider =  ServiceProvider.getInstance();
@@ -28,6 +29,9 @@ public class AddToOrder implements Command {
         if (order == null) {
             order = new Order();
             session.setAttribute("order", order);
+
+            Integer quantityOfDishes = 0;
+            session.setAttribute("quantityOfDishes", quantityOfDishes);
         }
 
         Criteria criteria = new Criteria();
@@ -39,7 +43,16 @@ public class AddToOrder implements Command {
         Dish dish = dishes.get(FOUND_DISH);
         Integer quantity = Integer.parseInt(request.getParameter("quantity"));
 
-        order.getDishes().put(dish, quantity);
+        if (order.getOrderList().containsKey(dish)) {
+            Integer currentQuantity = order.getOrderList().get(dish);
+            currentQuantity += quantity;
+
+            order.getOrderList().put(dish, currentQuantity);
+        } else {
+            order.getOrderList().put(dish, quantity);
+        }
+
+        setQuantityOfDishesToSession(order.getOrderList(), session);
 
         // TODO вывести сообщение о том, что блюдо добавлено в корзину
 
@@ -48,5 +61,14 @@ public class AddToOrder implements Command {
         }  catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setQuantityOfDishesToSession(Map<Dish, Integer> orderList, HttpSession session) {
+        Integer count = 0;
+
+        for (Integer quantity : orderList.values()) {
+            count += quantity;
+        }
+        session.setAttribute("quantityOfDishes", count);
     }
 }

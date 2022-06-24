@@ -15,14 +15,14 @@
 
     <header>
         <div>
-                    <form action="restaurant" method="get">
-                        <input type="hidden" name="command" value="change_locale_to_eng">
-                        <input type="submit" value="${en_button}">
-                    </form>
-                    <form action="restaurant" method="get">
-                        <input type="hidden" name="command" value="change_locale_to_ru">
-                        <input type="submit" value="${ru_button}">
-                    </form>
+                <form action="restaurant" method="get">
+                    <input type="hidden" name="command" value="change_locale_to_eng">
+                    <input type="submit" value="${en_button}">
+                </form>
+                <form action="restaurant" method="get">
+                    <input type="hidden" name="command" value="change_locale_to_ru">
+                    <input type="submit" value="${ru_button}">
+                </form>
 </div>
              <div>
                 <form action="restaurant" method="get">
@@ -36,7 +36,7 @@
 
                 <c:if test="${order != null}">
                     <label style="float: right; border: 1px solid black; padding: 10px">
-                            Order: ${order.getDishes().size()}
+                        Order: ${quantityOfDishes}
                     </label>
                 </c:if>
 

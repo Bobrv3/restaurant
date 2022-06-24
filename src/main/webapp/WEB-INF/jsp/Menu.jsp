@@ -26,7 +26,7 @@
                         </td>
                         <td>
 
-                            <form action="restaurant" method="post" id="addToOrder">
+                            <form action="restaurant" method="post">
                                 <input type="hidden" name="command" value="add_to_order">
                                 <input type="hidden" name="dish_id" value="${dish.id}">
 
