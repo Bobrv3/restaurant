@@ -56,4 +56,13 @@
     <url-pattern>/menu</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>CurrentOrder</servlet-name>
+    <jsp-file>/WEB-INF/jsp/CurrentOrder.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CurrentOrder</servlet-name>
+    <url-pattern>/showCurrentOrder</url-pattern>
+  </servlet-mapping>
+
 </web-app>

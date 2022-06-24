@@ -13,5 +13,6 @@ public enum CommandName {
     GET_MENU,
     GET_CATEGORIES,
     FIND_DISHES_BY,
-    ADD_TO_ORDER
+    ADD_TO_ORDER,
+    SHOW_CURRENT_ORDER
 }
