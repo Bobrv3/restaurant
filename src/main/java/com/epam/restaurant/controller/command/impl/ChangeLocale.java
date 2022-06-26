@@ -6,20 +6,25 @@ import com.epam.restaurant.service.ServiceException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.MessageFormat;
 
-public class ChangeLocaleToRu implements Command {
+public class ChangeLocale implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-        request.getSession(true).setAttribute("local", "ru");
+        HttpSession session = request.getSession(true);
+        session.setAttribute("local", (String) request.getParameter("locale"));
 
+        String lastCommand = (String) session.getAttribute("lastCommand");
         try {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher(MessageFormat.format("/restaurant?command={0}", lastCommand)).forward(request, response);
         } catch (ServletException e) {
-            // TODO обработать искл
+            // TODO обработать
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 }

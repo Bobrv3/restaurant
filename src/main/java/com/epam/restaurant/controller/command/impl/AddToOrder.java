@@ -34,8 +34,19 @@ public class AddToOrder implements Command {
             session.setAttribute("quantityOfDishes", quantityOfDishes);
         }
 
+        String dishId = request.getParameter("dish_id");
+        if (dishId == null) { // it was caused as lastParameter(after change local), which doesn't keep any parameters
+            try {
+                request.getRequestDispatcher("index.jsp").forward(request, response); // not needed to add the number of dishes to the order, otherwise their number will increase without clicking the add button.
+            } catch (IOException e) {
+                // TODO обработать
+                e.printStackTrace();
+            }
+            return;
+        }
+
         Criteria criteria = new Criteria();
-        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), request.getParameter("dish_id"));
+        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), dishId);
 
         MenuService menuService = serviceProvider.getMenuService();
         List<Dish> dishes = menuService.find(criteria);

@@ -1,6 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+        <fmt:setLocale value="${sessionScope.local}" />
+        <fmt:setBundle basename="local" var="loc" />
+
+        <fmt:message bundle="${loc}" key="local.label.yourOrder" var="yourOrder_lbl" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +19,7 @@
     <jsp:include page="/WEB-INF/jsp/Header.jsp" />
 
         <c:if test="${order != null}">
-            <h1>Your order:</h1>
+            <h1>${yourOrder_lbl}:</h1>
                 <table>
                     <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
                             <tr>

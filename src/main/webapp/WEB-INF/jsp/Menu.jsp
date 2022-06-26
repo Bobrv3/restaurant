@@ -1,7 +1,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    <link rel="stylesheet" href="css/Menu.css">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+    <fmt:setLocale value="${sessionScope.local}" />
+    <fmt:setBundle basename="local" var="loc" />
 
-    <h1>Menu</h1>
+    <link rel="stylesheet" href="css/Menu.css">
+    <fmt:message bundle="${loc}" key="local.link.Menu" var="menu_link" />
+    <fmt:message bundle="${loc}" key="local.button.add" var="btn_add" />
+
+    <h1>${menu_link}</h1>
 
     <c:if test="${menu == null}">
         <jsp:forward page="/restaurant">
@@ -34,7 +40,7 @@
                                 <input type="text" name="quantity" value="1" required>
                                 <button onclick="addOne(event)">+</button> <br>
 
-                                <input type="submit" value="add" class="yellow_button" id="addToOrderBtn">
+                                <input type="submit" value="${btn_add}" class="yellow_button" id="addToOrderBtn">
                             </form>
                         </td>
                     </tr>

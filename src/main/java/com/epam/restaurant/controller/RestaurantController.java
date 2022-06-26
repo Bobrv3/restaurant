@@ -20,9 +20,6 @@ import java.sql.SQLException;
 public class RestaurantController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(RestaurantController.class);
     private static final CommandProvider commandProvider = new CommandProvider();
-    private final DAOProvider daoFactory = DAOProvider.getInstance();
-    // TODO инициализировать и уничтожать Pool в листнерах
-    private final ConnectionPool connectionPool = ConnectionPool.getInstance();
     private static final String PARAMETER_COMMAND = "command";
 
     @Override
@@ -53,35 +50,5 @@ public class RestaurantController extends HttpServlet {
             LOGGER.error(e);
             resp.sendRedirect("/errorPage");
         }
-    }
-
-    @Override
-    public void init() throws ServletException {
-        try {
-            connectionPool.initConnectionPool();
-        } catch (ClassNotFoundException | InterruptedException | SQLException e) {
-            LOGGER.error("Connection pool initialization error...", e);
-            throw new ServletException("Connection pool initialization error", e);
-        }
-        super.init();
-    }
-
-    @Override
-    public void destroy() {
-        try {
-            connectionPool.dispose();
-        } catch (SQLException e) {
-            LOGGER.error(e);
-        } catch (InterruptedException e) {
-            LOGGER.error(e);
-        }
-
-        super.destroy();
-    }
-
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        super.service(req, resp);
     }
 }

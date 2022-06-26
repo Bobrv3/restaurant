@@ -3,7 +3,7 @@ body {
     background-color: #212529;
     position: absolute;
     left: 35%;
-    top: 25%;
+    top: 20%;
 }
 
 fieldset {
@@ -24,7 +24,7 @@ label {
 }
 
 #signUp_button {
-    width: 40%;
+    width: 45%;
     background: #ffc107;
     border-color: #ffc107;
     border-radius: 3em;

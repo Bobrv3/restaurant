@@ -15,17 +15,19 @@
         <header>
             <div>
                 <form action="restaurant" method="get">
-                    <input type="hidden" name="command" value="change_locale_to_eng">
+                    <input type="hidden" name="command" value="change_locale">
+                    <input type="hidden" name="locale" value="en">
                     <input type="submit" value="${en_button}">
                 </form>
                 <form action="restaurant" method="get">
-                    <input type="hidden" name="command" value="change_locale_to_ru">
+                    <input type="hidden" name="command" value="change_locale">
+                    <input type="hidden" name="locale" value="ru">
                     <input type="submit" value="${ru_button}">
                 </form>
             </div>
             <div>
                 <ul>
-                    <li><a href="/index.jsp">${menu_link}</a></li>
+                    <li><a href="/restaurant?command=move_to_home">${menu_link}</a></li>
                 </ul>
             </div>
             <div>

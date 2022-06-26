@@ -2,12 +2,12 @@ package com.epam.restaurant.controller.command;
 
 import com.epam.restaurant.controller.command.impl.AddToOrder;
 import com.epam.restaurant.controller.command.impl.Authorization;
-import com.epam.restaurant.controller.command.impl.ChangeLocaleToEng;
-import com.epam.restaurant.controller.command.impl.ChangeLocaleToRu;
+import com.epam.restaurant.controller.command.impl.ChangeLocale;
 import com.epam.restaurant.controller.command.impl.FindDishesBy;
 import com.epam.restaurant.controller.command.impl.GetCategories;
 import com.epam.restaurant.controller.command.impl.GetMenu;
 import com.epam.restaurant.controller.command.impl.MoveToAuthorizationPage;
+import com.epam.restaurant.controller.command.impl.MoveToHome;
 import com.epam.restaurant.controller.command.impl.NoNameCommand;
 import com.epam.restaurant.controller.command.impl.Registration;
 import com.epam.restaurant.controller.command.impl.MoveToRegistrationPage;
@@ -28,13 +28,13 @@ public final class CommandProvider {
         repository.put(CommandName.MOVE_TO_REGISTRATION_PAGE, new MoveToRegistrationPage());
         repository.put(CommandName.REGISTRATION, new Registration());
         repository.put(CommandName.NONAME_COMMAND, new NoNameCommand());
-        repository.put(CommandName.CHANGE_LOCALE_TO_ENG, new ChangeLocaleToEng());
-        repository.put(CommandName.CHANGE_LOCALE_TO_RU, new ChangeLocaleToRu());
+        repository.put(CommandName.CHANGE_LOCALE, new ChangeLocale());
         repository.put(CommandName.GET_CATEGORIES, new GetCategories());
         repository.put(CommandName.GET_MENU, new GetMenu());
         repository.put(CommandName.FIND_DISHES_BY, new FindDishesBy());
         repository.put(CommandName.ADD_TO_ORDER, new AddToOrder());
         repository.put(CommandName.SHOW_CURRENT_ORDER, new ShowCurrentOrder());
+        repository.put(CommandName.MOVE_TO_HOME, new MoveToHome());
     }
 
     public Command getCommand(String name) {

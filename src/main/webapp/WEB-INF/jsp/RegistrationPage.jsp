@@ -1,5 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+        <fmt:setLocale value="${sessionScope.local}" />
+        <fmt:setBundle basename="local" var="loc" />
+
+        <fmt:message bundle="${loc}" key="local.fieldSet.Registration" var="registr_legend" />
+        <fmt:message bundle="${loc}" key="local.label.login" var="login_lbl" />
+        <fmt:message bundle="${loc}" key="local.label.password" var="password_lbl" />
+        <fmt:message bundle="${loc}" key="local.label.name" var="name_lbl" />
+        <fmt:message bundle="${loc}" key="local.label.phoneNumber" var="phoneNumber_lbl" />
+        <fmt:message bundle="${loc}" key="local.label.email" var="email_lbl" />
+        <fmt:message bundle="${loc}" key="local.button.signUp" var="signUp_btn" />
+
         <!DOCTYPE html>
         <html>
 
@@ -17,34 +29,34 @@
                 <input type="hidden" name="roleId" value="" /><br>
 
                 <fieldset>
-                    <legend>Registration</legend>
+                    <legend>${registr_legend}</legend>
 
                     <c:if test="${invalidSignUp == true}">
                         <label id="error">A user with this name already exists</label><br>
                     </c:if>
 
                     <p>
-                        <label>login: </label>
+                        <label>${login_lbl}: </label>
                         <input type="text" name="login" value="" required /><br>
                     </p>
                     <p>
-                        <label>password: </label>
+                        <label>${password_lbl}: </label>
                         <input type="password" name="password" value="" required /><br>
                     </p>
                     <p>
-                        <label>name: </label>
+                        <label>${name_lbl}: </label>
                         <input type="text" name="name" value="" required /><br>
                     </p>
                     <p>
-                        <label>phone number: </label>
+                        <label>${phoneNumber_lbl}: </label>
                         <input type="text" placeholder="+375" name="phoneNumber" value="" required /><br>
                     </p>
                     <p>
-                        <label>email: </label>
+                        <label>${email_lbl}: </label>
                         <input type="email" name="email" value="" /><br>
                     </p>
                     <p>
-                        <input type="submit" value="Sign up" id="signUp_button">
+                        <input type="submit" value="${signUp_btn}" id="signUp_button">
                     </p>
                 </fieldset>
             </form>
