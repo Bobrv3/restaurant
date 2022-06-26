@@ -1,0 +1,38 @@
+body {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    background-color: #212529;
+    position: absolute;
+    left: 35%;
+    top: 25%;
+}
+
+fieldset {
+    position: fixed;
+    color: #ffc107;
+    width: 25%;
+    display: block;
+    margin: auto;
+    border: solid 2px #ffc107;
+}
+
+input {
+    float: right;
+}
+
+label {
+    float: left;
+}
+
+#signUp_button {
+    width: 40%;
+    background: #ffc107;
+    border-color: #ffc107;
+    border-radius: 3em;
+    transition-duration: 0.4s;
+}
+
+#signUp_button:hover {
+    background: #fff;
+    border-color: #fff;
+    color: #212529;
+}

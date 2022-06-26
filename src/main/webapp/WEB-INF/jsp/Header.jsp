@@ -4,10 +4,11 @@
         <fmt:setLocale value="${sessionScope.local}" />
         <fmt:setBundle basename="local" var="loc" />
 
-        <fmt:message bundle="${loc}" key="local.button.name.signUp" var="signUp_btn" />
-        <fmt:message bundle="${loc}" key="local.button.name.signIn" var="signIn_btn" />
-        <fmt:message bundle="${loc}" key="local.button.name.ru" var="ru_button" />
-        <fmt:message bundle="${loc}" key="local.button.name.en" var="en_button" />
+        <fmt:message bundle="${loc}" key="local.button.signUp" var="signUp_btn" />
+        <fmt:message bundle="${loc}" key="local.button.signIn" var="signIn_btn" />
+        <fmt:message bundle="${loc}" key="local.button.ru" var="ru_button" />
+        <fmt:message bundle="${loc}" key="local.button.en" var="en_button" />
+        <fmt:message bundle="${loc}" key="local.link.Menu" var="menu_link" />
 
         <link rel="stylesheet" href="css/Header.css">
 
@@ -24,7 +25,7 @@
             </div>
             <div>
                 <ul>
-                    <li><a href="/index.jsp">Menu</a></li>
+                    <li><a href="/index.jsp">${menu_link}</a></li>
                 </ul>
             </div>
             <div>
