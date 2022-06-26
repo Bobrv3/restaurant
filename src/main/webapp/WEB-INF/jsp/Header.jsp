@@ -9,9 +9,7 @@
         <fmt:message bundle="${loc}" key="local.button.name.ru" var="ru_button" />
         <fmt:message bundle="${loc}" key="local.button.name.en" var="en_button" />
 
-
         <link rel="stylesheet" href="css/Header.css">
-
 
         <header>
             <div>
@@ -35,11 +33,9 @@
                 </form>
 
                 <c:if test="${order != null}">
-                    <a href="/restaurant?command=show_current_order"
-                        style="float: right; border: 1px solid black; padding: 10px">
-                        Order: ${quantityOfDishes}
+                    <a href="/restaurant?command=show_current_order">
+                        <img class="linkImageHeader" src="../../images/order.png">${quantityOfDishes}
                     </a>
                 </c:if>
-
             </div>
         </header>

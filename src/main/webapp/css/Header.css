@@ -39,8 +39,8 @@ header div {
 
 #signUp_button:hover {
     background: #fff;
-        border-color: #fff;
-        color: #212529;
+    border-color: #fff;
+    color: #212529;
 }
 
 #signIn_button {
@@ -56,4 +56,7 @@ header div {
     color: #212529;
 }
 
-
+img.linkImageHeader {
+    width: 3em;
+    height: 2em;
+}

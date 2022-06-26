@@ -7,3 +7,8 @@ footer {
 label {
     color: #ffc107;
 }
+
+img.linkImageFooter {
+    width: 2em;
+    height: 2em;
+}

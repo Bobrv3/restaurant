@@ -42,5 +42,3 @@
             </c:forEach>
         </table>
     </c:forEach>
-
-    <script src="../../js/Menu.js"></script>
