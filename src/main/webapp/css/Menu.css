@@ -1,10 +1,13 @@
-h1 {
+body {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+}
+
+h1 {
+
     text-align: center;
 }
 
 .CategoryName {
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
     margin-left: 8%;
     margin-right: 8%;
     border-bottom-style: solid;
@@ -17,7 +20,6 @@ h1 {
 
 table {
     margin: auto;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
     font-size: 14px;
     background: white;
     width: 80%;

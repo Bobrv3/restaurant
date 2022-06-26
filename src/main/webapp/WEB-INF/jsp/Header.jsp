@@ -23,6 +23,11 @@
                 </form>
             </div>
             <div>
+                <ul>
+                    <li><a href="/index.jsp">Menu</a></li>
+                </ul>
+            </div>
+            <div>
                 <form action="restaurant" method="get">
                     <input type="hidden" name="command" value="move_to_authorization_page">
                     <input type="submit" value="${signIn_btn}" id="signIn_button">
