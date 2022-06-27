@@ -10,17 +10,30 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.MessageFormat;
 import java.util.Arrays;
 
 public class Authorization implements Command {
     private static final Logger LOGGER = LogManager.getLogger(Authorization.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
+
+    private static final String USER_ATTR = "user";
+    private static final String INVALID_SIGN_IN_ATTR = "invalidSignIn";
+
     private static final String LOGIN_PARAM = "login";
     private static final String PASSWORD_PARAM = "password";
+
+    private static final String HOME_ADDRESS = "/home";
+    private static final String AUTH_PAGE_ADDRESS = "/authorizationPage";
+
+    private static final String EX1 = "Error to forward in the authorization command..";
+    private static final String EX2 = "Invalid address - {0}: getRequestDispatcher({0}) in the authorization command..";
+    private static final String EX3 = "Invalid username or password...";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
@@ -29,33 +42,31 @@ public class Authorization implements Command {
         String login = request.getParameter(LOGIN_PARAM);
         char[] password = request.getParameter(PASSWORD_PARAM).toCharArray();
 
-        AuthorizedUser user = null;
-        PrintWriter writer = null;
         try {
-            user = userService.signIn(login, password);
-            writer = response.getWriter();
-            writer.println("Hello " + user.getName());
-        } catch (IOException e) {
-            // TODO обработать искл
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            LOGGER.info("Invalid username or password...", e);
-            request.setAttribute("invalidSignIn", true);
+            AuthorizedUser user = userService.signIn(login, password);
+            if (user == null) {
+                throw new NullPointerException();
+            }
 
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/authorizationPage");
+            request.getSession().setAttribute(USER_ATTR, user);
+
+            request.getRequestDispatcher(HOME_ADDRESS).forward(request, response);
+
+        } catch (NullPointerException e) {
+            LOGGER.info(EX3, e);
+            request.setAttribute(INVALID_SIGN_IN_ATTR, true);
 
             try {
-                requestDispatcher.forward(request, response);
+                request.getRequestDispatcher(AUTH_PAGE_ADDRESS).forward(request, response);
             } catch (ServletException ex) {
-                LOGGER.error("Error to forward in the authorization command..", ex);
+                LOGGER.error(EX1, ex);
             } catch (IOException ex) {
-                LOGGER.error("Invalid address getRequestDispatcher(/authorizationPage) in the authorization command..", ex);
+                LOGGER.error(MessageFormat.format(EX2, AUTH_PAGE_ADDRESS), ex);
             }
-        } finally {
-            if (writer != null) {
-                writer.flush();
-                writer.close();
-            }
+        } catch (ServletException ex) {
+            LOGGER.error(EX1, ex);
+        } catch (IOException ex) {
+            LOGGER.error(MessageFormat.format(EX2, HOME_ADDRESS), ex);
         }
     }
 }

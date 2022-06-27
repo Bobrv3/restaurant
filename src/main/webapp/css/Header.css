@@ -56,7 +56,12 @@ header div {
     color: #212529;
 }
 
-img.linkImageHeader {
+#orderImg {
     width: 3em;
+    height: 2em;
+}
+
+#accImg {
+    width: 2em;
     height: 2em;
 }

@@ -12,6 +12,15 @@
   </context-param>
 
   <servlet>
+    <servlet-name>Home</servlet-name>
+    <jsp-file>/index.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Home</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>Controller</servlet-name>
     <servlet-class>com.epam.restaurant.controller.RestaurantController</servlet-class>
   </servlet>

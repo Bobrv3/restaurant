@@ -31,19 +31,27 @@
                 </ul>
             </div>
             <div>
-                <form action="restaurant" method="get">
-                    <input type="hidden" name="command" value="move_to_authorization_page">
-                    <input type="submit" value="${signIn_btn}" id="signIn_button">
-                </form>
-                <form action="restaurant" method="get">
-                    <input type="hidden" name="command" value="move_to_registration_page">
-                    <input type="submit" value="${signUp_btn}" id="signUp_button">
-                </form>
+                <c:if test="${user == null}">
+                    <form action="restaurant" method="get">
+                        <input type="hidden" name="command" value="move_to_authorization_page">
+                        <input type="submit" value="${signIn_btn}" id="signIn_button">
+                    </form>
+                    <form action="restaurant" method="get">
+                        <input type="hidden" name="command" value="move_to_registration_page">
+                        <input type="submit" value="${signUp_btn}" id="signUp_button">
+                    </form>
+                </c:if>
 
-                <c:if test="${order != null}">
-                    <a href="/restaurant?command=show_current_order">
-                        <img class="linkImageHeader" src="../../images/order.png">${quantityOfDishes}
+                <c:if test="${user != null}">
+                    <a href="/restaurant?command=MoveToAccount">
+                        <img id="accImg" src="../../images/acc.png" alt="acc">
+                        ${user.getName()}
                     </a>
                 </c:if>
+
+                <a href="/restaurant?command=show_current_order">
+                    <img id="orderImg" src="../../images/order.png">${quantityOfDishes}
+                </a>
+
             </div>
         </header>
