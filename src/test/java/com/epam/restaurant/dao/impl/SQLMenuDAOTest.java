@@ -73,7 +73,7 @@ class SQLMenuDAOTest {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.STATUS.toString(), "0");
 
-        int currentSizeOfMenu = 2;
+        int currentSizeOfMenu = 3;
 
         List<Dish> actual = menuDAO.find(criteria);
 

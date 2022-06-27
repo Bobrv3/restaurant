@@ -44,7 +44,7 @@ class SQLUserDAOTest {
 
     @Test
     void signIn_UserExist_AuthorizedUser() throws DAOException {
-        AuthorizedUser expected = new AuthorizedUser(10, newUser.getName(), newUser.getRoleId());
+        AuthorizedUser expected = new AuthorizedUser("testUs4", newUser.getName(), newUser.getRoleId());
         AuthorizedUser actual = userDAO.signIn(existing_login, existing_password);
 
         Assertions.assertEquals(expected, actual);
@@ -83,7 +83,7 @@ class SQLUserDAOTest {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Users.LOGIN.toString(), "testUs4");
 
-        AuthorizedUser authorizedUser = new AuthorizedUser(10, "TestUser", 2);
+        AuthorizedUser authorizedUser = new AuthorizedUser("testUs4", "TestUser", 2);
 
         List<AuthorizedUser> expected = new ArrayList<>();
         expected.add(authorizedUser);

@@ -5,25 +5,25 @@ import java.util.Objects;
 
 public class AuthorizedUser implements Serializable {
     private static final long serialVersionUID = 3350492538842423262L;
-    private int id;
+    private String login;
     private String name;
     private int roleId;
 
     public AuthorizedUser() {
     }
 
-    public AuthorizedUser(int id, String name, int roleId) {
-        this.id = id;
+    public AuthorizedUser(String login, String name, int roleId) {
+        this.login = login;
         this.name = name;
         this.roleId = roleId;
     }
 
-    public int getId() {
-        return id;
+    public String getLogin() {
+        return login;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getName() {
@@ -47,18 +47,18 @@ public class AuthorizedUser implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthorizedUser that = (AuthorizedUser) o;
-        return id == that.id && roleId == that.roleId && Objects.equals(name, that.name);
+        return roleId == that.roleId && Objects.equals(login, that.login) && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, roleId);
+        return Objects.hash(login, name, roleId);
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " {" +
-                "id=" + id +
+                "login='" + login + '\'' +
                 ", name='" + name + '\'' +
                 ", roleId=" + roleId +
                 '}';

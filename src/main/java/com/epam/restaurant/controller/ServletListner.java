@@ -21,6 +21,7 @@ public class ServletListner implements ServletRequestListener, ServletContextLis
     private static final String LAST_COMMAND_PARAMETER = "lastCommand";
     private static final String MAIN_PAGE = "move_to_home";
 
+    // TODO переделать не через команды, а через строку реквеста
     @Override
     public void requestDestroyed(ServletRequestEvent sre) {
         HttpServletRequest request = (HttpServletRequest) sre.getServletRequest();
