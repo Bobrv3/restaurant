@@ -1,7 +1,5 @@
 <link rel="stylesheet" href="css/Footer.css">
 
-<script src="../../js/Menu.js"></script>
-
 <footer>
     <label>© 2022 Anton Bobrov</label>
     <nav>

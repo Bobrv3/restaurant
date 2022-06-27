@@ -38,6 +38,7 @@ header div {
 }
 
 #signUp_button:hover {
+    cursor: pointer;
     background: #fff;
     border-color: #fff;
     color: #212529;
@@ -51,6 +52,7 @@ header div {
 }
 
 #signIn_button:hover {
+    cursor: pointer;
     background: #fff;
     border-color: #fff;
     color: #212529;

@@ -35,15 +35,6 @@ public class AddToOrder implements Command {
         }
 
         String dishId = request.getParameter("dish_id");
-        if (dishId == null) { // it was caused as lastParameter(after change local), which doesn't keep any parameters
-            try {
-                request.getRequestDispatcher("index.jsp").forward(request, response); // not needed to add the number of dishes to the order, otherwise their number will increase without clicking the add button.
-            } catch (IOException e) {
-                // TODO обработать
-                e.printStackTrace();
-            }
-            return;
-        }
 
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), dishId);
@@ -68,7 +59,7 @@ public class AddToOrder implements Command {
         // TODO вывести сообщение о том, что блюдо добавлено в корзину
 
         try {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("/home").forward(request, response);
         }  catch (IOException e) {
             e.printStackTrace();
         }

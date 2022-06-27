@@ -6,12 +6,8 @@ import com.epam.restaurant.controller.command.impl.ChangeLocale;
 import com.epam.restaurant.controller.command.impl.FindDishesBy;
 import com.epam.restaurant.controller.command.impl.GetCategories;
 import com.epam.restaurant.controller.command.impl.GetMenu;
-import com.epam.restaurant.controller.command.impl.MoveToAuthorizationPage;
-import com.epam.restaurant.controller.command.impl.MoveToHome;
 import com.epam.restaurant.controller.command.impl.NoNameCommand;
 import com.epam.restaurant.controller.command.impl.Registration;
-import com.epam.restaurant.controller.command.impl.MoveToRegistrationPage;
-import com.epam.restaurant.controller.command.impl.ShowCurrentOrder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,8 +20,6 @@ public final class CommandProvider {
 
     public CommandProvider () {
         repository.put(CommandName.AUTHORIZATION, new Authorization());
-        repository.put(CommandName.MOVE_TO_AUTHORIZATION_PAGE, new MoveToAuthorizationPage());
-        repository.put(CommandName.MOVE_TO_REGISTRATION_PAGE, new MoveToRegistrationPage());
         repository.put(CommandName.REGISTRATION, new Registration());
         repository.put(CommandName.NONAME_COMMAND, new NoNameCommand());
         repository.put(CommandName.CHANGE_LOCALE, new ChangeLocale());
@@ -33,8 +27,6 @@ public final class CommandProvider {
         repository.put(CommandName.GET_MENU, new GetMenu());
         repository.put(CommandName.FIND_DISHES_BY, new FindDishesBy());
         repository.put(CommandName.ADD_TO_ORDER, new AddToOrder());
-        repository.put(CommandName.SHOW_CURRENT_ORDER, new ShowCurrentOrder());
-        repository.put(CommandName.MOVE_TO_HOME, new MoveToHome());
     }
 
     public Command getCommand(String name) {

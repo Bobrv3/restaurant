@@ -16,9 +16,9 @@ public class ChangeLocale implements Command {
         HttpSession session = request.getSession(true);
         session.setAttribute("local", (String) request.getParameter("locale"));
 
-        String lastCommand = (String) session.getAttribute("lastCommand");
+        String lastPage = (String) session.getAttribute("lastPage");
         try {
-            request.getRequestDispatcher(MessageFormat.format("/restaurant?command={0}", lastCommand)).forward(request, response);
+            request.getRequestDispatcher(MessageFormat.format("{0}", lastPage)).forward(request, response);
         } catch (ServletException e) {
             // TODO обработать
             e.printStackTrace();

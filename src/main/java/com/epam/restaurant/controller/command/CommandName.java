@@ -1,8 +1,6 @@
 package com.epam.restaurant.controller.command;
 
 public enum CommandName {
-    MOVE_TO_AUTHORIZATION_PAGE,
-    MOVE_TO_REGISTRATION_PAGE,
     NONAME_COMMAND,
     AUTHORIZATION,
     REGISTRATION,
@@ -11,6 +9,4 @@ public enum CommandName {
     GET_CATEGORIES,
     FIND_DISHES_BY,
     ADD_TO_ORDER,
-    SHOW_CURRENT_ORDER,
-    MOVE_TO_HOME
 }

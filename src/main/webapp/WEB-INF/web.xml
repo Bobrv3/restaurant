@@ -57,15 +57,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>Menu</servlet-name>
-    <servlet-class>com.epam.restaurant.bean.Menu</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Menu</servlet-name>
-    <url-pattern>/menu</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>CurrentOrder</servlet-name>
     <jsp-file>/WEB-INF/jsp/CurrentOrder.jsp</jsp-file>
   </servlet>

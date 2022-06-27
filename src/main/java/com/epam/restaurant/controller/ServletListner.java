@@ -17,25 +17,26 @@ import java.sql.SQLException;
 public class ServletListner implements ServletRequestListener, ServletContextListener {
     private static final Logger LOGGER = LogManager.getLogger(ServletListner.class);
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private static final String COMMAND_PARAMETER = "command";
-    private static final String LAST_COMMAND_PARAMETER = "lastCommand";
-    private static final String MAIN_PAGE = "move_to_home";
 
-    // TODO переделать не через команды, а через строку реквеста
+    private static final String LAST_PAGE_ATTR = "lastPage";
+    private static final String MAIN_PAGE_ADDR = "/home";
+    private static final String NOT_LAST_PAGE_REGEX = "(\\/restaurant).*|(\\/images).*|(\\/css).*|(\\/js).*";
+
     @Override
     public void requestDestroyed(ServletRequestEvent sre) {
         HttpServletRequest request = (HttpServletRequest) sre.getServletRequest();
         HttpSession session = request.getSession(true);
 
-        String lastCommand = (String) session.getAttribute(LAST_COMMAND_PARAMETER);
-        if (lastCommand == null) {
-            session.setAttribute(LAST_COMMAND_PARAMETER, MAIN_PAGE);
+        String lastPage = (String) session.getAttribute(LAST_PAGE_ATTR);
+        if (lastPage == null) {
+            session.setAttribute(LAST_PAGE_ATTR, MAIN_PAGE_ADDR);
+        } else {
+            String uri = request.getRequestURI();
+            if (!uri.matches(NOT_LAST_PAGE_REGEX)) {
+                session.setAttribute(LAST_PAGE_ATTR, uri);
+            }
         }
 
-        String requestParameter = request.getParameter(COMMAND_PARAMETER);
-        if (requestParameter != null && !requestParameter.equals("change_locale")) {
-            session.setAttribute(LAST_COMMAND_PARAMETER, requestParameter);
-        }
     }
 
     @Override

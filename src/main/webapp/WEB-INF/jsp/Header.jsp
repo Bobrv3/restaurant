@@ -27,19 +27,17 @@
             </div>
             <div>
                 <ul>
-                    <li><a href="/restaurant?command=move_to_home">${menu_link}</a></li>
+                    <li><a href="/home">${menu_link}</a></li>
                 </ul>
             </div>
             <div>
                 <c:if test="${user == null}">
-                    <form action="restaurant" method="get">
-                        <input type="hidden" name="command" value="move_to_authorization_page">
-                        <input type="submit" value="${signIn_btn}" id="signIn_button">
-                    </form>
-                    <form action="restaurant" method="get">
-                        <input type="hidden" name="command" value="move_to_registration_page">
-                        <input type="submit" value="${signUp_btn}" id="signUp_button">
-                    </form>
+                    <a href="/authorizationPage">
+                        <button id="signIn_button">${signIn_btn}</button>
+                    </a>
+                    <a href="/registrationPage">
+                        <button id="signUp_button">${signUp_btn}</button>
+                    </a>
                 </c:if>
 
                 <c:if test="${user != null}">
@@ -49,7 +47,7 @@
                     </a>
                 </c:if>
 
-                <a href="/restaurant?command=show_current_order">
+                <a href="/showCurrentOrder">
                     <img id="orderImg" src="../../images/order.png">${quantityOfDishes}
                 </a>
 
