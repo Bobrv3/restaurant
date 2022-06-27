@@ -35,7 +35,6 @@ public class Registration implements Command {
 
     private static final String EX1 = "Error to forward in the registration command..";
     private static final String EX2 = "Invalid address - {0}: getRequestDispatcher({0}) in the registration command..";
-    private static final String EX3 = "Invalid username or password...";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
@@ -65,9 +64,7 @@ public class Registration implements Command {
         request.getSession().setAttribute(USER_ATTR, new AuthorizedUser(userData.getLogin(), userData.getName(), userData.getRoleId()));
 
         try {
-            request.getRequestDispatcher(HOME_ADDRESS).forward(request, response);
-        } catch (ServletException e) {
-            LOGGER.error(EX1, e);
+            response.sendRedirect(HOME_ADDRESS);
         } catch (IOException e) {
             LOGGER.error(MessageFormat.format(EX2, HOME_ADDRESS), e);
         }

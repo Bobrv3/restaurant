@@ -19,6 +19,4 @@
         <jsp:include page="/WEB-INF/jsp/Footer.jsp" />
 
     </body>
-    <script src="../../js/Menu.js"></script>
-
     </html>

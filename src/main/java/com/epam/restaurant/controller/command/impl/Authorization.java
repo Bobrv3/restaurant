@@ -50,8 +50,7 @@ public class Authorization implements Command {
 
             request.getSession().setAttribute(USER_ATTR, user);
 
-            request.getRequestDispatcher(HOME_ADDRESS).forward(request, response);
-
+            response.sendRedirect(HOME_ADDRESS);
         } catch (NullPointerException e) {
             LOGGER.info(EX3, e);
             request.setAttribute(INVALID_SIGN_IN_ATTR, true);
@@ -63,8 +62,6 @@ public class Authorization implements Command {
             } catch (IOException ex) {
                 LOGGER.error(MessageFormat.format(EX2, AUTH_PAGE_ADDRESS), ex);
             }
-        } catch (ServletException ex) {
-            LOGGER.error(EX1, ex);
         } catch (IOException ex) {
             LOGGER.error(MessageFormat.format(EX2, HOME_ADDRESS), ex);
         }
