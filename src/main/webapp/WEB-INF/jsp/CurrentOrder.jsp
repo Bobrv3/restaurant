@@ -1,27 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-        <fmt:setLocale value="${sessionScope.local}" />
-        <fmt:setBundle basename="local" var="loc" />
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+        <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+            <fmt:setLocale value="${sessionScope.local}" />
+            <fmt:setBundle basename="local" var="loc" />
 
-        <fmt:message bundle="${loc}" key="local.label.yourOrder" var="yourOrder_lbl" />
+            <fmt:message bundle="${loc}" key="local.label.yourOrder" var="yourOrder_lbl" />
+            <fmt:message bundle="${loc}" key="local.button.placeOrder" var="placeOrder_btn" />
 
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your order</title>
-    <link rel="stylesheet" href="css/CurrentOrder.css">
-</head>
-<body>
-    <jsp:include page="/WEB-INF/jsp/Header.jsp" />
+            <!DOCTYPE html>
+            <html>
 
-        <c:if test="${order != null}">
-            <h1>${yourOrder_lbl}:</h1>
-                <table>
-                    <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
+            <head>
+                <meta charset="utf-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Your order</title>
+                <link rel="stylesheet" href="css/CurrentOrder.css">
+            </head>
+
+            <body>
+                <jsp:include page="/WEB-INF/jsp/Header.jsp" />
+
+                <c:if test="${order != null}">
+                    <h1>${yourOrder_lbl}:</h1>
+                    <table>
+                        <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
                             <tr>
                                 <td>
                                     <h3 class="DishName">
@@ -34,20 +37,32 @@
                                 </td>
                                 <td>
                                     <form action="restaurant" method="post">
+                                        <input type="hidden" name="command" value="set_quantity_of_dish">
+                                        <input type="hidden" name="dish_id" value="${orderedDish.id}">
+
                                         <button onclick="reduceOne(event)">-</button>
-                                        <input type="text" name="quantity" value="${order.getOrderList().get(orderedDish)}" required>
+                                        <input type="text" name="quantity"
+                                            value="${order.getOrderList().get(orderedDish)}" required>
                                         <button onclick="addOne(event)">+</button> <br>
                                     </form>
                                 </td>
                             </tr>
-                    </c:forEach>
-                </table>
-        </c:if>
+                        </c:forEach>
+                    </table>
 
-        <c:if test="${order == null}">
-            <h1>Your order is empty</h1>
-        </c:if>
+                    <form action="restaurant" method="get">
+                        <input type="hidden" name="command" value="place_order">
+                        <input type="submit" value="${placeOrder_btn}">
+                    </form>
+                </c:if>
 
-	<jsp:include page="/WEB-INF/jsp/Footer.jsp" />
-</body>
-</html>
+                <c:if test="${order == null}">
+                    <h1>Your order is empty</h1>
+                </c:if>
+
+                <jsp:include page="/WEB-INF/jsp/Footer.jsp" />
+            </body>
+
+            <script src="../../js/CurrentOrder.js"></script>
+
+            </html>

@@ -3,8 +3,6 @@ let count;
 
 
 function addOne(event) {
-    event.preventDefault();
-
     let currentBtn = event.target;
     inputQuantity = currentBtn.parentElement.quantity;
 
@@ -16,8 +14,6 @@ function addOne(event) {
 }
 
 function reduceOne(event) {
-    event.preventDefault();
-
     let currentBtn = event.target;
     inputQuantity = currentBtn.parentElement.quantity;
 

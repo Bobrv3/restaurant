@@ -43,15 +43,15 @@ public class AddToOrder implements Command {
         List<Dish> dishes = menuService.find(criteria);
 
         Dish dish = dishes.get(FOUND_DISH);
-        Integer quantity = Integer.parseInt(request.getParameter("quantity"));
+        Integer newQuantity = Integer.parseInt(request.getParameter("quantity"));
 
         if (order.getOrderList().containsKey(dish)) {
             Integer currentQuantity = order.getOrderList().get(dish);
-            currentQuantity += quantity;
+            currentQuantity += newQuantity;
 
             order.getOrderList().put(dish, currentQuantity);
         } else {
-            order.getOrderList().put(dish, quantity);
+            order.getOrderList().put(dish, newQuantity);
         }
 
         setQuantityOfDishesToSession(order.getOrderList(), session);

@@ -11,5 +11,3 @@
         </a>
     </nav>
 </footer>
-
-<script src="../../js/Menu.js"></script>
