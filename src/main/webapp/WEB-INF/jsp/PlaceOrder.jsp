@@ -4,7 +4,18 @@
             <fmt:setLocale value="${sessionScope.local}" />
             <fmt:setBundle basename="local" var="loc" />
 
-            <fmt:message bundle="${loc}" key="local.label.yourOrder" var="yourOrder_lbl" />
+            <fmt:message bundle="${loc}" key="local.legend.order" var="orderFmt" />
+            <fmt:message bundle="${loc}" key="local.h1.placingAnOrder" var="placingAnOrderFmt" />
+            <fmt:message bundle="${loc}" key="local.h2.methodOfReceiving" var="methodOfReceivingFmt" />
+            <fmt:message bundle="${loc}" key="local.label.takeaway" var="takeawayFmt" />
+            <fmt:message bundle="${loc}" key="local.label.inPlace" var="inPlaceFmt" />
+
+            <fmt:message bundle="${loc}" key="local.label.paymentMethod" var="paymentMethodFmt" />
+            <fmt:message bundle="${loc}" key="local.label.totalPrice" var="totalPriceFmt" />
+            <fmt:message bundle="${loc}" key="local.label.paymentByCardOnline" var="paymentByCardOnlineFmt" />
+            <fmt:message bundle="${loc}" key="local.label.paymentByCardInPlace" var="paymentByCardInPlaceFmt" />
+            <fmt:message bundle="${loc}" key="local.label.paymentByCash" var="paymentByCashFmt" />
+            <fmt:message bundle="${loc}" key="local.label.placeOrder" var="placeOrderFmt" />
 
             <!DOCTYPE html>
             <html>
@@ -21,20 +32,30 @@
                 <jsp:include page="/WEB-INF/jsp/Header.jsp" />
                 <div class="grid-container">
                     <div>
-                        <h1>Оформление заказа</h1>
-                        <h2>Способ получения</h2>
-                        <form action="restaurant" method="get">
+                        <h1>${placingAnOrderFmt}</h1>
+                        <form id="placingOrder" action="finishingTheOrder" method="get">
                             <input type="hidden" name="command" value="MoveToPaymentMethod">
-                            <label for="withYou">С собой</label>
-                            <input type="radio" name="obtaining" id="withYou" value="withYou"><br>
-                            <label for="inPlace">На месте</label>
+
+                            <h2>${methodOfReceivingFmt}</h2>
+                            <label for="takeaway">${takeawayFmt}</label>
+                            <input type="radio" name="obtaining" id="takeaway" value="takeaway" checked><br>
+                            <label for="inPlace">${inPlaceFmt}</label>
                             <input type="radio" name="obtaining" id="inPlace" value="inPlace">
-                            <input type="submit" value="Go to the payment method">
+
+                            <h2>${paymentMethodFmt}</h2>
+                            <label for="paymentByCash">${paymentByCashFmt}</label>
+                            <input type="radio" id="paymentByCash" name="paymentBy" value="cash" checked><br>
+                            <label for="paymentByCardOnline">${paymentByCardOnlineFmt}</label>
+                            <input type="radio" id="paymentByCardOnline" name="paymentBy" value="cardOnline"><br>
+                            <label for="paymentByCardInPlace">${paymentByCardInPlaceFmt}</label>
+                            <input type="radio" id="paymentByCardInPlace" name="paymentBy" value="cardInPlace"><br>
+                            <br>
+                            <input type="submit" value="${placeOrderFmt}">
                         </form>
                     </div>
                     <div>
                         <fieldset>
-                            <legend>${yourOrder_lbl}</legend>
+                            <legend>${orderFmt}</legend>
 
                             <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
                                 <label class="dishName">${orderedDish.name}
@@ -44,7 +65,7 @@
                             </c:forEach>
                             <hr>
 
-                            <label>Итого: ${order.getTotalPrice()}</label>
+                            <label>${totalPriceFmt}: ${order.getTotalPrice()}</label>
 
                         </fieldset>
                     </div>

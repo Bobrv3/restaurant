@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="css/Footer.css">
 
 <footer>
-    <label>© 2022 Anton Bobrov</label>
+    <label id="author">© 2022 Anton Bobrov</label>
     <nav>
         <a href="https://www.instagram.com/bbrv_/">
             <img class="linkImageFooter" src="images/instagram.png" alt="instagram">

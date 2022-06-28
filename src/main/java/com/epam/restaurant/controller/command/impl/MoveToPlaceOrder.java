@@ -56,8 +56,10 @@ public class MoveToPlaceOrder implements Command {
         order.setTotalPrice(totalPrice);
 
         session.setAttribute(ORDER_ATTR, order);
+
+
         try {
-            request.getRequestDispatcher(PLACE_ODER_ADDR).forward(request, response);
+            response.sendRedirect(PLACE_ODER_ADDR);
         } catch (IOException e) {
             LOGGER.error(MessageFormat.format(EX1, PLACE_ODER_ADDR, COMMAND_NAME));
         }

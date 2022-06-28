@@ -5,7 +5,7 @@
             <fmt:setBundle basename="local" var="loc" />
 
             <fmt:message bundle="${loc}" key="local.label.yourOrder" var="yourOrder_lbl" />
-            <fmt:message bundle="${loc}" key="local.button.placeOrder" var="placeOrder_btn" />
+            <fmt:message bundle="${loc}" key="local.button.goToPlacingAnOrder" var="GoToPlacingAnOrder_btn" />
 
             <!DOCTYPE html>
             <html>
@@ -51,7 +51,7 @@
                             </c:forEach>
                         </table>
 
-                        <input type="submit" value="${placeOrder_btn}" id="placeOrderBtn">
+                        <input type="submit" value="${GoToPlacingAnOrder_btn}" id="placeOrderBtn">
                     </form>
                 </c:if>
 
