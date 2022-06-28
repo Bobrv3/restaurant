@@ -34,8 +34,6 @@
                     <div>
                         <h1>${placingAnOrderFmt}</h1>
                         <form id="placingOrder" action="finishingTheOrder" method="get">
-                            <input type="hidden" name="command" value="MoveToPaymentMethod">
-
                             <h2>${methodOfReceivingFmt}</h2>
                             <label for="takeaway">${takeawayFmt}</label>
                             <input type="radio" name="obtaining" id="takeaway" value="takeaway" checked><br>

@@ -74,4 +74,13 @@
     <url-pattern>/showPlaceOrder</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>FinishingTheOrder</servlet-name>
+    <jsp-file>/WEB-INF/jsp/FinishingTheOrder.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FinishingTheOrder</servlet-name>
+    <url-pattern>/finishingTheOrder</url-pattern>
+  </servlet-mapping>
+
 </web-app>
