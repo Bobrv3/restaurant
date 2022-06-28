@@ -1,0 +1,14 @@
+.dishName {
+    position: relative;
+    left: 0%;
+}
+
+.dishPrice {
+    position: relative;
+    left: 50%;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto;
+}
