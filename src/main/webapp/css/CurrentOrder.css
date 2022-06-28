@@ -40,3 +40,7 @@ button {
     display: inline-block;
     margin: auto;
 }
+
+#placeOrderForm {
+    width: 100%;
+}

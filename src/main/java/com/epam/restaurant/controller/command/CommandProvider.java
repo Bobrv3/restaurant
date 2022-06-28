@@ -9,7 +9,6 @@ import com.epam.restaurant.controller.command.impl.GetMenu;
 import com.epam.restaurant.controller.command.impl.NoNameCommand;
 import com.epam.restaurant.controller.command.impl.PlaceOrder;
 import com.epam.restaurant.controller.command.impl.Registration;
-import com.epam.restaurant.controller.command.impl.SetQuantityOfDish;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +29,6 @@ public final class CommandProvider {
         repository.put(CommandName.FIND_DISHES_BY, new FindDishesBy());
         repository.put(CommandName.ADD_TO_ORDER, new AddToOrder());
         repository.put(CommandName.PLACE_ORDER, new PlaceOrder());
-        repository.put(CommandName.SET_QUANTITY_OF_DISH, new SetQuantityOfDish());
     }
 
     public Command getCommand(String name) {

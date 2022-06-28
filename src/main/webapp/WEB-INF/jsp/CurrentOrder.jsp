@@ -23,36 +23,35 @@
 
                 <c:if test="${order != null}">
                     <h1>${yourOrder_lbl}:</h1>
-                    <table>
-                        <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
-                            <tr>
-                                <td>
-                                    <h3 class="DishName">
-                                        <li />${orderedDish.name}
-                                    </h3>
-                                    ${orderedDish.description}
-                                </td>
-                                <td>
-                                    ${orderedDish.price}
-                                </td>
-                                <td>
-                                    <form action="restaurant" method="post">
-                                        <input type="hidden" name="command" value="set_quantity_of_dish">
+
+                    <form style="position: relative;" action="restaurant" method="get" id="placeOrderForm">
+                        <input type="hidden" name="command" value="place_order">
+
+                        <table>
+                            <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
+                                <tr>
+                                    <td>
+                                        <h3 class="DishName">
+                                            <li />${orderedDish.name}
+                                        </h3>
+                                        ${orderedDish.description}
+                                    </td>
+                                    <td>
+                                        ${orderedDish.price}
+                                    </td>
+                                    <td>
                                         <input type="hidden" name="dish_id" value="${orderedDish.id}">
 
                                         <button onclick="reduceOne(event)">-</button>
                                         <input type="text" name="quantity"
                                             value="${order.getOrderList().get(orderedDish)}" required>
                                         <button onclick="addOne(event)">+</button> <br>
-                                    </form>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </table>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
 
-                    <form action="restaurant" method="get">
-                        <input type="hidden" name="command" value="place_order">
-                        <input type="submit" value="${placeOrder_btn}">
+                        <input type="submit" value="${placeOrder_btn}" style="position: relative; left: 80%;">
                     </form>
                 </c:if>
 

@@ -3,19 +3,21 @@ let count;
 
 
 function addOne(event) {
+    event.preventDefault();
+
     let currentBtn = event.target;
-    inputQuantity = currentBtn.parentElement.quantity;
+    inputQuantity = currentBtn.parentElement.children.quantity;
 
     count = +inputQuantity.value;
 
     inputQuantity.value = ++count;
-
-
 }
 
 function reduceOne(event) {
+    event.preventDefault();
+
     let currentBtn = event.target;
-    inputQuantity = currentBtn.parentElement.quantity;
+    inputQuantity = currentBtn.parentElement.children.quantity;
 
     count = +inputQuantity.value;
 
@@ -24,3 +26,5 @@ function reduceOne(event) {
     }
     inputQuantity.value = count;
 }
+
+
