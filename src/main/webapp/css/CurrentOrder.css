@@ -42,5 +42,11 @@ button {
 }
 
 #placeOrderForm {
+    position: relative;
     width: 100%;
+}
+
+#placeOrderBtn {
+    position: relative;
+    left: 80%;
 }

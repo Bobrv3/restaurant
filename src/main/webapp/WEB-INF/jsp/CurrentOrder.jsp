@@ -24,8 +24,8 @@
                 <c:if test="${order != null}">
                     <h1>${yourOrder_lbl}:</h1>
 
-                    <form style="position: relative;" action="restaurant" method="get" id="placeOrderForm">
-                        <input type="hidden" name="command" value="place_order">
+                    <form action="restaurant" method="get" id="placeOrderForm">
+                        <input type="hidden" name="command" value="move_to_place_order">
 
                         <table>
                             <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
@@ -40,7 +40,7 @@
                                         ${orderedDish.price}
                                     </td>
                                     <td>
-                                        <input type="hidden" name="dish_id" value="${orderedDish.id}">
+                                        <input type="hidden" name="dishId" value="${orderedDish.id}">
 
                                         <button onclick="reduceOne(event)">-</button>
                                         <input type="text" name="quantity"
@@ -51,7 +51,7 @@
                             </c:forEach>
                         </table>
 
-                        <input type="submit" value="${placeOrder_btn}" style="position: relative; left: 80%;">
+                        <input type="submit" value="${placeOrder_btn}" id="placeOrderBtn">
                     </form>
                 </c:if>
 

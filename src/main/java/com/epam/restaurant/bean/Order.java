@@ -1,13 +1,15 @@
 package com.epam.restaurant.bean;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class Order {
-    private static long id = 0;
+    private long id = 0;
     private Map<Dish, Integer> orderList = new HashMap<>();
+    private BigDecimal totalPrice;
 
     public Order() {
 
@@ -24,6 +26,14 @@ public class Order {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public Map<Dish, Integer> getOrderList() {

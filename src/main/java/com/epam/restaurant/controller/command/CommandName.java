@@ -9,5 +9,5 @@ public enum CommandName {
     GET_CATEGORIES,
     FIND_DISHES_BY,
     ADD_TO_ORDER,
-    PLACE_ORDER
+    MOVE_TO_PLACE_ORDER
 }

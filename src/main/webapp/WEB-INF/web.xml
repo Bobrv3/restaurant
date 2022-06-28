@@ -65,4 +65,13 @@
     <url-pattern>/showCurrentOrder</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>PlaceOrder</servlet-name>
+    <jsp-file>/WEB-INF/jsp/PlaceOrder.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PlaceOrder</servlet-name>
+    <url-pattern>/showPlaceOrder</url-pattern>
+  </servlet-mapping>
+
 </web-app>
