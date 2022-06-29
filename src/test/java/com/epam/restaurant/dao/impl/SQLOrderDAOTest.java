@@ -29,11 +29,17 @@ class SQLOrderDAOTest {
     static void afterAll() throws SQLException, InterruptedException {
         connectionPool.dispose();
     }
+
     @Test
     void createOrder() throws DAOException {
         int expected = 1;
         int actual = orderDAO.createOrder(new Order(), 9);
 
         Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void createOrderDetails() throws DAOException {
+        Assertions.assertTrue(orderDAO.createOrderDetails(4, 2, 3, "takeaway"));
     }
 }

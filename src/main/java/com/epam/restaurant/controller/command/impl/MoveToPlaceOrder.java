@@ -29,6 +29,18 @@ public class MoveToPlaceOrder implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
+        calculateTotalPrice(request);
+
+
+
+        try {
+            response.sendRedirect(PLACE_ODER_ADDR);
+        } catch (IOException e) {
+            LOGGER.error(MessageFormat.format(EX1, PLACE_ODER_ADDR, COMMAND_NAME));
+        }
+    }
+
+    private void calculateTotalPrice(HttpServletRequest request) {
         String[] strIds = request.getParameterValues(DISH_ID_PARAM);
         String[] strQuantities = request.getParameterValues(QUANTITY_PARAM);
 
@@ -54,14 +66,6 @@ public class MoveToPlaceOrder implements Command {
             }
         }
         order.setTotalPrice(totalPrice);
-
         session.setAttribute(ORDER_ATTR, order);
-
-
-        try {
-            response.sendRedirect(PLACE_ODER_ADDR);
-        } catch (IOException e) {
-            LOGGER.error(MessageFormat.format(EX1, PLACE_ODER_ADDR, COMMAND_NAME));
-        }
     }
 }

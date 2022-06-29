@@ -38,9 +38,9 @@
 
                             <h2>${methodOfReceivingFmt}</h2>
                             <label for="takeaway">${takeawayFmt}</label>
-                            <input type="radio" name="obtaining" id="takeaway" value="takeaway" checked><br>
+                            <input type="radio" id="takeaway" name="receiving" value="takeaway" checked><br>
                             <label for="inPlace">${inPlaceFmt}</label>
-                            <input type="radio" name="obtaining" id="inPlace" value="inPlace">
+                            <input type="radio" id="inPlace" name="receiving" value="inPlace">
 
                             <h2>${paymentMethodFmt}</h2>
                             <label for="paymentByCash">${paymentByCashFmt}</label>
