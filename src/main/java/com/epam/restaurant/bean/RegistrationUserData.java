@@ -12,6 +12,7 @@ public class RegistrationUserData implements Serializable {
     private String phoneNumber;
     private String email;
     private int roleId;
+    private int id;
 
     public RegistrationUserData() {
     }
@@ -71,6 +72,14 @@ public class RegistrationUserData implements Serializable {
 
     public void setRoleId(int roleId) {
         this.roleId = roleId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

@@ -28,7 +28,7 @@ public class SQLUserDAO implements UserDAO {
     private static final String USER_AUTHORIZATION_QUERY = "SELECT login, name, role_id, password FROM users WHERE login=?";
     private static final String CHECK_USER_EXISTENCE_QUERY = "SELECT id FROM users WHERE login=?";
     private static final String REGISTER_USER_QUERY = "INSERT INTO users(login, password, name, phone_number, email, role_id) VALUES(?,?,?,?,?,?)";
-    private static final String FIND_USER_BY_CRITERIA_QUERY = "Select login, name, role_id from users where ";
+    private static final String FIND_USER_BY_CRITERIA_QUERY = "Select login, name, role_id, id, phone_number, email from users where ";
 
     private static final String AND = "AND ";
 
@@ -126,7 +126,7 @@ public class SQLUserDAO implements UserDAO {
 
     // TODO сделать для prepared statement: придумать как избавиться от '' после вставки на место ?
     @Override
-    public List<AuthorizedUser> find(Criteria criteria) throws DAOException {
+    public List<RegistrationUserData> find(Criteria criteria) throws DAOException {
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -149,12 +149,15 @@ public class SQLUserDAO implements UserDAO {
                 return null;
             }
 
-            List<AuthorizedUser> users = new ArrayList<>();
+            List<RegistrationUserData> users = new ArrayList<>();
             while (resultSet.next()) {
-                AuthorizedUser user = new AuthorizedUser();
+                RegistrationUserData user = new RegistrationUserData();
                 user.setLogin(resultSet.getString(1));
                 user.setName(resultSet.getString(2));
                 user.setRoleId(resultSet.getInt(3));
+                user.setId(resultSet.getInt(4));
+                user.setPhoneNumber(resultSet.getString(5));
+                user.setEmail(resultSet.getString(6));
                 users.add(user);
             }
 

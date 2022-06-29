@@ -83,12 +83,18 @@ class SQLUserDAOTest {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Users.LOGIN.toString(), "testUs4");
 
-        AuthorizedUser authorizedUser = new AuthorizedUser("testUs4", "TestUser", 2);
+        RegistrationUserData userData = new RegistrationUserData();
+        userData.setId(10);
+        userData.setLogin("testUs4");
+        userData.setName("TestUser");
+        userData.setPhoneNumber("+375446785678");
+        userData.setEmail("ant@gmail.com");
+        userData.setRoleId(2);
 
-        List<AuthorizedUser> expected = new ArrayList<>();
-        expected.add(authorizedUser);
+        List<RegistrationUserData> expected = new ArrayList<>();
+        expected.add(userData);
 
-        List<AuthorizedUser> actual = userDAO.find(criteria);
+        List<RegistrationUserData> actual = userDAO.find(criteria);
 
         Assertions.assertEquals(expected, actual);
     }
@@ -98,7 +104,7 @@ class SQLUserDAOTest {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Users.LOGIN.toString(), "fgfdsgdsfg");
 
-        List<AuthorizedUser> actual = userDAO.find(criteria);
+        List<RegistrationUserData> actual = userDAO.find(criteria);
 
         Assertions.assertNull(actual);
     }
