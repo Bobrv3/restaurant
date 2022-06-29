@@ -26,49 +26,59 @@ public class PlaceOrder implements Command {
     private static final String USER_ATTR = "user";
     private static final String PAYMENT_BY_PARAM = "paymentBy";
     private static final String RECEIVING_PARAM = "receiving";
-    private static final String CARD_ONLINE = "cardOnline";
+    private static final int CARD_ONLINE_ID = 2;
     private static final String FINISHING_THE_ORDER_ADDR = "/finishingTheOrder";
-    private static final String ONLINE_PAY_ADDR = "OnlinePay.jsp";
+    private static final String ONLINE_PAY_ADDR = "/onlinePay";
     private static final String MENU_ADDR = "menu";
 
     private static final String EX1 = "Invalid address to forward or redirect in the PlaceOrder command..";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
-        String paymentBy = request.getParameter(PAYMENT_BY_PARAM);
+        int paymentMethodId = Integer.parseInt(request.getParameter(PAYMENT_BY_PARAM));
+        String receiving = request.getParameter(RECEIVING_PARAM);
+
+        HttpSession session = request.getSession();
+        session.setAttribute(PAYMENT_BY_PARAM, paymentMethodId);
+        session.setAttribute(RECEIVING_PARAM, receiving);
 
         try {
-            if (CARD_ONLINE.equals(paymentBy)) {
-                request.getRequestDispatcher(ONLINE_PAY_ADDR).forward(request, response);
+            if (CARD_ONLINE_ID == paymentMethodId) {
+                response.sendRedirect(ONLINE_PAY_ADDR);
             }
             else {
-                HttpSession session = request.getSession();
-
-                // create order
-                AuthorizedUser user = (AuthorizedUser) session.getAttribute(USER_ATTR);
-                Order order = (Order) session.getAttribute(ORDER_ATTR);
-
-                OrderService orderService = serviceProvider.getOrderService();
-                int orderId = orderService.createOder(order, user.getLogin());
-
-                // create order detail
-                Menu menu = (Menu) session.getAttribute(MENU_ADDR);
-                String methodOfReceiving = request.getParameter(RECEIVING_PARAM);
-
-                for (Dish dish : order.getOrderList().keySet()) {
-                    Integer quantity = order.getOrderList().get(dish);
-                    orderService.createOderDetail(orderId, dish.getId(), quantity, methodOfReceiving);
-                }
-
-                // create invoice
-                PaymentService paymentService = serviceProvider.getPaymentService();
-                int invoiceId = paymentService.createInvoice(orderId);
-
+                setInvoice(request);
                 response.sendRedirect(FINISHING_THE_ORDER_ADDR);
             }
         }
         catch (IOException e) {
             LOGGER.error(EX1, e);
         }
+    }
+
+    public static int setInvoice(HttpServletRequest request) throws ServiceException {
+        HttpSession session = request.getSession();
+
+        // create order
+        AuthorizedUser user = (AuthorizedUser) session.getAttribute(USER_ATTR);
+        Order order = (Order) session.getAttribute(ORDER_ATTR);
+
+        OrderService orderService = serviceProvider.getOrderService();
+        int orderId = orderService.createOder(order, user.getLogin());
+
+        // create order detail
+        Menu menu = (Menu) session.getAttribute(MENU_ADDR);
+        String methodOfReceiving = (String) request.getSession().getAttribute(RECEIVING_PARAM);
+
+        for (Dish dish : order.getOrderList().keySet()) {
+            Integer quantity = order.getOrderList().get(dish);
+            orderService.createOderDetail(orderId, dish.getId(), quantity, methodOfReceiving);
+        }
+
+        // create invoice
+        PaymentService paymentService = serviceProvider.getPaymentService();
+        int invoiceId = paymentService.createInvoice(orderId);
+
+        return invoiceId;
     }
 }

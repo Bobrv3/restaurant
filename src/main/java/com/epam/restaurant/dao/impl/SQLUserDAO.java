@@ -34,8 +34,6 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public AuthorizedUser signIn(String login, char[] password) throws DAOException {
-        // TODO в слое сервисов посмотреть в куки: был ли пользователь авторизован или нет
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

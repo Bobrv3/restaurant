@@ -9,14 +9,13 @@
             <fmt:message bundle="${loc}" key="local.h2.methodOfReceiving" var="methodOfReceivingFmt" />
             <fmt:message bundle="${loc}" key="local.label.takeaway" var="takeawayFmt" />
             <fmt:message bundle="${loc}" key="local.label.inPlace" var="inPlaceFmt" />
-
             <fmt:message bundle="${loc}" key="local.label.paymentMethod" var="paymentMethodFmt" />
             <fmt:message bundle="${loc}" key="local.label.totalPrice" var="totalPriceFmt" />
             <fmt:message bundle="${loc}" key="local.label.paymentByCardOnline" var="paymentByCardOnlineFmt" />
             <fmt:message bundle="${loc}" key="local.label.paymentByCardInPlace" var="paymentByCardInPlaceFmt" />
             <fmt:message bundle="${loc}" key="local.label.paymentByCash" var="paymentByCashFmt" />
             <fmt:message bundle="${loc}" key="local.label.placeOrder" var="placeOrderFmt" />
-            <fmt:message bundle="${loc}" key="local.label.toContinue" var="toContinueFmt" />
+            <fmt:message bundle="${loc}" key="local.h2.toContinue" var="toContinueFmt" />
 
             <!DOCTYPE html>
             <html>
@@ -44,14 +43,14 @@
                             <input type="radio" id="inPlace" name="receiving" value="inPlace">
 
                             <h2>${paymentMethodFmt}</h2>
-                            <label for="paymentByCash">${paymentByCashFmt}</label>
-                            <input type="radio" id="paymentByCash" name="paymentBy" value="cash" checked><br>
-                            <label for="paymentByCardOnline">${paymentByCardOnlineFmt}</label>
-                            <input type="radio" id="paymentByCardOnline" name="paymentBy" value="cardOnline"><br>
-                            <label for="paymentByCardInPlace">${paymentByCardInPlaceFmt}</label>
-                            <input type="radio" id="paymentByCardInPlace" name="paymentBy" value="cardInPlace"><br>
+                            <c:forEach items="${paymentMethods}" var="paymentMethod">
+                                <label for="${paymentMethod.getMethod()}">${paymentMethod.getMethod()}</label>
+                                <input type="radio" id="${paymentMethod.getMethod()}" name="paymentBy"
+                                    value="${paymentMethod.getId()}" checked><br>
+                            </c:forEach>
                             <br>
-                            <input type="submit" value="${placeOrderFmt}" <c:if test="${user == null}">disabled</c:if>>
+                            <input type="submit" value="${placeOrderFmt}" <c:if test="${user == null}">disabled
+                            </c:if>>
                             <c:if test="${user == null}">
                                 <h3 style="color: red;">${toContinueFmt}</h3>
                             </c:if>

@@ -2,8 +2,11 @@ package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Order;
+import com.epam.restaurant.bean.PaymentMethod;
 import com.epam.restaurant.controller.command.Command;
+import com.epam.restaurant.service.PaymentService;
 import com.epam.restaurant.service.ServiceException;
+import com.epam.restaurant.service.ServiceProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,14 +18,17 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MoveToPlaceOrder implements Command {
     private static final Logger LOGGER = LogManager.getLogger(MoveToPlaceOrder.class);
+    private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
     private static final String DISH_ID_PARAM = "dishId";
     private static final String QUANTITY_PARAM = "quantity";
     private static final String ORDER_ATTR = "order";
+    private static final String PAYMENT_METHODS_ATTR = "paymentMethods";
     private static final String PLACE_ODER_ADDR = "/showPlaceOrder";
     private static final String COMMAND_NAME = MoveToPlaceOrder.class.getSimpleName();
     private static final String EX1 = "Invalid address - {0}: getRequestDispatcher({0}) in the {1} command..";
@@ -31,12 +37,23 @@ public class MoveToPlaceOrder implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         calculateTotalPrice(request);
 
-
+        setPaymentMethodsToSession(request);
 
         try {
             response.sendRedirect(PLACE_ODER_ADDR);
         } catch (IOException e) {
             LOGGER.error(MessageFormat.format(EX1, PLACE_ODER_ADDR, COMMAND_NAME));
+        }
+    }
+
+    private void setPaymentMethodsToSession(HttpServletRequest request) throws ServiceException {
+        HttpSession session = request.getSession();
+        List<PaymentMethod> paymentMethods = (List<PaymentMethod>) session.getAttribute(PAYMENT_METHODS_ATTR);
+        if (paymentMethods == null) {
+            PaymentService paymentService = serviceProvider.getPaymentService();
+            paymentMethods = paymentService.getPaymentMethods();
+
+            session.setAttribute(PAYMENT_METHODS_ATTR, paymentMethods);
         }
     }
 

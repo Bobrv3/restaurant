@@ -10,5 +10,6 @@ public enum CommandName {
     FIND_DISHES_BY,
     ADD_TO_ORDER,
     MOVE_TO_PLACE_ORDER,
-    PLACE_ORDER
+    PLACE_ORDER,
+    ONLINE_PAY
 }

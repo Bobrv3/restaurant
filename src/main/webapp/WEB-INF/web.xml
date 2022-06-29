@@ -83,4 +83,13 @@
     <url-pattern>/finishingTheOrder</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>OnlinePay</servlet-name>
+    <jsp-file>/WEB-INF/jsp/OnlinePay.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OnlinePay</servlet-name>
+    <url-pattern>/onlinePay</url-pattern>
+  </servlet-mapping>
+
 </web-app>

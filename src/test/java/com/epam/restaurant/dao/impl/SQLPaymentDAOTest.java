@@ -1,5 +1,6 @@
 package com.epam.restaurant.dao.impl;
 
+import com.epam.restaurant.bean.PaymentMethod;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.List;
 
 class SQLPaymentDAOTest {
     private static ConnectionPool connectionPool;
@@ -33,5 +35,18 @@ class SQLPaymentDAOTest {
         int actualId = paymentDAO.createInvoice(6);
 
         Assertions.assertEquals(nextId, actualId);
+    }
+
+    @Test
+    void getPaymentMethods_NumberOfMethodsEquals3_true() throws DAOException {
+        int numberOfMethods = 3;
+        List<PaymentMethod> paymentMethods = paymentDAO.getPaymentMethods();
+
+        Assertions.assertEquals(3, paymentMethods.size());
+    }
+
+    @Test
+    void createPayment_equalsTrue() throws DAOException {
+        Assertions.assertTrue(paymentDAO.createPayment(1, 2));
     }
 }

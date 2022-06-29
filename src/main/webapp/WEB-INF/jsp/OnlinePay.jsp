@@ -5,7 +5,9 @@
             <fmt:setLocale value="${sessionScope.local}" />
             <fmt:setBundle basename="local" var="loc" />
 
+            <fmt:message bundle="${loc}" key="local.legend.order" var="orderFmt" />
             <fmt:message bundle="${loc}" key="local.button.toPay" var="toPayFmt" />
+            <fmt:message bundle="${loc}" key="local.label.totalPrice" var="totalPriceFmt" />
 
             <!DOCTYPE html>
             <html>
@@ -21,9 +23,25 @@
             <body>
                 <jsp:include page="/WEB-INF/jsp/Header.jsp" />
 
-                <a href="/finishingTheOrder">
-                    <button>${toPayFmt}</button>
-                </a>
+                <fieldset>
+                    <legend>${orderFmt}</legend>
+
+                    <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
+                        <label class="dishName">${orderedDish.name}
+                            x${order.getOrderList().get(orderedDish)}</label>
+                        <label class="dishPrice">${orderedDish.price}</label>
+                        <br>
+                    </c:forEach>
+                    <hr>
+
+                    <label>${totalPriceFmt}: ${order.getTotalPrice()}</label>
+
+                </fieldset>
+
+                <form action="restaurant" method="post">
+                    <input type="hidden" name="command" value="online_pay">
+                    <input type="submit" value="${toPayFmt}">
+                </form>
 
                 <jsp:include page="/WEB-INF/jsp/Footer.jsp" />
             </body>
