@@ -16,6 +16,7 @@
             <fmt:message bundle="${loc}" key="local.label.paymentByCardInPlace" var="paymentByCardInPlaceFmt" />
             <fmt:message bundle="${loc}" key="local.label.paymentByCash" var="paymentByCashFmt" />
             <fmt:message bundle="${loc}" key="local.label.placeOrder" var="placeOrderFmt" />
+            <fmt:message bundle="${loc}" key="local.label.toContinue" var="toContinueFmt" />
 
             <!DOCTYPE html>
             <html>
@@ -50,7 +51,10 @@
                             <label for="paymentByCardInPlace">${paymentByCardInPlaceFmt}</label>
                             <input type="radio" id="paymentByCardInPlace" name="paymentBy" value="cardInPlace"><br>
                             <br>
-                            <input type="submit" value="${placeOrderFmt}">
+                            <input type="submit" value="${placeOrderFmt}" <c:if test="${user == null}">disabled</c:if>>
+                            <c:if test="${user == null}">
+                                <h3 style="color: red;">${toContinueFmt}</h3>
+                            </c:if>
                         </form>
                     </div>
                     <div>

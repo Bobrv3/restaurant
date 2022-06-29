@@ -6,6 +6,7 @@ import com.epam.restaurant.bean.Menu;
 import com.epam.restaurant.bean.Order;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.OrderService;
+import com.epam.restaurant.service.PaymentService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +49,7 @@ public class PlaceOrder implements Command {
                 Order order = (Order) session.getAttribute(ORDER_ATTR);
 
                 OrderService orderService = serviceProvider.getOrderService();
-                int oderId = orderService.createOder(order, user.getLogin());
+                int orderId = orderService.createOder(order, user.getLogin());
 
                 // create order detail
                 Menu menu = (Menu) session.getAttribute(MENU_ADDR);
@@ -56,8 +57,12 @@ public class PlaceOrder implements Command {
 
                 for (Dish dish : order.getOrderList().keySet()) {
                     Integer quantity = order.getOrderList().get(dish);
-                    orderService.createOderDetail(oderId, dish.getId(), quantity, methodOfReceiving);
+                    orderService.createOderDetail(orderId, dish.getId(), quantity, methodOfReceiving);
                 }
+
+                // create invoice
+                PaymentService paymentService = serviceProvider.getPaymentService();
+                int invoiceId = paymentService.createInvoice(orderId);
 
                 response.sendRedirect(FINISHING_THE_ORDER_ADDR);
             }
