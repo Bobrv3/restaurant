@@ -33,7 +33,9 @@
                 <div class="grid-container">
                     <div>
                         <h1>${placingAnOrderFmt}</h1>
-                        <form id="placingOrder" action="finishingTheOrder" method="get">
+                        <form id="placingOrder" action="restaurant" method="get">
+                            <input type="hidden" name="command" value="place_order">
+
                             <h2>${methodOfReceivingFmt}</h2>
                             <label for="takeaway">${takeawayFmt}</label>
                             <input type="radio" name="obtaining" id="takeaway" value="takeaway" checked><br>
