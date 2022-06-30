@@ -5,6 +5,7 @@ import com.epam.restaurant.controller.command.impl.Authorization;
 import com.epam.restaurant.controller.command.impl.ChangeLocale;
 import com.epam.restaurant.controller.command.impl.FindDishesBy;
 import com.epam.restaurant.controller.command.impl.GetCategories;
+import com.epam.restaurant.controller.command.impl.GetHistoryOfOrders;
 import com.epam.restaurant.controller.command.impl.GetMenu;
 import com.epam.restaurant.controller.command.impl.NoNameCommand;
 import com.epam.restaurant.controller.command.impl.MoveToPlaceOrder;
@@ -35,6 +36,7 @@ public final class CommandProvider {
         repository.put(CommandName.PLACE_ORDER, new PlaceOrder());
         repository.put(CommandName.ONLINE_PAY, new OnlinePay());
         repository.put(CommandName.PRINT_USER_REGISTR_DATA, new PrintUserRegistrData());
+        repository.put(CommandName.GET_HISTORY_OF_ORDERS, new GetHistoryOfOrders());
     }
 
     public Command getCommand(String name) {

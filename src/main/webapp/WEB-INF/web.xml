@@ -110,6 +110,15 @@
     <url-pattern> /personalInfo</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>HistoryOfOrders</servlet-name>
+    <jsp-file>/WEB-INF/jsp/HistoryOfOrders.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HistoryOfOrders</servlet-name>
+    <url-pattern>/historyOfOrders</url-pattern>
+  </servlet-mapping>
+
  
 
 </web-app>

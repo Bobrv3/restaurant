@@ -1,7 +1,7 @@
 package com.epam.restaurant.bean;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -10,6 +10,7 @@ public class Order {
     private long id = 0;
     private Map<Dish, Integer> orderList = new HashMap<>();
     private BigDecimal totalPrice;
+    private Date date;
 
     public Order() {
 
@@ -18,6 +19,14 @@ public class Order {
     public Order(long id, Map<Dish, Integer> dishes) {
         this.id = id;
         this.orderList = dishes;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public long getId() {

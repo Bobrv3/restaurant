@@ -42,4 +42,10 @@ class SQLOrderDAOTest {
     void createOrderDetails_SuccessToCreateOrderDetail_True() throws DAOException {
         Assertions.assertTrue(orderDAO.createOrderDetails(4, 2, 3, "takeaway"));
     }
+
+    @Test
+    void getAllUserOrders_CountOfAllOrdersFromUserWithId_10_equals_2_True() throws DAOException {
+        int userId = 10;
+        Assertions.assertEquals(2, orderDAO.getAllUserOrders(userId).size());
+    }
 }
