@@ -92,4 +92,24 @@
     <url-pattern>/onlinePay</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>AccountPage</servlet-name>
+    <jsp-file>/WEB-INF/jsp/AccountPage.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AccountPage</servlet-name>
+    <url-pattern>/showAccount</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>PersonalInfoPage</servlet-name>
+    <jsp-file>/WEB-INF/jsp/PersonalInfo.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PersonalInfoPage</servlet-name>
+    <url-pattern> /personalInfo</url-pattern>
+  </servlet-mapping>
+
+ 
+
 </web-app>
