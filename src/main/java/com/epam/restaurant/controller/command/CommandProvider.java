@@ -10,6 +10,7 @@ import com.epam.restaurant.controller.command.impl.NoNameCommand;
 import com.epam.restaurant.controller.command.impl.MoveToPlaceOrder;
 import com.epam.restaurant.controller.command.impl.OnlinePay;
 import com.epam.restaurant.controller.command.impl.PlaceOrder;
+import com.epam.restaurant.controller.command.impl.PrintUserRegistrData;
 import com.epam.restaurant.controller.command.impl.Registration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +34,7 @@ public final class CommandProvider {
         repository.put(CommandName.MOVE_TO_PLACE_ORDER, new MoveToPlaceOrder());
         repository.put(CommandName.PLACE_ORDER, new PlaceOrder());
         repository.put(CommandName.ONLINE_PAY, new OnlinePay());
+        repository.put(CommandName.PRINT_USER_REGISTR_DATA, new PrintUserRegistrData());
     }
 
     public Command getCommand(String name) {

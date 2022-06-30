@@ -2,9 +2,12 @@ package com.epam.restaurant.service;
 
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.AuthorizedUser;
+import com.epam.restaurant.bean.criteria.Criteria;
+
+import java.util.List;
 
 public interface UserService {
     AuthorizedUser signIn(String login, char[] password) throws ServiceException;
     boolean signUp(RegistrationUserData userData) throws ServiceException;
-//    TODO List<User> find(Criteria criteria);
+    List<RegistrationUserData> find(Criteria criteria) throws ServiceException;
 }

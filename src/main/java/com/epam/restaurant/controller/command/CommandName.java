@@ -11,5 +11,6 @@ public enum CommandName {
     ADD_TO_ORDER,
     MOVE_TO_PLACE_ORDER,
     PLACE_ORDER,
-    ONLINE_PAY
+    ONLINE_PAY,
+    PRINT_USER_REGISTR_DATA
 }

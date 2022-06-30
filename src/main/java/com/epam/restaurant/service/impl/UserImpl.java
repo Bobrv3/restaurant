@@ -2,11 +2,14 @@ package com.epam.restaurant.service.impl;
 
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.AuthorizedUser;
+import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.UserDAO;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.UserService;
+
+import java.util.List;
 
 
 public class UserImpl implements UserService {
@@ -42,5 +45,15 @@ public class UserImpl implements UserService {
         }
 
         return result;
+    }
+
+    @Override
+    public List<RegistrationUserData> find(Criteria criteria) throws ServiceException {
+        UserDAO userDAO = daoProvider.getUserDAO();
+        try {
+            return userDAO.find(criteria);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
     }
 }
