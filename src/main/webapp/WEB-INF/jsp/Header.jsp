@@ -24,11 +24,7 @@
                     <input type="hidden" name="locale" value="ru">
                     <input type="submit" value="${ru_button}">
                 </form>
-            </div>
-            <div>
-                <ul>
-                    <li><a href="/home">${menu_link}</a></li>
-                </ul>
+                <a id="homeLink" href="/home">${menu_link}</a></li>
             </div>
             <div>
                 <c:if test="${user == null}">
@@ -41,7 +37,7 @@
                 </c:if>
 
                 <c:if test="${user != null}">
-                    <a href="/restaurant?command=MoveToAccount">
+                    <a href="/showAccount">
                         <img id="accImg" src="../../images/acc.png" alt="acc">
                         ${user.getName()}
                     </a>

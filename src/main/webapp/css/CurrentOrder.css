@@ -1,3 +1,42 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+}
+
+.main {
+    padding: 1em;
+    text-align: center;
+}
+
+
+@media (max-width: 30em) {
+    .main {
+        flex: 1 0 auto;
+    }
+}
+
+@media (min-width: 30em) {
+    header {
+        display: block;
+    }
+
+    .wrapper {
+        flex-direction: row;
+    }
+
+    .main {
+        flex: 1 1 auto;
+    }
+}
+
 h1 {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
     text-align: center;
@@ -41,12 +80,12 @@ button {
     margin: auto;
 }
 
-#placeOrderForm {
-    position: relative;
-    width: 100%;
-}
-
 #placeOrderBtn {
     position: relative;
-    left: 80%;
+    left: 30%;
+    border-radius: 30px;
+    background: #ffc107;
+    border-color: #ffc107;
+    margin-top: 1%;
+    margin-bottom: 2%;
 }

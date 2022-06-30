@@ -30,48 +30,54 @@
 
             <body>
                 <jsp:include page="/WEB-INF/jsp/Header.jsp" />
-                <div class="grid-container">
-                    <div>
-                        <h1>${placingAnOrderFmt}</h1>
-                        <form id="placingOrder" action="restaurant" method="get">
-                            <input type="hidden" name="command" value="place_order">
 
-                            <h2>${methodOfReceivingFmt}</h2>
-                            <label for="takeaway">${takeawayFmt}</label>
-                            <input type="radio" id="takeaway" name="receiving" value="takeaway" checked><br>
-                            <label for="inPlace">${inPlaceFmt}</label>
-                            <input type="radio" id="inPlace" name="receiving" value="inPlace">
+                <div class="wrapper">
+                    <main class="main">
+                        <div class="grid-container">
+                            <div>
+                                <h1>${placingAnOrderFmt}</h1>
+                                <form id="placingOrder" action="restaurant" method="get">
+                                    <input type="hidden" name="command" value="place_order">
 
-                            <h2>${paymentMethodFmt}</h2>
-                            <c:forEach items="${paymentMethods}" var="paymentMethod">
-                                <label for="${paymentMethod.getMethod()}">${paymentMethod.getMethod()}</label>
-                                <input type="radio" id="${paymentMethod.getMethod()}" name="paymentBy"
-                                    value="${paymentMethod.getId()}" checked><br>
-                            </c:forEach>
-                            <br>
-                            <input type="submit" value="${placeOrderFmt}" <c:if test="${user == null}">disabled
-                            </c:if>>
-                            <c:if test="${user == null}">
-                                <h3 style="color: red;">${toContinueFmt}</h3>
-                            </c:if>
-                        </form>
-                    </div>
-                    <div>
-                        <fieldset>
-                            <legend>${orderFmt}</legend>
+                                    <h2>${methodOfReceivingFmt}</h2>
+                                    <label for="takeaway">${takeawayFmt}</label>
+                                    <input type="radio" id="takeaway" name="receiving" value="takeaway" checked><br>
+                                    <label for="inPlace">${inPlaceFmt}</label>
+                                    <input type="radio" id="inPlace" name="receiving" value="inPlace">
 
-                            <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
-                                <label class="dishName">${orderedDish.name}
-                                    x${order.getOrderList().get(orderedDish)}</label>
-                                <label class="dishPrice">${orderedDish.price}</label>
-                                <br>
-                            </c:forEach>
-                            <hr>
+                                    <h2>${paymentMethodFmt}</h2>
+                                    <c:forEach items="${paymentMethods}" var="paymentMethod">
+                                        <label for="${paymentMethod.getMethod()}">${paymentMethod.getMethod()}</label>
+                                        <input type="radio" id="${paymentMethod.getMethod()}" name="paymentBy"
+                                            value="${paymentMethod.getId()}" checked><br>
+                                    </c:forEach>
+                                    <br>
+                                    <input id="placeOrderBtn" type="submit" value="${placeOrderFmt}" <c:if
+                                        test="${user == null}">disabled
+                                    </c:if>>
+                                    <c:if test="${user == null}">
+                                        <h3 style="color: red;">${toContinueFmt}</h3>
+                                    </c:if>
+                                </form>
+                            </div>
+                            <div>
+                                <fieldset>
+                                    <legend>${orderFmt}</legend>
 
-                            <label>${totalPriceFmt}: ${order.getTotalPrice()}</label>
+                                    <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
+                                        <label class="dishName">${orderedDish.name}
+                                            x${order.getOrderList().get(orderedDish)}</label>
+                                        <label class="dishPrice">${orderedDish.price}</label>
+                                        <br>
+                                    </c:forEach>
+                                    <hr>
 
-                        </fieldset>
-                    </div>
+                                    <label>${totalPriceFmt}: ${order.getTotalPrice()}</label>
+
+                                </fieldset>
+                            </div>
+                        </div>
+                    </main>
                 </div>
 
                 <jsp:include page="/WEB-INF/jsp/Footer.jsp" />

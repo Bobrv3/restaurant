@@ -23,25 +23,29 @@
             <body>
                 <jsp:include page="/WEB-INF/jsp/Header.jsp" />
 
-                <fieldset>
-                    <legend>${orderFmt}</legend>
+                <div class="wrapper">
+                    <main class="main">
+                        <fieldset>
+                            <legend>${orderFmt}</legend>
 
-                    <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
-                        <label class="dishName">${orderedDish.name}
-                            x${order.getOrderList().get(orderedDish)}</label>
-                        <label class="dishPrice">${orderedDish.price}</label>
-                        <br>
-                    </c:forEach>
-                    <hr>
+                            <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
+                                <label class="dishName">${orderedDish.name}
+                                    x${order.getOrderList().get(orderedDish)}</label>
+                                <label class="dishPrice">${orderedDish.price}</label>
+                                <br>
+                            </c:forEach>
+                            <hr>
 
-                    <label>${totalPriceFmt}: ${order.getTotalPrice()}</label>
+                            <label>${totalPriceFmt}: ${order.getTotalPrice()}</label>
 
-                </fieldset>
+                        </fieldset>
 
-                <form action="restaurant" method="post">
-                    <input type="hidden" name="command" value="online_pay">
-                    <input type="submit" value="${toPayFmt}">
-                </form>
+                        <form action="restaurant" method="post" id="payBtn">
+                            <input type="hidden" name="command" value="online_pay">
+                            <input type="submit" value="${toPayFmt}">
+                        </form>
+                    </main>
+                </div>
 
                 <jsp:include page="/WEB-INF/jsp/Footer.jsp" />
             </body>

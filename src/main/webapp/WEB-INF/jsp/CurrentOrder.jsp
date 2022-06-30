@@ -19,47 +19,53 @@
             </head>
 
             <body>
+
                 <jsp:include page="/WEB-INF/jsp/Header.jsp" />
 
-                <c:if test="${order != null}">
-                    <h1>${yourOrder_lbl}:</h1>
+                <div class="wrapper">
+                    <main class="main">
+                        <c:if test="${order != null}">
+                            <h1>${yourOrder_lbl}:</h1>
 
-                    <form action="restaurant" method="get" id="placeOrderForm">
-                        <input type="hidden" name="command" value="move_to_place_order">
+                            <form action="restaurant" method="get" id="placeOrderForm">
+                                <input type="hidden" name="command" value="move_to_place_order">
 
-                        <table>
-                            <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
-                                <tr>
-                                    <td>
-                                        <h3 class="DishName">
-                                            <li />${orderedDish.name}
-                                        </h3>
-                                        ${orderedDish.description}
-                                    </td>
-                                    <td>
-                                        ${orderedDish.price}
-                                    </td>
-                                    <td>
-                                        <input type="hidden" name="dishId" value="${orderedDish.id}">
+                                <table>
+                                    <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
+                                        <tr>
+                                            <td>
+                                                <h3 class="DishName">
+                                                    <li />${orderedDish.name}
+                                                </h3>
+                                                ${orderedDish.description}
+                                            </td>
+                                            <td>
+                                                ${orderedDish.price}
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dishId" value="${orderedDish.id}">
 
-                                        <button onclick="reduceOne(event)">-</button>
-                                        <input type="text" name="quantity"
-                                            value="${order.getOrderList().get(orderedDish)}" required>
-                                        <button onclick="addOne(event)">+</button> <br>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
+                                                <button onclick="reduceOne(event)">-</button>
+                                                <input type="text" name="quantity"
+                                                    value="${order.getOrderList().get(orderedDish)}" required>
+                                                <button onclick="addOne(event)">+</button> <br>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </table>
 
-                        <input type="submit" value="${GoToPlacingAnOrder_btn}" id="placeOrderBtn">
-                    </form>
-                </c:if>
+                                <input type="submit" value="${GoToPlacingAnOrder_btn}" id="placeOrderBtn">
+                            </form>
+                        </c:if>
 
-                <c:if test="${order == null}">
-                    <h1>Your order is empty</h1>
-                </c:if>
+                        <c:if test="${order == null}">
+                            <h1>Your order is empty</h1>
+                        </c:if>
+                    </main>
+                </div>
 
                 <jsp:include page="/WEB-INF/jsp/Footer.jsp" />
+
             </body>
 
             <script src="../../js/CurrentOrder.js"></script>

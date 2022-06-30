@@ -3,13 +3,13 @@ body {
 }
 
 h1 {
-
     text-align: center;
 }
 
 .CategoryName {
     margin-left: 8%;
     margin-right: 8%;
+    margin-bottom: 1%;
     border-bottom-style: solid;
 }
 
@@ -57,6 +57,7 @@ button {
     border-color: #ffc107;
     margin: 4px;
     width: 60%;
+    min-width: 75px;
     transition-duration: 0.4s;
 }
 

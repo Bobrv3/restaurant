@@ -21,8 +21,13 @@
             <body>
                 <jsp:include page="/WEB-INF/jsp/Header.jsp" />
 
-                <img id="tick" src="../../images/tick.png" alt="Complete">
-                <h2>${doneFmt}</h2>
+
+                <div class="wrapper">
+                    <main class="main">
+                        <img id="tick" src="../../images/tick.png" alt="Complete">
+                        <h2>${doneFmt}</h2>
+                    </main>
+                </div>
 
                 <jsp:include page="/WEB-INF/jsp/Footer.jsp" />
             </body>

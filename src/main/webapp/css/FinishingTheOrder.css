@@ -1,11 +1,42 @@
-#tick {
-    position: relative;
-    top: 10%;
-    left: 40%;
-    margin-top: 3%;
-    width: 20%;
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
 }
 
-h2 {
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+}
+
+.main {
+    padding: 1em;
     text-align: center;
+}
+
+
+@media (max-width: 30em) {
+    .main {
+        flex: 1 0 auto;
+    }
+}
+
+@media (min-width: 30em) {
+    header {
+        display: block;
+    }
+
+    .wrapper {
+        flex-direction: row;
+    }
+
+    .main {
+        flex: 1 1 auto;
+    }
+}
+
+#tick {
+    width: 20%;
 }

@@ -2,6 +2,7 @@ footer {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
     background-color: #212529;
     padding: 10px;
+    text-align: center;
 }
 
 label#author {

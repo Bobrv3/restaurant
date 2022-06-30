@@ -35,25 +35,3 @@ body {
         flex: 1 1 auto;
     }
 }
-
-fieldset {
-    position: relative;
-    left: 31%;
-    width: 30%;
-    margin-top: 1%;
-}
-
-#payBtn {
-    position: relative;
-    left: 59%;
-    margin: 1%;
-    width: 10%;
-    min-width: 80px;
-}
-
-#payBtn>input {
-    width: 100%;
-    border-radius: 30px;
-    background: #ffc107;
-    border-color: #ffc107;
-}

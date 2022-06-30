@@ -8,15 +8,21 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Main page</title>
+        <link rel="stylesheet" href="css/Index.css">
     </head>
 
     <body>
 
         <jsp:include page="/WEB-INF/jsp/Header.jsp" />
 
-        <jsp:include page="/WEB-INF/jsp/Menu.jsp" />
+        <div class="wrapper">
+            <main class="main">
+                <jsp:include page="/WEB-INF/jsp/Menu.jsp" />
+            </main>
+        </div>
 
         <jsp:include page="/WEB-INF/jsp/Footer.jsp" />
 
     </body>
+
     </html>
