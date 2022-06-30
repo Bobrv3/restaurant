@@ -19,15 +19,16 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-public class GetHistoryOfOrders implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(GetHistoryOfOrders.class);
+public class GetOrdersInProcessing implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(GetOrdersInProcessing.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
     private static final String USER_ATTR = "user";
-    private static final String ORDERS_HISTORY_ATTR = "ordersHistory";
-    private static final String HISTORY_OF_ORDERS_ADDR = "/historyOfOrders";
+    private static final String ORDERS_IN_PROCESSING_ATTR = "ordersInProcessing";
+    private static final String ORDERS_IN_PROCESSING_ADDR = "/ordersInProcessing";
     private static final int FOUND_USER = 0;
     private static final String EX = "Error invalid address to forward";
+
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
@@ -43,16 +44,16 @@ public class GetHistoryOfOrders implements Command {
 
         Criteria orderCriteria = new Criteria();
         orderCriteria.add(SearchCriteria.Orders.USER_ID.toString(), registrationUserData.get(FOUND_USER).getId());
-        orderCriteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "confirmed");
-        List<Order> ordersHistory = orderService.find(orderCriteria);
+        orderCriteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "in Processing");
 
-        session.setAttribute(ORDERS_HISTORY_ATTR, ordersHistory);
+        List<Order> ordersInProcessing = orderService.find(orderCriteria);
+
+        session.setAttribute(ORDERS_IN_PROCESSING_ATTR, ordersInProcessing);
 
         try {
-            request.getRequestDispatcher(HISTORY_OF_ORDERS_ADDR).forward(request, response);
+            request.getRequestDispatcher(ORDERS_IN_PROCESSING_ADDR).forward(request, response);
         } catch (IOException e) {
             LOGGER.error(EX, e);
         }
-
     }
 }

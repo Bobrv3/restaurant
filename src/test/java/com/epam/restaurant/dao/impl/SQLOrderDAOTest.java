@@ -1,6 +1,8 @@
 package com.epam.restaurant.dao.impl;
 
 import com.epam.restaurant.bean.Order;
+import com.epam.restaurant.bean.criteria.Criteria;
+import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
@@ -44,8 +46,20 @@ class SQLOrderDAOTest {
     }
 
     @Test
-    void getAllUserOrders_CountOfAllOrdersFromUserWithId_10_equals_2_True() throws DAOException {
+    void find_CountOfConfirmedOrdersFromUserWithId_10_equals_2_True() throws DAOException {
         int userId = 10;
-        Assertions.assertEquals(2, orderDAO.getAllUserOrders(userId).size());
+        Criteria criteria = new Criteria();
+        criteria.add(SearchCriteria.Orders.USER_ID.toString(), 10);
+        criteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "confirmed");
+        Assertions.assertEquals(2, orderDAO.find(criteria).size());
+    }
+
+    @Test
+    void find_CountOfProcessingOrdersFromUserWithId_9_equals_7_True() throws DAOException {
+        int userId = 10;
+        Criteria criteria = new Criteria();
+        criteria.add(SearchCriteria.Orders.USER_ID.toString(), 9);
+        criteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "in Processing");
+        Assertions.assertEquals(7, orderDAO.find(criteria).size());
     }
 }

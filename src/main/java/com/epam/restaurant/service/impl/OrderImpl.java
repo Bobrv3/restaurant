@@ -47,17 +47,12 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllUserOrders(String userLogin) throws ServiceException {
+    public List<Order> find(Criteria criteria) throws ServiceException {
         UserDAO userDAO = daoProvider.getUserDAO();
 
-        Criteria criteria = new Criteria();
-        criteria.add(SearchCriteria.Users.LOGIN.toString(), userLogin);
-
         try {
-            List<RegistrationUserData> authorizedUsers = userDAO.find(criteria);
-
             OrderDAO orderDAO = daoProvider.getOrderDAO();
-            List<Order> orders = orderDAO.getAllUserOrders(authorizedUsers.get(0).getId());
+            List<Order> orders = orderDAO.find(criteria);
 
             return orders;
         } catch (DAOException e) {
