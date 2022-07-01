@@ -67,4 +67,15 @@ public class MenuImpl implements MenuService {
             throw new ServiceException(e);
         }
     }
+
+    @Override
+    public boolean editCategory(int editedCategoryId, String newCategoryName) throws ServiceException {
+        MenuDAO menuDAO = daoProvider.getMenuDAO();
+
+        try {
+            return menuDAO.editCategory(editedCategoryId, newCategoryName);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

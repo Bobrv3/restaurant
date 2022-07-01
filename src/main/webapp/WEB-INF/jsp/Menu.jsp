@@ -20,14 +20,25 @@
         </c:if>
 
         <c:forEach items="${categories}" var="category">
-            <h2 class="CategoryName">${category.name}
-                <c:if test="${user != null && user.roleId == 1}">
-                    <a href="/restaurant?command=edit_category&&dishId=${dish.id}">
-                        <img src="../../images/edit.png" alt="edit" class="imgInTd">
-                    </a>
-                </c:if>
-            </h2>
 
+            <c:if test="${param.editedCategory == category.id}">
+                <form action="restaurant" method="get" style="width: 84%;" class="CategoryName">
+                    <input type="hidden" name="command" value="edit_category">
+                    <input type="hidden" name="editedCategoryId" value="${category.id}">
+
+                    <input type="text" name="categoryName" value="${category.name}">
+                    <input type="submit" value="${saveFmt}">
+                </form>
+            </c:if>
+            <c:if test="${param.editedCategory != category.id}">
+                <h2 class="CategoryName">${category.name}
+                    <c:if test="${user.roleId == 1}">
+                        <a href="/home?editedCategory=${category.id}">
+                            <img src="../../images/edit.png" alt="edit" class="imgInTd">
+                        </a>
+                    </c:if>
+                </h2>
+            </c:if>
 
 
             <table>

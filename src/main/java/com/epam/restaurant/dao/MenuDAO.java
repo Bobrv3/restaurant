@@ -16,4 +16,6 @@ public interface MenuDAO {
     List<Dish> find(Criteria criteria) throws DAOException;
 
     int remove(Criteria criteria) throws DAOException;
+
+    boolean editCategory(int editedCategoryId, String newCategoryName) throws DAOException;
 }

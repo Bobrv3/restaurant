@@ -1,6 +1,5 @@
 package com.epam.restaurant.dao.impl;
 
-import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.bean.Category;
 import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Menu;
@@ -30,6 +29,7 @@ public class SQLMenuDAO implements MenuDAO {
     private static final String GET_MENU_QUERY = "SELECT dishes_id, name, description, price, category_id FROM menu where status != 1;";
     private static final String FIND_DISH_BY_CRITERIA_QUERY = "Select dishes_id, name, description, price, category_id FROM menu where ";
     private static final String REMOVE_DISH_BY_CRITERIA_QUERY = "UPDATE menu SET status=1 where ";
+    private static final String EDIT_CATEGORY_QUERY = "UPDATE categories SET name=? where id=?";
 
     private static final String AND = "AND ";
 
@@ -174,7 +174,6 @@ public class SQLMenuDAO implements MenuDAO {
     public int remove(Criteria criteria) throws DAOException {
         Connection connection = null;
         Statement statement = null;
-        ResultSet resultSet = null;
 
         Map<String, Object> criterias = criteria.getCriteria();
 
@@ -198,7 +197,35 @@ public class SQLMenuDAO implements MenuDAO {
             throw new DAOException("Error when trying to take connection", e);
         } finally {
             try {
-                connectionPool.closeConnection(connection, statement, resultSet);
+                connectionPool.closeConnection(connection, statement, null);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
+    }
+
+    @Override
+    public boolean editCategory(int editedCategoryId, String newCategoryName) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+
+             statement = connection.prepareStatement(EDIT_CATEGORY_QUERY);
+             statement.setString(1, newCategoryName);
+             statement.setInt(2, editedCategoryId);
+
+            return statement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, null);
             } catch (SQLException e) {
                 LOGGER.error("Error to close connection...", e);
             }

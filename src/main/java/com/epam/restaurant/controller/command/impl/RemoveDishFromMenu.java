@@ -21,10 +21,10 @@ import java.util.List;
 public class RemoveDishFromMenu implements Command {
     private static final Logger LOGGER = LogManager.getLogger(RemoveDishFromMenu.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
+
     private static final String DISH_ID_PARAM = "dishId";
     private static final String MENU_ATTR = "menu";
     private static final String MAIN_PAGE_ADDR = "/home";
-    private static final String QUANTITY_OF_DISHES_ATTR = "quantityOfDishes";
 
     private static final String EX1 = "Error invalid address to redirect";
     @Override
