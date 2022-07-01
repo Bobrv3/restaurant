@@ -24,9 +24,8 @@ public class RestaurantController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("text/html; charset=utf-8");
-
         Command command = commandProvider.getCommand(req.getParameter(PARAMETER_COMMAND).toUpperCase());
+
         try {
             command.execute(req, resp);
         } catch (ServiceException e) {
@@ -39,9 +38,8 @@ public class RestaurantController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html; charset=utf-8");
-
         Command command = commandProvider.getCommand(req.getParameter(PARAMETER_COMMAND).toUpperCase());
+
         try {
             command.execute(req, resp);
         } catch (ServiceException e) {
