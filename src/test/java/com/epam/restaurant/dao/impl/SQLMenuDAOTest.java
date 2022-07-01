@@ -10,6 +10,7 @@ import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.MenuDAO;
+import com.sun.source.util.SourcePositions;
 import org.apache.logging.log4j.core.util.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -88,5 +89,13 @@ class SQLMenuDAOTest {
         int numOdRemovedDishes = menuDAO.remove(criteria);
 
         Assertions.assertEquals(1, numOdRemovedDishes);
+    }
+
+    @Test
+    void editCategory_ResultOfUpdateMoreThan0_true() throws DAOException {
+        int editedCategoryId = 2;
+        String newCategoryName = "Soup";
+
+        Assertions.assertTrue(menuDAO.editCategory(editedCategoryId, newCategoryName));
     }
 }
