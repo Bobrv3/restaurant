@@ -34,12 +34,6 @@
                                 </a>
                             </div>
                             <div>
-                                <a href="/personalInfo">
-                                    <img src="../../images/acc.png" alt="personal Info"><br>
-                                    ${personalInfoFmt}
-                                </a>
-                            </div>
-                            <div>
                                 <a href="/historyOfOrders">
                                     <img src="../../images/historyOfOrders.png" alt="history Of Orders"><br>
                                     ${historyOfOrdersFmt}
@@ -49,6 +43,12 @@
                                 <a href="/showCurrentOrder">
                                     <img src="../../images/order.png" alt="current order" style="width: 40%;"><br>
                                     ${currentOrderFmt}
+                                </a>
+                            </div>
+                            <div>
+                                <a href="/personalInfo">
+                                    <img src="../../images/acc.png" alt="personal Info"><br>
+                                    ${personalInfoFmt}
                                 </a>
                             </div>
                             <div>

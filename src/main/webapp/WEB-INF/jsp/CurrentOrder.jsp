@@ -40,7 +40,8 @@
                                                 ${orderedDish.description}
                                             </td>
                                             <td style="width: 5%;">
-                                                <a href="/restaurant?command=removeFromOrder&dishId=${orderedDish.id}">
+                                                <a
+                                                    href="/restaurant?command=remove_from_order&&dishId=${orderedDish.id}">
                                                     <img style="width: 100%;" src="../../images/remove.png"
                                                         alt="remove">
                                                 </a>
@@ -60,7 +61,9 @@
                                     </c:forEach>
                                 </table>
 
-                                <input type="submit" value="${GoToPlacingAnOrder_btn}" id="placeOrderBtn">
+                                <c:if test="${order != null}">
+                                    <input type="submit" value="${GoToPlacingAnOrder_btn}" id="placeOrderBtn">
+                                </c:if>
                             </form>
                         </c:if>
 
