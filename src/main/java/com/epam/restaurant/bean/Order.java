@@ -11,6 +11,7 @@ public class Order {
     private Map<Dish, Integer> orderList = new HashMap<>();
     private BigDecimal totalPrice;
     private Date date;
+    private String methodOfReceiving;
 
     public Order() {
 
@@ -19,6 +20,14 @@ public class Order {
     public Order(long id, Map<Dish, Integer> dishes) {
         this.id = id;
         this.orderList = dishes;
+    }
+
+    public String getMethodOfReceiving() {
+        return methodOfReceiving;
+    }
+
+    public void setMethodOfReceiving(String methodOfReceiving) {
+        this.methodOfReceiving = methodOfReceiving;
     }
 
     public Date getDate() {
