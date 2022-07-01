@@ -37,7 +37,7 @@
                 </c:if>
 
                 <c:if test="${user != null}">
-                    <a href="/showAccount">
+                    <a href="/restaurant?command=move_to_account">
                         <img id="accImg" src="../../images/acc.png" alt="acc">
                         ${user.getName()}
                     </a>

@@ -8,6 +8,7 @@ import com.epam.restaurant.controller.command.impl.GetCategories;
 import com.epam.restaurant.controller.command.impl.GetHistoryOfOrders;
 import com.epam.restaurant.controller.command.impl.GetMenu;
 import com.epam.restaurant.controller.command.impl.GetOrdersInProcessing;
+import com.epam.restaurant.controller.command.impl.MoveToAccount;
 import com.epam.restaurant.controller.command.impl.NoNameCommand;
 import com.epam.restaurant.controller.command.impl.MoveToPlaceOrder;
 import com.epam.restaurant.controller.command.impl.OnlinePay;
@@ -39,6 +40,7 @@ public final class CommandProvider {
         repository.put(CommandName.PRINT_USER_REGISTR_DATA, new PrintUserRegistrData());
         repository.put(CommandName.GET_HISTORY_OF_ORDERS, new GetHistoryOfOrders());
         repository.put(CommandName.GET_ORDERS_IN_PROCESSING, new GetOrdersInProcessing());
+        repository.put(CommandName.MOVE_TO_ACCOUNT, new MoveToAccount());
     }
 
     public Command getCommand(String name) {

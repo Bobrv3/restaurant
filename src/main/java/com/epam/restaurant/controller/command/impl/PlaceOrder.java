@@ -24,6 +24,7 @@ public class PlaceOrder implements Command {
 
     private static final String ORDER_ATTR = "order";
     private static final String USER_ATTR = "user";
+    private static final String QUANTITY_OF_DISHES_ATTR = "quantityOfDishes";
     private static final String PAYMENT_BY_PARAM = "paymentBy";
     private static final String RECEIVING_PARAM = "receiving";
     private static final int CARD_ONLINE_ID = 2;
@@ -48,6 +49,12 @@ public class PlaceOrder implements Command {
             }
             else {
                 setInvoice(request);
+
+                session.removeAttribute(ORDER_ATTR);
+                session.removeAttribute(PAYMENT_BY_PARAM);
+                session.removeAttribute(RECEIVING_PARAM);
+                session.removeAttribute(QUANTITY_OF_DISHES_ATTR);
+
                 response.sendRedirect(FINISHING_THE_ORDER_ADDR);
             }
         }
