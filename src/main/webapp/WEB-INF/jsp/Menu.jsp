@@ -7,6 +7,7 @@
 
         <fmt:message bundle="${loc}" key="local.link.Menu" var="menu_link" />
         <fmt:message bundle="${loc}" key="local.button.add" var="btn_add" />
+        <fmt:message bundle="${loc}" key="local.button.save" var="saveFmt" />
 
         <link rel="stylesheet" href="css/Menu.css">
 
@@ -33,15 +34,36 @@
                 <c:forEach items="${menu.getDishes()}" var="dish">
                     <c:if test="${dish.category_id == category.id}">
                         <tr>
-                            <td>
-                                <h3 class="DishName">
-                                    <li />${dish.name}
-                                </h3>
-                                ${dish.description}
-                            </td>
-                            <td>
-                                ${dish.price}
-                            </td>
+                            <c:if test="${param.editedDishId == dish.id}">
+                                <form action="restaurant" method="post">
+                                    <input type="hidden" name="command" value="editDish">
+                                    <input type="hidden" name="dishId" value="${dish.id}">
+
+                                    <td>
+                                        <h3 class="DishName">
+                                            <li /><input type="text" name="dishName" value="${dish.name}">
+                                        </h3>
+                                        <textarea name="description" cols="90" rows="3">${dish.description}</textarea>
+                                        <input type="submit" value="${saveFmt}">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="price" value="${dish.price}" id="editedPrice">
+                                    </td>
+                                </form>
+                            </c:if>
+
+                            <c:if test="${param.editedDishId != dish.id}">
+                                <td>
+                                    <h3 class="DishName">
+                                        <li />${dish.name}
+                                    </h3>
+                                    ${dish.description}
+                                </td>
+                                <td>
+                                    ${dish.price}
+                                </td>
+                            </c:if>
+
                             <td>
 
                                 <form action="restaurant" method="post">
@@ -61,7 +83,7 @@
                                         <img src="../../images/remove.png" alt="remove" class="imgInTd">
                                     </a>
 
-                                    <a href="/restaurant?command=edit_dish&&dishId=${dish.id}">
+                                    <a href="/home?editedDishId=${dish.id}">
                                         <img src="../../images/edit.png" alt="edit" class="imgInTd">
                                     </a>
                                 </c:if>
