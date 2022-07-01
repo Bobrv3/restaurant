@@ -17,7 +17,7 @@
                 <meta charset="UTF-8">
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Main page</title>
+                <title>History of orders</title>
                 <link rel="stylesheet" href="css/HistoryOfOrders.css">
             </head>
 
@@ -51,7 +51,7 @@
                                         ${order.totalPrice}
                                     </td>
                                     <td>
-                                        ${order.date}
+                                        ${order.dateTime}
                                     </td>
                                     <td>
                                         ${order.methodOfReceiving}

@@ -2,7 +2,6 @@ package com.epam.restaurant.dao.impl;
 
 import com.epam.restaurant.bean.Order;
 import com.epam.restaurant.bean.criteria.Criteria;
-import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.OrderDAO;
@@ -10,11 +9,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class SQLOrderDAO implements OrderDAO {
             connection = connectionPool.takeConnection();
 
             preparedStatement = connection.prepareStatement(INSERT_ORDER_QUERY, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setDate(1, new Date(System.currentTimeMillis()));
+            preparedStatement.setTimestamp (1, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(2, IN_PROCESSING);
             preparedStatement.setInt(3, userId);
             preparedStatement.executeUpdate();
@@ -124,7 +123,7 @@ public class SQLOrderDAO implements OrderDAO {
                 Order order = new Order();
                 order.setId(resultSet.getInt(1));
                 order.setTotalPrice(resultSet.getBigDecimal(2));
-                order.setDate(resultSet.getDate(3));
+                order.setDateTime(resultSet.getTimestamp(3));
                 order.setMethodOfReceiving(resultSet.getString(4));
                 orders.add(order);
             }

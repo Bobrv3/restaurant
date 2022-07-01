@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,7 +40,7 @@ public class SQLPaymentDAO implements PaymentDAO {
             connection = connectionPool.takeConnection();
 
             preparedStatement = connection.prepareStatement(INSERT_INVOICE_QUERY, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setDate(1, new Date(System.currentTimeMillis()));
+            preparedStatement.setTimestamp (1, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(2, UNPAID);
             preparedStatement.setInt(3, orderId);
             preparedStatement.executeUpdate();
@@ -114,7 +115,7 @@ public class SQLPaymentDAO implements PaymentDAO {
             connection = connectionPool.takeConnection();
 
             preparedStatement = connection.prepareStatement(INSERT_PAYMENT_QUERY);
-            preparedStatement.setDate(1, new Date(System.currentTimeMillis()));
+            preparedStatement.setTimestamp (1, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(2, SUCCESS);
             preparedStatement.setInt(3, invoiceId);
             preparedStatement.setInt(4, paymentMethodId);
