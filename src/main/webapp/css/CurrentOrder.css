@@ -59,9 +59,16 @@ table {
 
 td {
     color: #669;
-    border-top: 0px solid #e8edff;
     padding: 10px 15px;
     text-align: center;
+}
+
+#tdWithForm {
+    padding: 0;
+}
+
+#removeImg {
+    width: 20px;
 }
 
 tr:hover td {

@@ -34,7 +34,7 @@ class SQLOrderDAOTest {
 
     @Test
     void createOrder_equalsNextGeneratedId_True() throws DAOException {
-        int nextId = 1;
+        int nextId = 44;
         int actualId = orderDAO.createOrder(new Order(), 9);
 
         Assertions.assertEquals(nextId, actualId);
@@ -42,7 +42,7 @@ class SQLOrderDAOTest {
 
     @Test
     void createOrderDetails_SuccessToCreateOrderDetail_True() throws DAOException {
-        Assertions.assertTrue(orderDAO.createOrderDetails(4, 2, 3, "takeaway"));
+        Assertions.assertTrue(orderDAO.createOrderDetails(44, 2, 3, "takeaway"));
     }
 
     @Test
@@ -60,6 +60,6 @@ class SQLOrderDAOTest {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Orders.USER_ID.toString(), 9);
         criteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "in Processing");
-        Assertions.assertEquals(7, orderDAO.find(criteria).size());
+        Assertions.assertEquals(14, orderDAO.find(criteria).size());
     }
 }

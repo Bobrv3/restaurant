@@ -39,23 +39,22 @@
                                                 </h3>
                                                 ${orderedDish.description}
                                             </td>
-                                            <td style="width: 5%;">
-                                                <a
-                                                    href="/restaurant?command=remove_from_order&&dishId=${orderedDish.id}">
-                                                    <img style="width: 100%;" src="../../images/remove.png"
-                                                        alt="remove">
-                                                </a>
-                                            </td>
                                             <td>
                                                 ${orderedDish.price}
                                             </td>
-                                            <td>
+                                            <td id="tdWithForm">
                                                 <input type="hidden" name="dishId" value="${orderedDish.id}">
 
                                                 <button onclick="reduceOne(event)">-</button>
                                                 <input type="text" name="quantity"
                                                     value="${order.getOrderList().get(orderedDish)}" required>
                                                 <button onclick="addOne(event)">+</button> <br>
+                                            </td>
+                                            <td>
+                                                <a
+                                                    href="/restaurant?command=remove_from_order&&dishId=${orderedDish.id}">
+                                                    <img src="../../images/remove.png" alt="remove" id="removeImg">
+                                                </a>
                                             </td>
                                         </tr>
                                     </c:forEach>
