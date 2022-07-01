@@ -19,7 +19,16 @@
         </c:if>
 
         <c:forEach items="${categories}" var="category">
-            <h2 class="CategoryName">${category.name}</h2>
+            <h2 class="CategoryName">${category.name}
+                <c:if test="${user != null && user.roleId == 1}">
+                    <a href="/restaurant?command=edit_category&&dishId=${dish.id}">
+                        <img src="../../images/edit.png" alt="edit" class="imgInTd">
+                    </a>
+                </c:if>
+            </h2>
+
+
+
             <table>
                 <c:forEach items="${menu.getDishes()}" var="dish">
                     <c:if test="${dish.category_id == category.id}">
@@ -45,6 +54,17 @@
 
                                     <input type="submit" value="${btn_add}" class="yellow_button" id="addToOrderBtn">
                                 </form>
+                            </td>
+                            <td>
+                                <c:if test="${user != null && user.roleId == 1}">
+                                    <a href="/restaurant?command=remove_from_menu&&dishId=${dish.id}">
+                                        <img src="../../images/remove.png" alt="remove" class="imgInTd">
+                                    </a>
+
+                                    <a href="/restaurant?command=edit_dish&&dishId=${dish.id}">
+                                        <img src="../../images/edit.png" alt="edit" class="imgInTd">
+                                    </a>
+                                </c:if>
                             </td>
                         </tr>
                     </c:if>

@@ -11,4 +11,5 @@ public interface MenuService {
     Menu getMenu() throws ServiceException;
     List<Category> getCategories() throws ServiceException;
     List<Dish> find(Criteria criteria) throws ServiceException;
+    int remove(Criteria criteria) throws ServiceException;
 }

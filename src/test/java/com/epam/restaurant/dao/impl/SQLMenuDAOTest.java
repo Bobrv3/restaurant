@@ -79,4 +79,14 @@ class SQLMenuDAOTest {
 
         Assertions.assertEquals(currentSizeOfMenu, actual.size());
     }
+
+    @Test
+    void remove_DishWithId3_equal_1() throws DAOException {
+        Criteria criteria = new Criteria();
+        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), 3);
+
+        int numOdRemovedDishes = menuDAO.remove(criteria);
+
+        Assertions.assertEquals(1, numOdRemovedDishes);
+    }
 }

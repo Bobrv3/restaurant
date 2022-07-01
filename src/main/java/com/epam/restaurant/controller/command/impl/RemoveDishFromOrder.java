@@ -14,8 +14,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
-public class RemoveFromOrder implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(RemoveFromOrder.class);
+public class RemoveDishFromOrder implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(RemoveDishFromOrder.class);
     private static final String DISH_ID_PARAM = "dishId";
     private static final String ORDER_ATTR = "order";
     private static final String CURRENT_ORDER_ADDR = "/showCurrentOrder";

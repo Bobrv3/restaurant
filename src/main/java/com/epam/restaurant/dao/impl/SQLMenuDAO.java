@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,6 +29,7 @@ public class SQLMenuDAO implements MenuDAO {
     private static final String GET_ALL_CATEGORIES_QUERY = "SELECT * FROM categories ORDER BY id";
     private static final String GET_MENU_QUERY = "SELECT dishes_id, name, description, price, category_id FROM menu where status != 1;";
     private static final String FIND_DISH_BY_CRITERIA_QUERY = "Select dishes_id, name, description, price, category_id FROM menu where ";
+    private static final String REMOVE_DISH_BY_CRITERIA_QUERY = "UPDATE menu SET status=1 where ";
 
     private static final String AND = "AND ";
 
@@ -153,6 +155,41 @@ public class SQLMenuDAO implements MenuDAO {
             }
 
             return dishes;
+
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to create a statement dish find query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
+    }
+
+    @Override
+    public int remove(Criteria criteria) throws DAOException {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        Map<String, Object> criterias = criteria.getCriteria();
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            StringBuilder queryBuilder = new StringBuilder(REMOVE_DISH_BY_CRITERIA_QUERY);
+            for (String key : criterias.keySet()) {
+                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), AND));
+            }
+            queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
+
+            statement = connection.createStatement();
+
+            return statement.executeUpdate(queryBuilder.toString());
 
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a statement dish find query", e);

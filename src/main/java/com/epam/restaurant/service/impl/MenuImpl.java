@@ -56,4 +56,15 @@ public class MenuImpl implements MenuService {
 
         return dishes;
     }
+
+    @Override
+    public int remove(Criteria criteria) throws ServiceException {
+        MenuDAO menuDAO = daoProvider.getMenuDAO();
+
+        try {
+            return menuDAO.remove(criteria);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

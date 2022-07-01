@@ -16,7 +16,8 @@ import com.epam.restaurant.controller.command.impl.PlaceOrder;
 import com.epam.restaurant.controller.command.impl.PrintUserRegistrData;
 import com.epam.restaurant.controller.command.impl.QuitFromAccount;
 import com.epam.restaurant.controller.command.impl.Registration;
-import com.epam.restaurant.controller.command.impl.RemoveFromOrder;
+import com.epam.restaurant.controller.command.impl.RemoveDishFromMenu;
+import com.epam.restaurant.controller.command.impl.RemoveDishFromOrder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +45,8 @@ public final class CommandProvider {
         repository.put(CommandName.GET_ORDERS_IN_PROCESSING, new GetOrdersInProcessing());
         repository.put(CommandName.MOVE_TO_ACCOUNT, new MoveToAccount());
         repository.put(CommandName.QUIT_FROM_ACCOUNT, new QuitFromAccount());
-        repository.put(CommandName.REMOVE_FROM_ORDER, new RemoveFromOrder());
+        repository.put(CommandName.REMOVE_FROM_ORDER, new RemoveDishFromOrder());
+        repository.put(CommandName.REMOVE_FROM_MENU, new RemoveDishFromMenu());
     }
 
     public Command getCommand(String name) {
