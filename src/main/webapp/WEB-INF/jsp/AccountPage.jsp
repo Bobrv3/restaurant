@@ -8,6 +8,7 @@
             <fmt:message bundle="${loc}" key="local.txt.personalInfo" var="personalInfoFmt" />
             <fmt:message bundle="${loc}" key="local.txt.historyOfOrders" var="historyOfOrdersFmt" />
             <fmt:message bundle="${loc}" key="local.txt.currentOrder" var="currentOrderFmt" />
+            <fmt:message bundle="${loc}" key="local.txt.quitFromAccount" var="quitFromAccountFmt" />
             <!DOCTYPE html>
             <html>
 
@@ -48,6 +49,12 @@
                                 <a href="/showCurrentOrder">
                                     <img src="../../images/order.png" alt="current order" style="width: 40%;"><br>
                                     ${currentOrderFmt}
+                                </a>
+                            </div>
+                            <div>
+                                <a href="/restaurant?command=quit_from_account">
+                                    <img src="../../images/quit.png" alt="Quit from account"><br>
+                                    ${quitFromAccountFmt}
                                 </a>
                             </div>
                         </div>

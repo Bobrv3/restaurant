@@ -39,6 +39,12 @@
                                                 </h3>
                                                 ${orderedDish.description}
                                             </td>
+                                            <td style="width: 5%;">
+                                                <a href="/restaurant?command=removeFromOrder&dishId=${orderedDish.id}">
+                                                    <img style="width: 100%;" src="../../images/remove.png"
+                                                        alt="remove">
+                                                </a>
+                                            </td>
                                             <td>
                                                 ${orderedDish.price}
                                             </td>

@@ -14,6 +14,7 @@ import com.epam.restaurant.controller.command.impl.MoveToPlaceOrder;
 import com.epam.restaurant.controller.command.impl.OnlinePay;
 import com.epam.restaurant.controller.command.impl.PlaceOrder;
 import com.epam.restaurant.controller.command.impl.PrintUserRegistrData;
+import com.epam.restaurant.controller.command.impl.QuitFromAccount;
 import com.epam.restaurant.controller.command.impl.Registration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,6 +42,7 @@ public final class CommandProvider {
         repository.put(CommandName.GET_HISTORY_OF_ORDERS, new GetHistoryOfOrders());
         repository.put(CommandName.GET_ORDERS_IN_PROCESSING, new GetOrdersInProcessing());
         repository.put(CommandName.MOVE_TO_ACCOUNT, new MoveToAccount());
+        repository.put(CommandName.QUIT_FROM_ACCOUNT, new QuitFromAccount());
     }
 
     public Command getCommand(String name) {
