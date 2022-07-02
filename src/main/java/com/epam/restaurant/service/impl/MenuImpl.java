@@ -10,6 +10,7 @@ import com.epam.restaurant.dao.MenuDAO;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class MenuImpl implements MenuService {
@@ -77,5 +78,17 @@ public class MenuImpl implements MenuService {
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price) throws ServiceException {
+        MenuDAO menuDAO = daoProvider.getMenuDAO();
+
+        try {
+            return menuDAO.editDish(editedDishId, newDishName, description, price);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+
     }
 }

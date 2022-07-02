@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -94,8 +95,28 @@ class SQLMenuDAOTest {
     @Test
     void editCategory_ResultOfUpdateMoreThan0_true() throws DAOException {
         int editedCategoryId = 2;
-        String newCategoryName = "Soup";
+
+        Criteria criteria = new Criteria();
+        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), editedCategoryId);
+
+        List<Dish> dishes = menuDAO.find(criteria);
+        String newCategoryName = dishes.get(0).getName();
 
         Assertions.assertTrue(menuDAO.editCategory(editedCategoryId, newCategoryName));
+    }
+
+    @Test
+    void editDish() throws DAOException {
+        int editedCategoryId = 2;
+
+        Criteria criteria = new Criteria();
+        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), editedCategoryId);
+
+        List<Dish> dishes = menuDAO.find(criteria);
+        String newCategoryName = dishes.get(0).getName();
+        BigDecimal newPrice = dishes.get(0). getPrice();
+        String newDescription = dishes.get(0).getDescription();
+
+        Assertions.assertTrue(menuDAO.editDish(editedCategoryId, newCategoryName, newDescription, newPrice));
     }
 }

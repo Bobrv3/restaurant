@@ -30,6 +30,7 @@ public class SQLMenuDAO implements MenuDAO {
     private static final String FIND_DISH_BY_CRITERIA_QUERY = "Select dishes_id, name, description, price, category_id FROM menu where ";
     private static final String REMOVE_DISH_BY_CRITERIA_QUERY = "UPDATE menu SET status=1 where ";
     private static final String EDIT_CATEGORY_QUERY = "UPDATE categories SET name=? where id=?";
+    private static final String EDIT_DISH_QUERY = "UPDATE menu SET name=?, description=?, price=? where dishes_id=?";
 
     private static final String AND = "AND ";
 
@@ -216,7 +217,37 @@ public class SQLMenuDAO implements MenuDAO {
              statement.setString(1, newCategoryName);
              statement.setInt(2, editedCategoryId);
 
-            return statement.executeUpdate() > 0;
+            return statement.executeUpdate() == 1;
+
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, null);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
+    }
+
+    @Override
+    public boolean editDish(int editedDishId, String dishName, String description, BigDecimal price) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            statement = connection.prepareStatement(EDIT_DISH_QUERY);
+            statement.setString(1, dishName);
+            statement.setString(2, description);
+            statement.setBigDecimal(3, price);
+            statement.setInt(4, editedDishId);
+
+            return statement.executeUpdate() == 1;
 
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);

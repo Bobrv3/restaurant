@@ -4,6 +4,7 @@ import com.epam.restaurant.controller.command.impl.AddToOrder;
 import com.epam.restaurant.controller.command.impl.Authorization;
 import com.epam.restaurant.controller.command.impl.ChangeLocale;
 import com.epam.restaurant.controller.command.impl.EditCategory;
+import com.epam.restaurant.controller.command.impl.EditDish;
 import com.epam.restaurant.controller.command.impl.FindDishesBy;
 import com.epam.restaurant.controller.command.impl.GetCategories;
 import com.epam.restaurant.controller.command.impl.GetHistoryOfOrders;
@@ -49,6 +50,7 @@ public final class CommandProvider {
         repository.put(CommandName.REMOVE_FROM_ORDER, new RemoveDishFromOrder());
         repository.put(CommandName.REMOVE_FROM_MENU, new RemoveDishFromMenu());
         repository.put(CommandName.EDIT_CATEGORY, new EditCategory());
+        repository.put(CommandName.EDIT_DISH, new EditDish());
     }
 
     public Command getCommand(String name) {

@@ -19,5 +19,6 @@ public enum CommandName {
     QUIT_FROM_ACCOUNT,
     REMOVE_FROM_ORDER,
     REMOVE_FROM_MENU,
-    EDIT_CATEGORY
+    EDIT_CATEGORY,
+    EDIT_DISH
 }

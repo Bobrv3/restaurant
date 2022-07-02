@@ -47,8 +47,8 @@
                         <tr>
                             <c:if test="${param.editedDishId == dish.id}">
                                 <form action="restaurant" method="post">
-                                    <input type="hidden" name="command" value="editDish">
-                                    <input type="hidden" name="dishId" value="${dish.id}">
+                                    <input type="hidden" name="command" value="edit_dish">
+                                    <input type="hidden" name="editedDishId" value="${dish.id}">
 
                                     <td>
                                         <h3 class="DishName">
