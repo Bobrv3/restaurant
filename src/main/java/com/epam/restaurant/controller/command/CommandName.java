@@ -22,5 +22,6 @@ public enum CommandName {
     EDIT_CATEGORY,
     EDIT_DISH,
     ADD_DISH,
-    ADD_CATEGORY
+    ADD_CATEGORY,
+    CONFIRMATION_OF_ORDERS
 }

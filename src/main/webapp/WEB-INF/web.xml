@@ -140,6 +140,15 @@
     <servlet-name>OrdersInProcessing</servlet-name>
     <url-pattern>/ordersInProcessing</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>ConfirmationOfOrders</servlet-name>
+    <jsp-file>/WEB-INF/jsp/ConfirmationOfOrders.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ConfirmationOfOrders</servlet-name>
+    <url-pattern>/confirmationOfOrders</url-pattern>
+  </servlet-mapping>
 
  
 

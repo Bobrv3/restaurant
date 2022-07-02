@@ -9,6 +9,7 @@
             <fmt:message bundle="${loc}" key="local.txt.historyOfOrders" var="historyOfOrdersFmt" />
             <fmt:message bundle="${loc}" key="local.txt.currentOrder" var="currentOrderFmt" />
             <fmt:message bundle="${loc}" key="local.txt.quitFromAccount" var="quitFromAccountFmt" />
+            <fmt:message bundle="${loc}" key="local.txt.confirmationOfOrders" var="confirmationOfOrdersFmt" />
             <!DOCTYPE html>
             <html>
 
@@ -29,32 +30,38 @@
                         <div class="grid-container">
                             <div>
                                 <a href="/ordersInProcessing">
-                                    <img src="../../images/ordersInProcessing.png" alt="orders In Processing"><br>
+                                    <img src="../../images/ordersInProcessing.png" alt="${ordersInProcessingFmt}"><br>
                                     ${ordersInProcessingFmt}
                                 </a>
                             </div>
                             <div>
                                 <a href="/historyOfOrders">
-                                    <img src="../../images/historyOfOrders.png" alt="history Of Orders"><br>
+                                    <img src="../../images/historyOfOrders.png" alt="${historyOfOrdersFmt}"><br>
                                     ${historyOfOrdersFmt}
                                 </a>
                             </div>
                             <div>
                                 <a href="/showCurrentOrder">
-                                    <img src="../../images/order.png" alt="current order" style="width: 40%;"><br>
+                                    <img src="../../images/order.png" alt="${currentOrderFmt}" style="width: 40%;"><br>
                                     ${currentOrderFmt}
                                 </a>
                             </div>
                             <div>
                                 <a href="/personalInfo">
-                                    <img src="../../images/acc.png" alt="personal Info"><br>
+                                    <img src="../../images/acc.png" alt="${personalInfoFmt}"><br>
                                     ${personalInfoFmt}
                                 </a>
                             </div>
                             <div>
                                 <a href="/restaurant?command=quit_from_account">
-                                    <img src="../../images/quit.png" alt="Quit from account"><br>
+                                    <img src="../../images/quit.png" alt="${quitFromAccountFmt}"><br>
                                     ${quitFromAccountFmt}
+                                </a>
+                            </div>
+                            <div>
+                                <a href="/restaurant?command=confirmation_of_orders">
+                                    <img src="../../images/communicate.png" alt="${confirmationOfOrdersFmt}"><br>
+                                    ${confirmationOfOrdersFmt}
                                 </a>
                             </div>
                         </div>

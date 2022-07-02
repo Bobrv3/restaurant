@@ -1,6 +1,7 @@
 package com.epam.restaurant.dao.impl;
 
 import com.epam.restaurant.bean.Order;
+import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.dao.ConnectionPool;
@@ -61,5 +62,13 @@ class SQLOrderDAOTest {
         criteria.add(SearchCriteria.Orders.USER_ID.toString(), 9);
         criteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "in Processing");
         Assertions.assertEquals(14, orderDAO.find(criteria).size());
+    }
+
+    @Test
+    void findOrdersWithUsersInfo_SizeOfListMoreThan0_true() throws DAOException {
+        Criteria criteria = new Criteria();
+        criteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "in Processing");
+
+        Assertions.assertTrue(orderDAO.findOrdersWithUsersInfo(criteria, new RegistrationUserData()).size() > 0);
     }
 }

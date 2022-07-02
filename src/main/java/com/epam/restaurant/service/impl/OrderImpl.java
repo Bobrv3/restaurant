@@ -1,6 +1,5 @@
 package com.epam.restaurant.service.impl;
 
-import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.bean.Order;
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
@@ -53,6 +52,20 @@ public class OrderImpl implements OrderService {
         try {
             OrderDAO orderDAO = daoProvider.getOrderDAO();
             List<Order> orders = orderDAO.find(criteria);
+
+            return orders;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Order> findOrdersWithUsersInfo(Criteria criteria, RegistrationUserData userData) throws ServiceException {
+        UserDAO userDAO = daoProvider.getUserDAO();
+
+        try {
+            OrderDAO orderDAO = daoProvider.getOrderDAO();
+            List<Order> orders = orderDAO.findOrdersWithUsersInfo(criteria, userData);
 
             return orders;
         } catch (DAOException e) {
