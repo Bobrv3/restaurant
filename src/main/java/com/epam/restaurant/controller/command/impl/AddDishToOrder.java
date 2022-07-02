@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class AddToOrder implements Command {
+public class AddDishToOrder implements Command {
     private static final ServiceProvider serviceProvider =  ServiceProvider.getInstance();
     private static final int FOUND_DISH = 0;
 

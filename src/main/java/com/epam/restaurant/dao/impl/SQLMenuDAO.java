@@ -32,6 +32,7 @@ public class SQLMenuDAO implements MenuDAO {
     private static final String EDIT_CATEGORY_QUERY = "UPDATE categories SET name=? where id=?";
     private static final String EDIT_DISH_QUERY = "UPDATE menu SET name=?, description=?, price=? where dishes_id=?";
     private static final String ADD_DISH_QUERY = "INSERT INTO menu(price, name, description, status,  category_id) VALUES(?,?,?, 0, ?)";
+    private static final String ADD_CATEGORY_QUERY = "INSERT INTO categories(name) VALUES(?)";
     private static final int GENERATED_KEYS = 1;
 
     private static final String AND = "AND ";
@@ -292,7 +293,38 @@ public class SQLMenuDAO implements MenuDAO {
             throw new DAOException("Error when trying to take connection", e);
         } finally {
             try {
-                connectionPool.closeConnection(connection, statement, null);
+                connectionPool.closeConnection(connection, statement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
+    }
+
+    @Override
+    public int addCategory(String categoryName) throws DAOException {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            statement = connection.prepareStatement(ADD_CATEGORY_QUERY, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, categoryName);
+            statement.executeUpdate();
+
+            resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+
+            return resultSet.getInt(GENERATED_KEYS);
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, resultSet);
             } catch (SQLException e) {
                 LOGGER.error("Error to close connection...", e);
             }

@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class AddDish implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(AddDish.class);
+public class AddNewDishToMenu implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(AddNewDishToMenu.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
     private static final String CATEGORY_FOR_ADD_PARAM = "categoryForAdd";

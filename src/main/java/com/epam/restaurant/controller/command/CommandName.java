@@ -21,5 +21,6 @@ public enum CommandName {
     REMOVE_FROM_MENU,
     EDIT_CATEGORY,
     EDIT_DISH,
-    ADD_DISH
+    ADD_DISH,
+    ADD_CATEGORY
 }

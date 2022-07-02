@@ -150,7 +150,7 @@
         <c:if test="${param.createCategory}">
             <h2 class="CategoryName">
                 <form action="restaurant" method="post">
-                    <input type="hidden" name="command" value="addCategory">
+                    <input type="hidden" name="command" value="add_category">
 
                     <input type="text" name="categoryName" style="width: 150px;">
                     <input type="submit" value="${addCategoryFmt}">

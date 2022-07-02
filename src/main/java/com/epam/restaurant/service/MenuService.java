@@ -23,4 +23,6 @@ public interface MenuService {
     boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price) throws ServiceException;
 
     int addDish(BigDecimal price, String name, String description, int categoryForAdd) throws ServiceException;
+
+    int addCategory(String categoryName) throws ServiceException;
 }

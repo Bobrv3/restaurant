@@ -1,7 +1,8 @@
 package com.epam.restaurant.controller.command;
 
-import com.epam.restaurant.controller.command.impl.AddDish;
-import com.epam.restaurant.controller.command.impl.AddToOrder;
+import com.epam.restaurant.controller.command.impl.AddNewCategoryToMenu;
+import com.epam.restaurant.controller.command.impl.AddNewDishToMenu;
+import com.epam.restaurant.controller.command.impl.AddDishToOrder;
 import com.epam.restaurant.controller.command.impl.Authorization;
 import com.epam.restaurant.controller.command.impl.ChangeLocale;
 import com.epam.restaurant.controller.command.impl.EditCategory;
@@ -39,7 +40,7 @@ public final class CommandProvider {
         repository.put(CommandName.GET_CATEGORIES, new GetCategories());
         repository.put(CommandName.GET_MENU, new GetMenu());
         repository.put(CommandName.FIND_DISHES_BY, new FindDishesBy());
-        repository.put(CommandName.ADD_TO_ORDER, new AddToOrder());
+        repository.put(CommandName.ADD_TO_ORDER, new AddDishToOrder());
         repository.put(CommandName.MOVE_TO_PLACE_ORDER, new MoveToPlaceOrder());
         repository.put(CommandName.PLACE_ORDER, new PlaceOrder());
         repository.put(CommandName.ONLINE_PAY, new OnlinePay());
@@ -52,7 +53,8 @@ public final class CommandProvider {
         repository.put(CommandName.REMOVE_FROM_MENU, new RemoveDishFromMenu());
         repository.put(CommandName.EDIT_CATEGORY, new EditCategory());
         repository.put(CommandName.EDIT_DISH, new EditDish());
-        repository.put(CommandName.ADD_DISH, new AddDish());
+        repository.put(CommandName.ADD_DISH, new AddNewDishToMenu());
+        repository.put(CommandName.ADD_CATEGORY, new AddNewCategoryToMenu());
     }
 
     public Command getCommand(String name) {

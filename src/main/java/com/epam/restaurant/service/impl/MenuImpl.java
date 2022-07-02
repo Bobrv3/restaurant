@@ -89,4 +89,13 @@ public class MenuImpl implements MenuService {
             throw new ServiceException(e);
         }
     }
+
+    @Override
+    public int addCategory(String categoryName) throws ServiceException {
+        try {
+            return menuDAO.addCategory(categoryName);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }
