@@ -8,6 +8,7 @@
         <fmt:message bundle="${loc}" key="local.link.Menu" var="menu_link" />
         <fmt:message bundle="${loc}" key="local.button.add" var="btn_add" />
         <fmt:message bundle="${loc}" key="local.button.save" var="saveFmt" />
+        <fmt:message bundle="${loc}" key="local.link.addCategory" var="addCategoryFmt" />
 
         <link rel="stylesheet" href="css/Menu.css">
 
@@ -134,8 +135,28 @@
                         </tr>
                     </c:if>
                 </c:if>
-
             </table>
         </c:forEach>
+
+        <c:if test="${user.roleId == 1 && !param.createCategory}">
+            <h2 class="CategoryName">
+                ${addCategoryFmt}
+                <a href="/home?createCategory=true">
+                    <img src="../../images/addContent.png" alt="add category" id="imgAddContent">
+                </a>
+            </h2>
+        </c:if>
+
+        <c:if test="${param.createCategory}">
+            <h2 class="CategoryName">
+                <form action="restaurant" method="post">
+                    <input type="hidden" name="command" value="addCategory">
+
+                    <input type="text" name="categoryName" style="width: 150px;">
+                    <input type="submit" value="${addCategoryFmt}">
+                </form>
+            </h2>
+        </c:if>
+
 
         <script src="../../js/Menu.js"></script>
