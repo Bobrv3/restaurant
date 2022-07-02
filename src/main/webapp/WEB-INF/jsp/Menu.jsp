@@ -89,7 +89,7 @@
                                 </form>
                             </td>
                             <td>
-                                <c:if test="${user != null && user.roleId == 1}">
+                                <c:if test="${user.roleId == 1}">
                                     <a href="/restaurant?command=remove_from_menu&&dishId=${dish.id}">
                                         <img src="../../images/remove.png" alt="remove" class="imgInTd">
                                     </a>
@@ -102,6 +102,40 @@
                         </tr>
                     </c:if>
                 </c:forEach>
+
+                <c:if test="${user.roleId == 1}">
+
+                    <c:if test="${!param.createDish || (param.createDish && param.categoryForAdd != category.id)}">
+                        <tr>
+                            <td colspan="4">
+                                <a href="/home?createDish=true&categoryForAdd=${category.id}">
+                                    <img src="../../images/addContent.png" alt="add dish" id="imgAddContent">
+                                </a>
+                            </td>
+                        </tr>
+                    </c:if>
+                    <c:if test="${param.createDish && (param.categoryForAdd == category.id)}">
+                        <tr>
+                            <form action="restaurant" method="post">
+                                <input type="hidden" name="command" value="add_dish">
+                                <input type="hidden" name="categoryForAdd" value="category.id">
+                                <td>
+                                    <h3 class="DishName">
+                                        <li /><input type="text" name="dishName" value="" placeholder="Dish name">
+                                    </h3>
+                                    <textarea name="description" cols="90" rows="3"
+                                        placeholder="Description..."></textarea>
+                                    <input type="submit" value="${btn_add}">
+                                </td>
+                                <td>
+                                    <input type="text" name="price" value="" placeholder="Price" id="editedPrice">
+                                </td>
+                            </form>
+                            </td>
+                        </tr>
+                    </c:if>
+                </c:if>
+
             </table>
         </c:forEach>
 
