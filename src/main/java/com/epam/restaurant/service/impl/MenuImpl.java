@@ -15,11 +15,10 @@ import java.util.List;
 
 public class MenuImpl implements MenuService {
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
+    private static final MenuDAO menuDAO = daoProvider.getMenuDAO();
 
     @Override
     public Menu getMenu() throws ServiceException {
-        MenuDAO menuDAO = daoProvider.getMenuDAO();
-
         Menu menu = null;
         try {
             menu = menuDAO.getMenu();
@@ -32,8 +31,6 @@ public class MenuImpl implements MenuService {
 
     @Override
     public List<Category> getCategories() throws ServiceException {
-        MenuDAO menuDAO = daoProvider.getMenuDAO();
-
         List<Category> categories = null;
         try {
             categories = menuDAO.getCategories();
@@ -46,8 +43,6 @@ public class MenuImpl implements MenuService {
 
     @Override
     public List<Dish> find(Criteria criteria) throws ServiceException {
-        MenuDAO menuDAO = daoProvider.getMenuDAO();
-
         List<Dish> dishes = null;
         try {
             dishes = menuDAO.find(criteria);
@@ -60,8 +55,6 @@ public class MenuImpl implements MenuService {
 
     @Override
     public int remove(Criteria criteria) throws ServiceException {
-        MenuDAO menuDAO = daoProvider.getMenuDAO();
-
         try {
             return menuDAO.remove(criteria);
         } catch (DAOException e) {
@@ -71,8 +64,6 @@ public class MenuImpl implements MenuService {
 
     @Override
     public boolean editCategory(int editedCategoryId, String newCategoryName) throws ServiceException {
-        MenuDAO menuDAO = daoProvider.getMenuDAO();
-
         try {
             return menuDAO.editCategory(editedCategoryId, newCategoryName);
         } catch (DAOException e) {
@@ -82,13 +73,20 @@ public class MenuImpl implements MenuService {
 
     @Override
     public boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price) throws ServiceException {
-        MenuDAO menuDAO = daoProvider.getMenuDAO();
-
         try {
             return menuDAO.editDish(editedDishId, newDishName, description, price);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
 
+    }
+
+    @Override
+    public int addDish(BigDecimal price, String name, String description, int categoryForAdd) throws ServiceException {
+        try {
+            return menuDAO.addDish(price, name, description, categoryForAdd);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
     }
 }

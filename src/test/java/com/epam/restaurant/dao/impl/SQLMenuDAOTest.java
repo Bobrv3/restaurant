@@ -119,4 +119,9 @@ class SQLMenuDAOTest {
 
         Assertions.assertTrue(menuDAO.editDish(editedCategoryId, newCategoryName, newDescription, newPrice));
     }
+
+//    @Test
+//    void addDish_ReturnedIndxMoreThan0_true() throws DAOException {
+//        Assertions.assertTrue(menuDAO.addDish(new BigDecimal("14.50"), "Kharcho", "Georgian national beef soup with rice, walnuts and tklapi or sour tkemali sauce.", 2) > 0);
+//    }
 }

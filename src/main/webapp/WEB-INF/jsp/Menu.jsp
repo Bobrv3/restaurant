@@ -64,19 +64,18 @@
                             </c:if>
 
                             <c:if test="${param.editedDishId != dish.id}">
-                                <td>
+                                <td class="col1">
                                     <h3 class="DishName">
                                         <li />${dish.name}
                                     </h3>
                                     ${dish.description}
                                 </td>
-                                <td>
+                                <td class="col2">
                                     ${dish.price}
                                 </td>
                             </c:if>
 
-                            <td>
-
+                            <td class="col3">
                                 <form action="restaurant" method="post">
                                     <input type="hidden" name="command" value="add_to_order">
                                     <input type="hidden" name="dish_id" value="${dish.id}">
@@ -118,7 +117,7 @@
                         <tr>
                             <form action="restaurant" method="post">
                                 <input type="hidden" name="command" value="add_dish">
-                                <input type="hidden" name="categoryForAdd" value="category.id">
+                                <input type="hidden" name="categoryForAdd" value="${category.id}">
                                 <td>
                                     <h3 class="DishName">
                                         <li /><input type="text" name="dishName" value="" placeholder="Dish name">

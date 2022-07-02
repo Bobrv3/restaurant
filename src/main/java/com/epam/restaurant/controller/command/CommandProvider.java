@@ -1,5 +1,6 @@
 package com.epam.restaurant.controller.command;
 
+import com.epam.restaurant.controller.command.impl.AddDish;
 import com.epam.restaurant.controller.command.impl.AddToOrder;
 import com.epam.restaurant.controller.command.impl.Authorization;
 import com.epam.restaurant.controller.command.impl.ChangeLocale;
@@ -51,6 +52,7 @@ public final class CommandProvider {
         repository.put(CommandName.REMOVE_FROM_MENU, new RemoveDishFromMenu());
         repository.put(CommandName.EDIT_CATEGORY, new EditCategory());
         repository.put(CommandName.EDIT_DISH, new EditDish());
+        repository.put(CommandName.ADD_DISH, new AddDish());
     }
 
     public Command getCommand(String name) {
