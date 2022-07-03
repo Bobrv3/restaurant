@@ -31,7 +31,7 @@ public class SQLOrderDAO implements OrderDAO {
     private static final String FIND_ORDER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where {0} group by ord.id;";
     private static final String FIND_ORDER_WITH_USER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, u.name, phone_number, email FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id LEFT JOIN users u on user_id=u.id where {0} group by ord.id;";
     private static final String FIND_ORDER_WITH_DISH_BY_CRITERIA_QUERY = "SELECT ord.id,  m.name, methodOfReceiving, quantity FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where {0};";
-    private static final String UPDATE_ORDER_STATUS_QUERY = "UPDATE orders SET order_status='confirmed' where id=?;";
+    private static final String UPDATE_ORDER_STATUS_QUERY = "UPDATE orders SET order_status=? where id=?;";
 
     private static final String AND = "AND ";
     private static final int NUM_OF_UPDATED_ROWS = 1;
@@ -202,8 +202,7 @@ public class SQLOrderDAO implements OrderDAO {
         }
     }
 
-    @Override
-    public boolean confirmOrder(int orderID) throws DAOException {
+    public boolean updateOrderStatus(int orderID, String status) throws DAOException {
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         Connection connection = null;
@@ -212,7 +211,8 @@ public class SQLOrderDAO implements OrderDAO {
             connection = connectionPool.takeConnection();
 
             statement = connection.prepareStatement(UPDATE_ORDER_STATUS_QUERY);
-            statement.setInt(1, orderID);
+            statement.setString(1, status);
+            statement.setInt(2, orderID);
             int num = statement.executeUpdate();
 
             return num == NUM_OF_UPDATED_ROWS;

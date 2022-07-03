@@ -18,7 +18,7 @@ public interface OrderDAO {
 
     Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws DAOException;
 
-    boolean confirmOrder(int orderID) throws DAOException;
+    boolean updateOrderStatus(int orderID, String status) throws DAOException;
 
     List<OrderForCooking> findOrdersWithDishInfo(Criteria criteria) throws DAOException;
 }

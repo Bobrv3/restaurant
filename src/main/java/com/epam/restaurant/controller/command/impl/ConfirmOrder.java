@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 public class ConfirmOrder implements Command {
@@ -22,6 +21,7 @@ public class ConfirmOrder implements Command {
 
     private static final String CONFIRMED_ORDER_ID = "confirmedOrderID";
     private static final String ORDERS_FOR_CONFIRMATION_ATTR = "ordersForConfirmation";
+    private static final String CONFIRMED_STATUS = "confirmed";
     private static final String CONFIRMATION_OF_ORDERS_ADDR = "/confirmationOfOrders";
 
     private static final String EX1 = "Error invalid address to redirect";
@@ -31,7 +31,7 @@ public class ConfirmOrder implements Command {
         int orderIDforConfirming = Integer.parseInt(request.getParameter(CONFIRMED_ORDER_ID));
 
         OrderService orderService = serviceProvider.getOrderService();
-        orderService.confirmOrder(orderIDforConfirming);
+        orderService.updateOrderStatus(orderIDforConfirming, CONFIRMED_STATUS);
 
         Map<Order, RegistrationUserData> orders = (Map<Order, RegistrationUserData>) request.getSession().getAttribute(ORDERS_FOR_CONFIRMATION_ATTR);
         for (Order order : orders.keySet()) {

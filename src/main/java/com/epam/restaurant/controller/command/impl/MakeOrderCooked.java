@@ -1,28 +1,49 @@
 package com.epam.restaurant.controller.command.impl;
 
-import com.epam.restaurant.bean.Dish;
-import com.epam.restaurant.bean.Order;
+import com.epam.restaurant.bean.OrderForCooking;
 import com.epam.restaurant.controller.command.Command;
+import com.epam.restaurant.service.OrderService;
 import com.epam.restaurant.service.ServiceException;
+import com.epam.restaurant.service.ServiceProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+import java.io.IOException;
+import java.util.List;
 
 public class MakeOrderCooked implements Command {
     private static final Logger LOGGER = LogManager.getLogger(MakeOrderCooked.class);
+    private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
-    private static final String ORDER_FOR_COOK_ATTR = "orderForCook";
     private static final String COOKED_ORDER_ID_PARAM = "cookedOrderId";
+    private static final String ORDERS_FOR_COOKING_ATTR = "ordersForCooking";
+    private static final String KITCHEN_ADDR = "/kitchen";
+    private static final String COOKED_STATUS = "cooked";
+
+    private static final String EX1 = "Error invalid address to redirect";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
-        int cookedDishId = Integer.parseInt(request.getParameter(COOKED_ORDER_ID_PARAM));
-        Map<Order, Dish> orderDishMap = (Map<Order, Dish>) request.getSession().getAttribute(ORDER_FOR_COOK_ATTR);
+        int cookedOrderId = Integer.parseInt(request.getParameter(COOKED_ORDER_ID_PARAM));
 
+        OrderService orderService = serviceProvider.getOrderService();
+        orderService.updateOrderStatus(cookedOrderId, COOKED_STATUS);
 
+        List<OrderForCooking> ordersForCooking = (List<OrderForCooking>) request.getSession().getAttribute(ORDERS_FOR_COOKING_ATTR);
+        for (OrderForCooking order : ordersForCooking) {
+            if (order.getOrderId() == cookedOrderId) {
+                ordersForCooking.remove(order);
+                break;
+            }
+        }
+
+        try {
+            response.sendRedirect(KITCHEN_ADDR);
+        } catch (IOException e) {
+            LOGGER.error(EX1, e);
+        }
     }
 }

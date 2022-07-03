@@ -71,11 +71,11 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
-    public boolean confirmOrder(int orderID) throws ServiceException {
+    public boolean updateOrderStatus(int orderID, String status) throws ServiceException {
         try {
             OrderDAO orderDAO = daoProvider.getOrderDAO();
 
-            return orderDAO.confirmOrder(orderID);
+            return orderDAO.updateOrderStatus(orderID, status);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

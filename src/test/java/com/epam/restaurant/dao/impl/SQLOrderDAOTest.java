@@ -1,13 +1,11 @@
 package com.epam.restaurant.dao.impl;
 
 import com.epam.restaurant.bean.Order;
-import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
-import com.epam.restaurant.dao.MenuDAO;
 import com.epam.restaurant.dao.OrderDAO;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -15,8 +13,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class SQLOrderDAOTest {
     private static ConnectionPool connectionPool;
@@ -73,10 +69,11 @@ class SQLOrderDAOTest {
     }
 
     @Test
-    void confirmOrder_withOrderIdEq5_true() throws DAOException {
+    void updateOrderStatus_withOrderIdEq5_true() throws DAOException {
         int orderIdForConfirming = 5;
+        String status = "confirmed";
 
-        Assertions.assertTrue(orderDAO.confirmOrder(orderIdForConfirming));
+        Assertions.assertTrue(orderDAO.updateOrderStatus(orderIdForConfirming, status));
     }
 
     @Test

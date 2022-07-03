@@ -19,7 +19,7 @@ public interface OrderService {
 
     Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws ServiceException;
 
-    boolean confirmOrder(int orderID) throws ServiceException;
+    boolean updateOrderStatus(int orderID, String status) throws ServiceException;
 
     List<OrderForCooking> findOrdersWithDishInfo(Criteria criteria) throws ServiceException;
 }
