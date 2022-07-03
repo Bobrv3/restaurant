@@ -33,11 +33,11 @@
 
                         <p>
                             <label>${lbl_login}: </label>
-                            <input type="text" name="login" value="" /><br>
+                            <input type="text" name="login" value="" required /><br>
                         </p>
                         <p>
                             <label>${lbl_pswd}: </label>
-                            <input type="password" name="password" value="" />
+                            <input type="password" name="password" value="" required />
                         </p>
                         <p>
                             <input type="submit" value="${signIn_btn}" id="signIn_button">

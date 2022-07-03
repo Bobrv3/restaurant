@@ -53,13 +53,14 @@
 
                                     <td>
                                         <h3 class="DishName">
-                                            <li /><input type="text" name="dishName" value="${dish.name}">
+                                            <li /><input type="text" name="dishName" value="${dish.name}" required>
                                         </h3>
-                                        <textarea name="description" cols="90" rows="3">${dish.description}</textarea>
+                                        <textarea name="description" cols="90" rows="3"
+                                            required>${dish.description}</textarea>
                                         <input type="submit" value="${saveFmt}">
                                     </td>
                                     <td>
-                                        <input type="text" name="price" value="${dish.price}" id="editedPrice">
+                                        <input type="text" name="price" value="${dish.price}" required id="editedPrice">
                                     </td>
                                 </form>
                             </c:if>
@@ -121,14 +122,16 @@
                                 <input type="hidden" name="categoryForAdd" value="${category.id}">
                                 <td>
                                     <h3 class="DishName">
-                                        <li /><input type="text" name="dishName" value="" placeholder="Dish name">
+                                        <li /><input type="text" name="dishName" value="" placeholder="Dish name"
+                                            required>
                                     </h3>
-                                    <textarea name="description" cols="90" rows="3"
-                                        placeholder="Description..."></textarea>
+                                    <textarea name="description" cols="90" rows="3" placeholder="Description..."
+                                        required></textarea>
                                     <input type="submit" value="${btn_add}">
                                 </td>
                                 <td>
-                                    <input type="text" name="price" value="" placeholder="Price" id="editedPrice">
+                                    <input type="text" name="price" value="" placeholder="Price" required
+                                        id="editedPrice">
                                 </td>
                             </form>
                             </td>
@@ -152,7 +155,7 @@
                 <form action="restaurant" method="post">
                     <input type="hidden" name="command" value="add_category">
 
-                    <input type="text" name="categoryName" style="width: 150px;">
+                    <input type="text" name="categoryName" value="" required style="width: 150px;">
                     <input type="submit" value="${addCategoryFmt}">
                 </form>
             </h2>
