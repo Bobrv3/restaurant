@@ -28,8 +28,10 @@ public class SQLOrderDAO implements OrderDAO {
     private static final String INSERT_ORDER_DETAIL_QUERY = "INSERT INTO order_details (orders_id, menu_dishes_id, quantity, methodOfReceiving) VALUES (?, ?, ?, ?)";
     private static final String FIND_ORDER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where {0} group by ord.id;";
     private static final String FIND_ORDER_WITH_USER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, u.name, phone_number, email FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id LEFT JOIN users u on user_id=u.id where {0} group by ord.id;";
+    private static final String UPDATE_ORDER_STATUS_QUERY = "UPDATE orders SET order_status='confirmed' where id=?;";
 
     private static final String AND = "AND ";
+    private static final int NUM_OF_UPDATED_ROWS = 1;
 
     private static final String IN_PROCESSING = "in processing";
     private static final int GENERATED_KEYS = 1;
@@ -89,7 +91,7 @@ public class SQLOrderDAO implements OrderDAO {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);
         } catch (SQLException e) {
-            throw new DAOException("Error when trying to create order", e);
+            throw new DAOException("Error when trying to createOrderDetails", e);
         } finally {
             try {
                 connectionPool.closeConnection(connection, preparedStatement, resultSet);
@@ -135,7 +137,7 @@ public class SQLOrderDAO implements OrderDAO {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);
         } catch (SQLException e) {
-            throw new DAOException("Error when trying to getAllUserOrders", e);
+            throw new DAOException("Error when trying to find", e);
         } finally {
             try {
                 connectionPool.closeConnection(connection, statement, resultSet);
@@ -185,7 +187,35 @@ public class SQLOrderDAO implements OrderDAO {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);
         } catch (SQLException e) {
-            throw new DAOException("Error when trying to getAllUserOrders", e);
+            throw new DAOException("Error when trying to findOrdersWithUsersInfo", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
+    }
+
+    @Override
+    public boolean confirmOrder(int orderID) throws DAOException {
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        Connection connection = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            statement = connection.prepareStatement(UPDATE_ORDER_STATUS_QUERY);
+            statement.setInt(1, orderID);
+            int num = statement.executeUpdate();
+
+            return num == NUM_OF_UPDATED_ROWS;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to confirmOrder", e);
         } finally {
             try {
                 connectionPool.closeConnection(connection, statement, resultSet);

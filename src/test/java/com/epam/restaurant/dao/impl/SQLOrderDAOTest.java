@@ -71,4 +71,11 @@ class SQLOrderDAOTest {
 
         Assertions.assertTrue(orderDAO.findOrdersWithUsersInfo(criteria, new RegistrationUserData()).size() > 0);
     }
+
+    @Test
+    void confirmOrder_withOrderIdEq5_true() throws DAOException {
+        int orderIdForConfirming = 5;
+
+        Assertions.assertTrue(orderDAO.confirmOrder(orderIdForConfirming));
+    }
 }

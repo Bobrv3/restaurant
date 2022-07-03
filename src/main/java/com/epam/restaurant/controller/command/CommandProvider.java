@@ -16,13 +16,14 @@ import com.epam.restaurant.controller.command.impl.MoveToAccount;
 import com.epam.restaurant.controller.command.impl.NoNameCommand;
 import com.epam.restaurant.controller.command.impl.MoveToPlaceOrder;
 import com.epam.restaurant.controller.command.impl.OnlinePay;
-import com.epam.restaurant.controller.command.impl.ConfirmationOfOrders;
+import com.epam.restaurant.controller.command.impl.MoveToConfirmationOfOrders;
 import com.epam.restaurant.controller.command.impl.PlaceOrder;
 import com.epam.restaurant.controller.command.impl.PrintUserRegistrData;
 import com.epam.restaurant.controller.command.impl.QuitFromAccount;
 import com.epam.restaurant.controller.command.impl.Registration;
 import com.epam.restaurant.controller.command.impl.RemoveDishFromMenu;
 import com.epam.restaurant.controller.command.impl.RemoveDishFromOrder;
+import com.epam.restaurant.controller.command.impl.ConfirmOrder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,7 +57,8 @@ public final class CommandProvider {
         repository.put(CommandName.EDIT_DISH, new EditDish());
         repository.put(CommandName.ADD_DISH, new AddNewDishToMenu());
         repository.put(CommandName.ADD_CATEGORY, new AddNewCategoryToMenu());
-        repository.put(CommandName.CONFIRMATION_OF_ORDERS, new ConfirmationOfOrders());
+        repository.put(CommandName.MOVE_TO_CONFIRMATION_OF_ORDERS, new MoveToConfirmationOfOrders());
+        repository.put(CommandName.CONFIRM_ORDER, new ConfirmOrder());
     }
 
     public Command getCommand(String name) {

@@ -69,6 +69,7 @@
                                     <td>
                                         <form action="restaurant" method="post">
                                             <input type="hidden" name="command" value="confirm_order">
+                                            <input type="hidden" name="confirmedOrderID" value="${order.id}">
                                             <input type="submit" value="${confirmFmt} &#10004;">
                                         </form>
                                     </td>

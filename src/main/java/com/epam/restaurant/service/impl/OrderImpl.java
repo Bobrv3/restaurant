@@ -15,11 +15,10 @@ import java.util.List;
 
 public class OrderImpl implements OrderService {
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
+    private static final UserDAO userDAO = daoProvider.getUserDAO();
 
     @Override
     public int createOder(Order order, String userLogin) throws ServiceException {
-        UserDAO userDAO = daoProvider.getUserDAO();
-
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Users.LOGIN.toString(), userLogin);
 
@@ -47,8 +46,6 @@ public class OrderImpl implements OrderService {
 
     @Override
     public List<Order> find(Criteria criteria) throws ServiceException {
-        UserDAO userDAO = daoProvider.getUserDAO();
-
         try {
             OrderDAO orderDAO = daoProvider.getOrderDAO();
             List<Order> orders = orderDAO.find(criteria);
@@ -61,13 +58,22 @@ public class OrderImpl implements OrderService {
 
     @Override
     public List<Order> findOrdersWithUsersInfo(Criteria criteria, RegistrationUserData userData) throws ServiceException {
-        UserDAO userDAO = daoProvider.getUserDAO();
-
         try {
             OrderDAO orderDAO = daoProvider.getOrderDAO();
             List<Order> orders = orderDAO.findOrdersWithUsersInfo(criteria, userData);
 
             return orders;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean confirmOrder(int orderID) throws ServiceException {
+        try {
+            OrderDAO orderDAO = daoProvider.getOrderDAO();
+
+            return orderDAO.confirmOrder(orderID);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

@@ -15,4 +15,6 @@ public interface OrderDAO {
     List<Order> find(Criteria criteria) throws DAOException;
 
     List<Order> findOrdersWithUsersInfo(Criteria criteria, RegistrationUserData userData) throws DAOException;
+
+    boolean confirmOrder(int orderID) throws DAOException;
 }
