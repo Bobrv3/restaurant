@@ -7,8 +7,9 @@
             <fmt:message bundle="${loc}" key="local.h2.methodOfReceiving" var="methodOfReceivingFmt" />
             <fmt:message bundle="${loc}" key="local.txt.kitchen" var="kitchenFmt" />
             <fmt:message bundle="${loc}" key="local.txt.done" var="doneFmt" />
-            <fmt:message bundle="${loc}" key="local.txt.dish" var="dishFmt" />
+            <fmt:message bundle="${loc}" key="local.txt.dish" var="dishNameFmt" />
             <fmt:message bundle="${loc}" key="local.txt.orders" var="ordersFmt" />
+            <fmt:message bundle="${loc}" key="local.txt.amount" var="amountFmt" />
 
             <!DOCTYPE html>
             <html>
@@ -31,7 +32,7 @@
 
                         <table>
                             <th>№</th>
-                            <th>${dishFmt}</th>
+                            <th>${dishNameFmt} (x ${amountFmt})</th>
                             <th>${methodOfReceivingFmt}</th>
                             <th>${doneFmt}</th>
 
@@ -40,9 +41,11 @@
                                     <td>
                                         ${order.orderId}
                                     </td>
+
                                     <td>
                                         ${order.dishName}
                                     </td>
+
                                     <td>
                                         ${order.methodOfReceiving}
                                     </td>
@@ -54,7 +57,6 @@
                                         </form>
                                     </td>
                                 </tr>
-
                             </c:forEach>
                         </table>
 

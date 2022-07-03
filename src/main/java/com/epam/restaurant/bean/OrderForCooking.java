@@ -5,14 +5,16 @@ import java.util.Objects;
 public class OrderForCooking {
     private long orderId;
     private String dishName;
+    private int quantity;
     private String methodOfReceiving;
 
     public OrderForCooking() {
     }
 
-    public OrderForCooking(long orderId, String dishName, String methodOfReceiving) {
+    public OrderForCooking(long orderId, String dishName, int quantity, String methodOfReceiving) {
         this.orderId = orderId;
         this.dishName = dishName;
+        this.quantity = quantity;
         this.methodOfReceiving = methodOfReceiving;
     }
 
@@ -32,6 +34,14 @@ public class OrderForCooking {
         this.dishName = dishName;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public String getMethodOfReceiving() {
         return methodOfReceiving;
     }
@@ -44,13 +54,13 @@ public class OrderForCooking {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrderForCooking that = (OrderForCooking) o;
-        return orderId == that.orderId && Objects.equals(dishName, that.dishName) && Objects.equals(methodOfReceiving, that.methodOfReceiving);
+        OrderForCooking order = (OrderForCooking) o;
+        return orderId == order.orderId && quantity == order.quantity && Objects.equals(dishName, order.dishName) && Objects.equals(methodOfReceiving, order.methodOfReceiving);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, dishName, methodOfReceiving);
+        return Objects.hash(orderId, dishName, quantity, methodOfReceiving);
     }
 
     @Override
@@ -58,6 +68,7 @@ public class OrderForCooking {
         return "OrderForCooking{" +
                 "orderId=" + orderId +
                 ", dishName='" + dishName + '\'' +
+                ", quantity=" + quantity +
                 ", methodOfReceiving='" + methodOfReceiving + '\'' +
                 '}';
     }

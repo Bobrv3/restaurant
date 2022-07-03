@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MoveToCookOrders implements Command {
@@ -35,7 +36,30 @@ public class MoveToCookOrders implements Command {
 
         List<OrderForCooking> ordersForCooking = orderService.findOrdersWithDishInfo(criteria);
 
-        request.getSession().setAttribute(ORDERS_FOR_COOKING_ATTR, ordersForCooking);
+        List<OrderForCooking> groupedOrders = new ArrayList<>();
+        long previousOderId = 0;
+        StringBuilder dishiesName = null;
+        int j = -1;
+        for (OrderForCooking order : ordersForCooking) {
+            if (previousOderId != order.getOrderId()) {
+                j++;
+                // TODO сделать невозможным создать пустой заказ и потом убрать эти условия
+                if (order.getDishName() != null) {
+                    dishiesName = new StringBuilder(order.getDishName()).append(" ( x").append(order.getQuantity()).append(")");
+                } else {
+                    dishiesName = new StringBuilder("");
+                }
+                order.setDishName(dishiesName.toString());
+                groupedOrders.add(order);
+                previousOderId = order.getOrderId();
+
+            } else {
+                dishiesName.append("<hr>").append(order.getDishName()).append(" ( x").append(order.getQuantity()).append(")");
+                groupedOrders.get(j).setDishName(dishiesName.toString());
+            }
+        }
+
+        request.getSession().setAttribute(ORDERS_FOR_COOKING_ATTR, groupedOrders);
 
         try {
             response.sendRedirect(KITCHEN_ADDR);
