@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -148,7 +149,7 @@ public class SQLOrderDAO implements OrderDAO {
     }
 
     @Override
-    public List<Order> findOrdersWithUsersInfo(Criteria criteria, RegistrationUserData userData) throws DAOException {
+    public Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws DAOException {
         ResultSet resultSet = null;
         Statement statement = null;
         Connection connection = null;
@@ -168,21 +169,23 @@ public class SQLOrderDAO implements OrderDAO {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
 
-            List<Order> orders = new ArrayList<>();
+            Map<Order, RegistrationUserData> orderUserDataMap = new HashMap<>();
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setId(resultSet.getInt(1));
                 order.setTotalPrice(resultSet.getBigDecimal(2));
                 order.setDateTime(resultSet.getTimestamp(3));
                 order.setMethodOfReceiving(resultSet.getString(4));
-                orders.add(order);
 
+                RegistrationUserData userData = new RegistrationUserData();
                 userData.setName(resultSet.getString(5));
                 userData.setPhoneNumber(resultSet.getString(6));
                 userData.setEmail(resultSet.getString(7));
+
+                orderUserDataMap.put(order, userData);
             }
 
-            return orders;
+            return orderUserDataMap;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);

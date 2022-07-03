@@ -15,14 +15,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MoveToConfirmationOfOrders implements Command {
     private static final Logger LOGGER = LogManager.getLogger(MoveToConfirmationOfOrders.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
     private static final String IN_PROCESSING = "in processing";
-    private static final String USER_DATA_ATTR = "userData";
     private static final String ORDERS_FOR_CONFIRMATION_ATTR = "ordersForConfirmation";
     private static final String CONFIRMATION_OF_ORDERS_ADDR = "/confirmationOfOrders";
 
@@ -35,11 +36,9 @@ public class MoveToConfirmationOfOrders implements Command {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), IN_PROCESSING);
 
-        RegistrationUserData userData = new RegistrationUserData();
-        List<Order> orders = orderService.findOrdersWithUsersInfo(criteria, userData);
+        Map<Order, RegistrationUserData> orderUserDataMap = orderService.findOrdersWithUsersInfo(criteria);
 
-        request.getSession().setAttribute(ORDERS_FOR_CONFIRMATION_ATTR, orders);
-        request.getSession().setAttribute(USER_DATA_ATTR, userData);
+        request.getSession().setAttribute(ORDERS_FOR_CONFIRMATION_ATTR, orderUserDataMap);
 
         try {
             response.sendRedirect(CONFIRMATION_OF_ORDERS_ADDR);

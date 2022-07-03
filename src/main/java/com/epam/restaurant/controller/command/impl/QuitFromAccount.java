@@ -31,7 +31,6 @@ public class QuitFromAccount implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         HttpSession session = request.getSession();
 
-        session.removeAttribute(USER_DATA_ATTR);
         session.removeAttribute(ORDERS_IN_PROCESSING_ATTR);
         session.removeAttribute(ORDERS_HISTORY_ATTR);
         session.removeAttribute(ORDER_ATTR);

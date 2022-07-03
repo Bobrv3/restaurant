@@ -69,7 +69,7 @@ class SQLOrderDAOTest {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "in Processing");
 
-        Assertions.assertTrue(orderDAO.findOrdersWithUsersInfo(criteria, new RegistrationUserData()).size() > 0);
+        Assertions.assertTrue(orderDAO.findOrdersWithUsersInfo(criteria).size() > 0);
     }
 
     @Test

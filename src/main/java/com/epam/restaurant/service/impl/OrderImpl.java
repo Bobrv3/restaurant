@@ -12,6 +12,7 @@ import com.epam.restaurant.service.OrderService;
 import com.epam.restaurant.service.ServiceException;
 
 import java.util.List;
+import java.util.Map;
 
 public class OrderImpl implements OrderService {
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
@@ -57,12 +58,12 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findOrdersWithUsersInfo(Criteria criteria, RegistrationUserData userData) throws ServiceException {
+    public Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws ServiceException {
         try {
             OrderDAO orderDAO = daoProvider.getOrderDAO();
-            List<Order> orders = orderDAO.findOrdersWithUsersInfo(criteria, userData);
+            Map<Order, RegistrationUserData> orderUserMap = orderDAO.findOrdersWithUsersInfo(criteria);
 
-            return orders;
+            return orderUserMap;
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

@@ -5,6 +5,7 @@ import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
 
@@ -15,7 +16,7 @@ public interface OrderService {
 
     List<Order> find(Criteria criteria) throws ServiceException;
 
-    List<Order> findOrdersWithUsersInfo(Criteria criteria, RegistrationUserData userData) throws ServiceException;
+    Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws ServiceException;
 
     boolean confirmOrder(int orderID) throws ServiceException;
 }

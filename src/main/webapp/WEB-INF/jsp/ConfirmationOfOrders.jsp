@@ -43,7 +43,7 @@
                             <th>${userEmailFmt}</th>
                             <th>${confirmationOfOrderFmt}</th>
 
-                            <c:forEach items="${ordersForConfirmation}" var="order">
+                            <c:forEach items="${ordersForConfirmation.keySet()}" var="order">
                                 <tr>
                                     <td>
                                         ${order.id}
@@ -58,13 +58,13 @@
                                         ${order.methodOfReceiving}
                                     </td>
                                     <td>
-                                        ${userData.name}
+                                        ${ordersForConfirmation.get(order).name}
                                     </td>
                                     <td>
-                                        ${userData.phoneNumber}
+                                        ${ordersForConfirmation.get(order).phoneNumber}
                                     </td>
                                     <td>
-                                        ${userData.email}
+                                        ${ordersForConfirmation.get(order).email}
                                     </td>
                                     <td>
                                         <form action="restaurant" method="post">
