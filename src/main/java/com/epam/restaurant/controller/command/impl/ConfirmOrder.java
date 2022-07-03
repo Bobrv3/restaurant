@@ -1,6 +1,7 @@
 package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.bean.Order;
+import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.OrderService;
 import com.epam.restaurant.service.ServiceException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class ConfirmOrder implements Command {
     private static final Logger LOGGER = LogManager.getLogger(ConfirmOrder.class);
@@ -31,13 +33,12 @@ public class ConfirmOrder implements Command {
         OrderService orderService = serviceProvider.getOrderService();
         orderService.confirmOrder(orderIDforConfirming);
 
-        List<Order> orders = (List<Order>) request.getSession().getAttribute(ORDERS_FOR_CONFIRMATION_ATTR);
-        for (Order order : orders) {
+        Map<Order, RegistrationUserData> orders = (Map<Order, RegistrationUserData>) request.getSession().getAttribute(ORDERS_FOR_CONFIRMATION_ATTR);
+        for (Order order : orders.keySet()) {
             if (order.getId() == orderIDforConfirming) {
                 orders.remove(order);
                 break;
-            }
-        }
+            }        }
         request.getSession().setAttribute(ORDERS_FOR_CONFIRMATION_ATTR, orders);
 
         try {

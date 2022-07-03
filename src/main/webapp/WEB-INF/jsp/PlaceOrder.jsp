@@ -43,7 +43,7 @@
                                     <label for="takeaway">${takeawayFmt}</label>
                                     <input type="radio" id="takeaway" name="receiving" value="takeaway" checked><br>
                                     <label for="inPlace">${inPlaceFmt}</label>
-                                    <input type="radio" id="inPlace" name="receiving" value="inPlace">
+                                    <input type="radio" id="inPlace" name="receiving" value="in place">
 
                                     <h2>${paymentMethodFmt}</h2>
                                     <c:forEach items="${paymentMethods}" var="paymentMethod">
@@ -53,8 +53,7 @@
                                     </c:forEach>
                                     <br>
                                     <input id="placeOrderBtn" type="submit" value="${placeOrderFmt}" <c:if
-                                        test="${user == null}">disabled
-                                    </c:if>>
+                                        test="${user == null}">disabled</c:if>>
                                     <c:if test="${user == null}">
                                         <h3 style="color: red;">${toContinueFmt}</h3>
                                     </c:if>

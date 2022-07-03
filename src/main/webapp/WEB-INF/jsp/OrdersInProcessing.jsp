@@ -9,6 +9,7 @@
             <fmt:message bundle="${loc}" key="local.h2.methodOfReceiving" var="methodOfReceivingFmt" />
             <fmt:message bundle="${loc}" key="local.label.totalPrice" var="totalFmt" />
             <fmt:message bundle="${loc}" key="local.txt.date" var="dateFmt" />
+            <fmt:message bundle="${loc}" key="local.txt.noOrdersInProcessing" var="noOrdersInProcessingFmt" />
 
             <!DOCTYPE html>
             <html>
@@ -35,31 +36,38 @@
                             </jsp:forward>
                         </c:if>
 
-                        <table>
-                            <th>№</th>
-                            <th>${totalFmt}</th>
-                            <th>${dateFmt}</th>
-                            <th>${methodOfReceivingFmt}</th>
+                        <c:if test="${empty ordersInProcessing}">
+                            <h2>
+                                ${noOrdersInProcessingFmt}
+                            </h2>
+                        </c:if>
+                        <c:if test="${not empty ordersInProcessing}">
+                            <table>
+                                <th>№</th>
+                                <th>${totalFmt}</th>
+                                <th>${dateFmt}</th>
+                                <th>${methodOfReceivingFmt}</th>
 
-                            <c:forEach items="${ordersInProcessing}" var="order">
-                                <tr>
+                                <c:forEach items="${ordersInProcessing}" var="order">
+                                    <tr>
 
-                                    <td>
-                                        ${order.id}
-                                    </td>
-                                    <td>
-                                        ${order.totalPrice}
-                                    </td>
-                                    <td>
-                                        ${order.dateTime}
-                                    </td>
-                                    <td>
-                                        ${order.methodOfReceiving}
-                                    </td>
-                                </tr>
+                                        <td>
+                                            ${order.id}
+                                        </td>
+                                        <td>
+                                            ${order.totalPrice}
+                                        </td>
+                                        <td>
+                                            ${order.dateTime}
+                                        </td>
+                                        <td>
+                                            ${order.methodOfReceiving}
+                                        </td>
+                                    </tr>
 
-                            </c:forEach>
-                        </table>
+                                </c:forEach>
+                            </table>
+                        </c:if>
 
                     </main>
                 </div>
