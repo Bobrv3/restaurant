@@ -10,6 +10,7 @@
             <fmt:message bundle="${loc}" key="local.txt.currentOrder" var="currentOrderFmt" />
             <fmt:message bundle="${loc}" key="local.txt.quitFromAccount" var="quitFromAccountFmt" />
             <fmt:message bundle="${loc}" key="local.txt.confirmationOfOrders" var="confirmationOfOrdersFmt" />
+            <fmt:message bundle="${loc}" key="local.txt.orders" var="ordersFmt" />
             <!DOCTYPE html>
             <html>
 
@@ -64,6 +65,14 @@
                                     <a href="/restaurant?command=move_to_confirmation_of_orders">
                                         <img src="../../images/communicate.png" alt="${confirmationOfOrdersFmt}"><br>
                                         ${confirmationOfOrdersFmt}
+                                    </a>
+                                </div>
+                            </c:if>
+                            <c:if test="${user.roleId == 3}">
+                                <div>
+                                    <a href="/restaurant?command=move_to_cook_orders">
+                                        <img src="../../images/cook.png" alt="${ordersFmt}"><br>
+                                        ${ordersFmt}
                                     </a>
                                 </div>
                             </c:if>

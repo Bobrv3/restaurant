@@ -13,6 +13,7 @@ import com.epam.restaurant.controller.command.impl.GetHistoryOfOrders;
 import com.epam.restaurant.controller.command.impl.GetMenu;
 import com.epam.restaurant.controller.command.impl.GetOrdersInProcessing;
 import com.epam.restaurant.controller.command.impl.MoveToAccount;
+import com.epam.restaurant.controller.command.impl.MoveToCookOrders;
 import com.epam.restaurant.controller.command.impl.NoNameCommand;
 import com.epam.restaurant.controller.command.impl.MoveToPlaceOrder;
 import com.epam.restaurant.controller.command.impl.OnlinePay;
@@ -59,6 +60,7 @@ public final class CommandProvider {
         repository.put(CommandName.ADD_CATEGORY, new AddNewCategoryToMenu());
         repository.put(CommandName.MOVE_TO_CONFIRMATION_OF_ORDERS, new MoveToConfirmationOfOrders());
         repository.put(CommandName.CONFIRM_ORDER, new ConfirmOrder());
+        repository.put(CommandName.MOVE_TO_COOK_ORDERS, new MoveToCookOrders());
     }
 
     public Command getCommand(String name) {
