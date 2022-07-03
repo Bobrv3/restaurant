@@ -58,12 +58,15 @@
                                     ${quitFromAccountFmt}
                                 </a>
                             </div>
-                            <div>
-                                <a href="/restaurant?command=move_to_confirmation_of_orders">
-                                    <img src="../../images/communicate.png" alt="${confirmationOfOrdersFmt}"><br>
-                                    ${confirmationOfOrdersFmt}
-                                </a>
-                            </div>
+                            <c:if test="${user.roleId == 1}">
+                                <div>
+
+                                    <a href="/restaurant?command=move_to_confirmation_of_orders">
+                                        <img src="../../images/communicate.png" alt="${confirmationOfOrdersFmt}"><br>
+                                        ${confirmationOfOrdersFmt}
+                                    </a>
+                                </div>
+                            </c:if>
                         </div>
                     </main>
                 </div>
