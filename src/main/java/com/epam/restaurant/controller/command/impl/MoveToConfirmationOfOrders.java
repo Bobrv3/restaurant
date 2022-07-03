@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class ConfirmationOfOrders implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(ConfirmationOfOrders.class);
+public class MoveToConfirmationOfOrders implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(MoveToConfirmationOfOrders.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
     private static final String IN_PROCESSING = "in processing";

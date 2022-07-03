@@ -59,7 +59,7 @@
                                 </a>
                             </div>
                             <div>
-                                <a href="/restaurant?command=confirmation_of_orders">
+                                <a href="/restaurant?command=move_to_confirmation_of_orders">
                                     <img src="../../images/communicate.png" alt="${confirmationOfOrdersFmt}"><br>
                                     ${confirmationOfOrdersFmt}
                                 </a>

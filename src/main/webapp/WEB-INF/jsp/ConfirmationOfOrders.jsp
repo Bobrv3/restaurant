@@ -5,13 +5,14 @@
             <fmt:setBundle basename="local" var="loc" />
 
             <fmt:message bundle="${loc}" key="local.txt.confirmationOfOrders" var="confirmationOfOrdersFmt" />
+            <fmt:message bundle="${loc}" key="local.txt.confirmationOfOrder" var="confirmationOfOrderFmt" />
             <fmt:message bundle="${loc}" key="local.h2.methodOfReceiving" var="methodOfReceivingFmt" />
             <fmt:message bundle="${loc}" key="local.label.totalPrice" var="totalFmt" />
             <fmt:message bundle="${loc}" key="local.txt.date" var="dateFmt" />
-
             <fmt:message bundle="${loc}" key="local.txt.userName" var="userNameFmt" />
             <fmt:message bundle="${loc}" key="local.txt.userPhoneNumber" var="userPhoneNumberFmt" />
             <fmt:message bundle="${loc}" key="local.txt.userEmail" var="userEmailFmt" />
+            <fmt:message bundle="${loc}" key="local.txt.confirm" var="confirmFmt" />
 
             <!DOCTYPE html>
             <html>
@@ -40,6 +41,7 @@
                             <th>${userNameFmt}</th>
                             <th>${userPhoneNumberFmt}</th>
                             <th>${userEmailFmt}</th>
+                            <th>${confirmationOfOrderFmt}</th>
 
                             <c:forEach items="${ordersForConfirmation}" var="order">
                                 <tr>
@@ -63,6 +65,12 @@
                                     </td>
                                     <td>
                                         ${userData.email}
+                                    </td>
+                                    <td>
+                                        <form action="restaurant" method="post">
+                                            <input type="hidden" name="command" value="confirm_order">
+                                            <input type="submit" value="${confirmFmt} &#10004;">
+                                        </form>
                                     </td>
                                 </tr>
 

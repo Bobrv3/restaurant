@@ -27,7 +27,7 @@
                     <input type="hidden" name="command" value="edit_category">
                     <input type="hidden" name="editedCategoryId" value="${category.id}">
 
-                    <input type="text" name="categoryName" value="${category.name}">
+                    <input type="text" name="categoryName" value="${category.name}" required>
                     <input type="submit" value="${saveFmt}">
                 </form>
             </c:if>
