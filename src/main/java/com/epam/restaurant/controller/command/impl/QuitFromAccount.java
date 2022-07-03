@@ -24,6 +24,7 @@ public class QuitFromAccount implements Command {
     private static final String AUTHORIZED_USER_ATTR = "user";
     private static final String MAIN_PAGE_ADDR = "/home";
     private static final String ORDERS_FOR_CONFIRMATION_ATTR = "ordersForConfirmation";
+    private static final String ORDERS_FOR_COOKING_ATTR = "ordersForCooking";
 
     private static final String EX1 = "Invalid address to redirect in QuitFromAccount";
 
@@ -39,6 +40,7 @@ public class QuitFromAccount implements Command {
         session.removeAttribute(QUANTITY_OF_DISHES_ATTR);
         session.removeAttribute(AUTHORIZED_USER_ATTR);
         session.removeAttribute(ORDERS_FOR_CONFIRMATION_ATTR);
+        session.removeAttribute(ORDERS_FOR_COOKING_ATTR);
 
         try {
             response.sendRedirect(MAIN_PAGE_ADDR);

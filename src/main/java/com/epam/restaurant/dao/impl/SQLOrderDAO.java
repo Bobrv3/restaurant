@@ -1,7 +1,7 @@
 package com.epam.restaurant.dao.impl;
 
-import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Order;
+import com.epam.restaurant.bean.OrderForCooking;
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.dao.ConnectionPool;
@@ -18,7 +18,6 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -232,7 +231,7 @@ public class SQLOrderDAO implements OrderDAO {
     }
 
     @Override
-    public Map<Order, Dish> findOrdersWithDishInfo(Criteria criteria) throws DAOException {
+    public List<OrderForCooking> findOrdersWithDishInfo(Criteria criteria) throws DAOException {
         ResultSet resultSet = null;
         Statement statement = null;
         Connection connection = null;
@@ -252,19 +251,16 @@ public class SQLOrderDAO implements OrderDAO {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
 
-            Map<Order, Dish> orderDishMap = new LinkedHashMap<>();
+            List<OrderForCooking> orderForCookingList = new ArrayList<>();
             while (resultSet.next()) {
-                Order order = new Order();
-                order.setId(resultSet.getInt(1));
+                OrderForCooking order = new OrderForCooking();
+                order.setOrderId(resultSet.getInt(1));
+                order.setDishName(resultSet.getString(2));
                 order.setMethodOfReceiving(resultSet.getString(3));
-
-                Dish dish = new Dish();
-                dish.setName(resultSet.getString(2));
-
-                orderDishMap.put(order, dish);
+                orderForCookingList.add(order);
             }
 
-            return orderDishMap;
+            return orderForCookingList;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);

@@ -1,8 +1,6 @@
 package com.epam.restaurant.controller.command.impl;
 
-import com.epam.restaurant.bean.Dish;
-import com.epam.restaurant.bean.Order;
-import com.epam.restaurant.bean.RegistrationUserData;
+import com.epam.restaurant.bean.OrderForCooking;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.controller.command.Command;
@@ -16,14 +14,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 public class MoveToCookOrders implements Command {
     private static final Logger LOGGER = LogManager.getLogger(MoveToCookOrders.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
     private static final String CONFIRMED_STATUS = "confirmed";
-    private static final String DISH_FOR_COOK_ATTR = "dishForCook";
+    private static final String ORDERS_FOR_COOKING_ATTR = "ordersForCooking";
     private static final String KITCHEN_ADDR = "/kitchen";
 
     private static final String EX1 = "Error invalid address to redirect";
@@ -35,9 +33,9 @@ public class MoveToCookOrders implements Command {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Orders.ORDER_STATUS.name(), CONFIRMED_STATUS);
 
-        Map<Order, Dish> orderDishMap = orderService.findOrdersWithDishInfo(criteria);
+        List<OrderForCooking> ordersForCooking = orderService.findOrdersWithDishInfo(criteria);
 
-        request.getSession().setAttribute(DISH_FOR_COOK_ATTR, orderDishMap);
+        request.getSession().setAttribute(ORDERS_FOR_COOKING_ATTR, ordersForCooking);
 
         try {
             response.sendRedirect(KITCHEN_ADDR);

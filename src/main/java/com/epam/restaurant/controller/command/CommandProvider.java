@@ -5,6 +5,7 @@ import com.epam.restaurant.controller.command.impl.AddNewDishToMenu;
 import com.epam.restaurant.controller.command.impl.AddDishToOrder;
 import com.epam.restaurant.controller.command.impl.Authorization;
 import com.epam.restaurant.controller.command.impl.ChangeLocale;
+import com.epam.restaurant.controller.command.impl.MakeOrderCooked;
 import com.epam.restaurant.controller.command.impl.EditCategory;
 import com.epam.restaurant.controller.command.impl.EditDish;
 import com.epam.restaurant.controller.command.impl.FindDishesBy;
@@ -61,6 +62,7 @@ public final class CommandProvider {
         repository.put(CommandName.MOVE_TO_CONFIRMATION_OF_ORDERS, new MoveToConfirmationOfOrders());
         repository.put(CommandName.CONFIRM_ORDER, new ConfirmOrder());
         repository.put(CommandName.MOVE_TO_COOK_ORDERS, new MoveToCookOrders());
+        repository.put(CommandName.ORDER_COOKED, new MakeOrderCooked());
     }
 
     public Command getCommand(String name) {
