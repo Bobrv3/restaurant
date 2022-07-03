@@ -1,5 +1,6 @@
 package com.epam.restaurant.dao;
 
+import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Order;
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
@@ -18,4 +19,6 @@ public interface OrderDAO {
     Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws DAOException;
 
     boolean confirmOrder(int orderID) throws DAOException;
+
+    Map<Order, Dish> findOrdersWithDishInfo(Criteria criteria) throws DAOException;
 }

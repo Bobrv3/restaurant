@@ -1,5 +1,6 @@
 package com.epam.restaurant.service.impl;
 
+import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Order;
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
@@ -75,6 +76,17 @@ public class OrderImpl implements OrderService {
             OrderDAO orderDAO = daoProvider.getOrderDAO();
 
             return orderDAO.confirmOrder(orderID);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Map<Order, Dish> findOrdersWithDishInfo(Criteria criteria) throws ServiceException {
+        try {
+            OrderDAO orderDAO = daoProvider.getOrderDAO();
+
+            return orderDAO.findOrdersWithDishInfo(criteria);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

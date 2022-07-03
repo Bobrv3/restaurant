@@ -149,6 +149,15 @@
     <servlet-name>ConfirmationOfOrders</servlet-name>
     <url-pattern>/confirmationOfOrders</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Kitchen</servlet-name>
+    <jsp-file>/WEB-INF/jsp/Kitchen.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Kitchen</servlet-name>
+    <url-pattern>/kitchen</url-pattern>
+  </servlet-mapping>
 
  
 

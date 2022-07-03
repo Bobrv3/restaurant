@@ -1,5 +1,6 @@
 package com.epam.restaurant.dao.impl;
 
+import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Order;
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
@@ -18,6 +19,7 @@ import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ public class SQLOrderDAO implements OrderDAO {
     private static final String INSERT_ORDER_DETAIL_QUERY = "INSERT INTO order_details (orders_id, menu_dishes_id, quantity, methodOfReceiving) VALUES (?, ?, ?, ?)";
     private static final String FIND_ORDER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where {0} group by ord.id;";
     private static final String FIND_ORDER_WITH_USER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, u.name, phone_number, email FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id LEFT JOIN users u on user_id=u.id where {0} group by ord.id;";
+    private static final String FIND_ORDER_WITH_DISH_BY_CRITERIA_QUERY = "SELECT ord.id,  m.name, methodOfReceiving FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where {0};";
     private static final String UPDATE_ORDER_STATUS_QUERY = "UPDATE orders SET order_status='confirmed' where id=?;";
 
     private static final String AND = "AND ";
@@ -169,7 +172,7 @@ public class SQLOrderDAO implements OrderDAO {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
 
-            Map<Order, RegistrationUserData> orderUserDataMap = new HashMap<>();
+            Map<Order, RegistrationUserData> orderUserDataMap = new LinkedHashMap<>();
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setId(resultSet.getInt(1));
@@ -219,6 +222,54 @@ public class SQLOrderDAO implements OrderDAO {
             throw new DAOException("Error when trying to take connection", e);
         } catch (SQLException e) {
             throw new DAOException("Error when trying to confirmOrder", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
+    }
+
+    @Override
+    public Map<Order, Dish> findOrdersWithDishInfo(Criteria criteria) throws DAOException {
+        ResultSet resultSet = null;
+        Statement statement = null;
+        Connection connection = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            Map<String, Object> criterias = criteria.getCriteria();
+
+            StringBuilder where = new StringBuilder("");
+            for (String key : criterias.keySet()) {
+                where.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), AND));
+            }
+            where = new StringBuilder(where.substring(0, where.length() - AND.length()));
+            String query = MessageFormat.format(FIND_ORDER_WITH_DISH_BY_CRITERIA_QUERY, where);
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+
+            Map<Order, Dish> orderDishMap = new LinkedHashMap<>();
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.setId(resultSet.getInt(1));
+                order.setMethodOfReceiving(resultSet.getString(3));
+
+                Dish dish = new Dish();
+                dish.setName(resultSet.getString(2));
+
+                orderDishMap.put(order, dish);
+            }
+
+            return orderDishMap;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to findOrdersWithUsersInfo", e);
         } finally {
             try {
                 connectionPool.closeConnection(connection, statement, resultSet);

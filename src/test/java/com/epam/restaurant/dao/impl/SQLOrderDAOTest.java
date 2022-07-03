@@ -78,4 +78,12 @@ class SQLOrderDAOTest {
 
         Assertions.assertTrue(orderDAO.confirmOrder(orderIdForConfirming));
     }
+
+    @Test
+    void findOrdersWithDishInfo_SizeOfListMoreThan0_true() throws DAOException {
+        Criteria criteria = new Criteria();
+        criteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "confirmed");
+
+        Assertions.assertTrue(orderDAO.findOrdersWithDishInfo(criteria).size() > 0);
+    }
 }

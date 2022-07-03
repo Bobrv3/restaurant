@@ -1,5 +1,6 @@
 package com.epam.restaurant.service;
 
+import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Order;
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
@@ -19,4 +20,6 @@ public interface OrderService {
     Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws ServiceException;
 
     boolean confirmOrder(int orderID) throws ServiceException;
+
+    Map<Order, Dish> findOrdersWithDishInfo(Criteria criteria) throws ServiceException;
 }
