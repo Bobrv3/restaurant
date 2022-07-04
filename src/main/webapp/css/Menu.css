@@ -98,4 +98,6 @@ button {
     height: 90%;
     min-width: 145px;
     min-height: 95px;
+    max-width: 195px;
+    max-height: 135px;
 }

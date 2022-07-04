@@ -31,6 +31,7 @@ public class SQLMenuDAO implements MenuDAO {
     private static final String REMOVE_DISH_BY_CRITERIA_QUERY = "UPDATE menu SET status=1 where ";
     private static final String EDIT_CATEGORY_QUERY = "UPDATE categories SET name=? where id=?";
     private static final String EDIT_DISH_QUERY = "UPDATE menu SET name=?, description=?, price=? where dishes_id=?";
+    private static final String EDIT_DISH_PHOTO_QUERY = "UPDATE dish_photos SET url=? where menu_dishes_id=?";
     private static final String ADD_DISH_QUERY = "INSERT INTO menu(price, name, description, status,  category_id) VALUES(?,?,?, 0, ?)";
     private static final String ADD_CATEGORY_QUERY = "INSERT INTO categories(name) VALUES(?)";
     private static final String ADD_PHOTO_QUERY = "INSERT INTO dish_photos(url, menu_dishes_id) VALUES(?, ?)";
@@ -239,12 +240,17 @@ public class SQLMenuDAO implements MenuDAO {
     }
 
     @Override
-    public boolean editDish(int editedDishId, String dishName, String description, BigDecimal price) throws DAOException {
+    public boolean editDish(int editedDishId, String dishName, String description, BigDecimal price, String photoLink) throws DAOException {
         Connection connection = null;
         PreparedStatement statement = null;
 
         try {
             connection = connectionPool.takeConnection();
+
+            statement = connection.prepareStatement(EDIT_DISH_PHOTO_QUERY);
+            statement.setString(1, photoLink);
+            statement.setInt(2, editedDishId);
+            statement.executeUpdate();
 
             statement = connection.prepareStatement(EDIT_DISH_QUERY);
             statement.setString(1, dishName);
@@ -255,6 +261,9 @@ public class SQLMenuDAO implements MenuDAO {
             return statement.executeUpdate() == 1;
 
         } catch (SQLException e) {
+            if (e.getClass() == java.sql.SQLIntegrityConstraintViolationException.class){
+                throw new DAOException("A dish with such a photo already exists. ", e);
+            }
             throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

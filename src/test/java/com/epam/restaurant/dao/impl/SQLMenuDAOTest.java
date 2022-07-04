@@ -1,6 +1,5 @@
 package com.epam.restaurant.dao.impl;
 
-import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.bean.Category;
 import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Menu;
@@ -10,8 +9,6 @@ import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.MenuDAO;
-import com.sun.source.util.SourcePositions;
-import org.apache.logging.log4j.core.util.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,8 +17,6 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class SQLMenuDAOTest {
     private static ConnectionPool connectionPool;
@@ -116,8 +111,9 @@ class SQLMenuDAOTest {
         String newCategoryName = dishes.get(0).getName();
         BigDecimal newPrice = dishes.get(0). getPrice();
         String newDescription = dishes.get(0).getDescription();
+        String photo_link = dishes.get(0).getPhoto_link();
 
-        Assertions.assertTrue(menuDAO.editDish(editedCategoryId, newCategoryName, newDescription, newPrice));
+        Assertions.assertTrue(menuDAO.editDish(editedCategoryId, newCategoryName, newDescription, newPrice, photo_link));
     }
 
 //    @Test

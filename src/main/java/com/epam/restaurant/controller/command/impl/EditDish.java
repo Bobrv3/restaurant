@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.List;
 
 public class EditDish implements Command {
@@ -26,29 +27,33 @@ public class EditDish implements Command {
     private static final String EDITED_DISH_ID_PARAM = "editedDishId";
     private static final String DESCRIPTION_PARAM = "description";
     private static final String PRICE_PARAM = "price";
+    private static final String PHOTO_LINK_PARAM = "photo_link";
     private static final String MENU_ATTR = "menu";
+    private static final String PATH_TO_PHOTO = "../../images/dishes/{0}";
 
     private static final String EX1 = "Error invalid address to redirect";
+    private static final String ERROR_MESSAGE_ATTR = "Error message";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         int editedDishId = Integer.parseInt(request.getParameter(EDITED_DISH_ID_PARAM));
         String newDishName = request.getParameter(DISH_NAME_PARAM);
         String description = request.getParameter(DESCRIPTION_PARAM);
         BigDecimal price = new BigDecimal(request.getParameter(PRICE_PARAM));
-
-        editDishInSession(request, editedDishId, newDishName, description, price);
-
-        editCategoryInDB(editedDishId, newDishName, description, price);
+        String photoLink = MessageFormat.format(PATH_TO_PHOTO, request.getParameter(PHOTO_LINK_PARAM));
 
         try {
+            editCategoryInDB(editedDishId, newDishName, description, price, photoLink);
+
+            editDishInSession(request, editedDishId, newDishName, description, price, photoLink);
+
             response.sendRedirect(MAIN_PAGE_ADDR);
         } catch (IOException e) {
             LOGGER.error(EX1, e);
         }
     }
 
-    private void editDishInSession(HttpServletRequest request, int editedDishId, String newDishName, String description, BigDecimal price) {
+    private void editDishInSession(HttpServletRequest request, int editedDishId, String newDishName, String description, BigDecimal price, String photo_link) {
         Menu menu = (Menu) request.getSession().getAttribute(MENU_ATTR);
         List<Dish> dishes = menu.getDishes();
 
@@ -57,6 +62,7 @@ public class EditDish implements Command {
                 dish.setName(newDishName);
                 dish.setDescription(description);
                 dish.setPrice(price);
+                dish.setPhoto_link(photo_link);
                 break;
             }
         }
@@ -64,9 +70,9 @@ public class EditDish implements Command {
         request.getSession().setAttribute(MENU_ATTR, menu);
     }
 
-    private void editCategoryInDB(int editedDishId, String newDishName, String description, BigDecimal price) throws ServiceException {
+    private void editCategoryInDB(int editedDishId, String newDishName, String description, BigDecimal price, String photo_link) throws ServiceException {
         MenuService menuService = serviceProvider.getMenuService();
 
-        menuService.editDish(editedDishId, newDishName, description, price);
+        menuService.editDish(editedDishId, newDishName, description, price, photo_link);
     }
 }

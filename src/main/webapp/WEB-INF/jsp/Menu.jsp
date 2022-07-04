@@ -55,12 +55,17 @@
                                         <h3 class="DishName">
                                             <li /><input type="text" name="dishName" value="${dish.name}" required>
                                         </h3>
-                                        <textarea name="description" cols="90" rows="3"
+                                        <textarea name="description" cols="70" rows="3"
                                             required>${dish.description}</textarea>
                                         <input type="submit" value="${saveFmt}">
                                     </td>
                                     <td>
                                         <input type="text" name="price" value="${dish.price}" required id="editedPrice">
+                                    </td>
+                                    <td>
+                                        <img src="${dish.photo_link}" alt="photo of ${dish.name}" class="dishPhoto">
+                                        <br>
+                                        <input type="file" name="photo_link" accept="images/*">
                                     </td>
                                 </form>
                             </c:if>

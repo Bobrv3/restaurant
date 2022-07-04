@@ -20,9 +20,9 @@ public interface MenuDAO {
 
     boolean editCategory(int editedCategoryId, String newCategoryName) throws DAOException;
 
-    boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price) throws DAOException;
+    boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price, String photo_link) throws DAOException;
 
-    int addDish(BigDecimal price, String name, String description, int categoryForAdd) throws DAOException;
+    int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photo_link) throws DAOException;
 
     int addCategory(String categoryName) throws DAOException;
 }

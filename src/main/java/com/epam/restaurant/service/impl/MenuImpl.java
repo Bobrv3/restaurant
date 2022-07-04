@@ -72,9 +72,9 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price) throws ServiceException {
+    public boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price, String photo_link) throws ServiceException {
         try {
-            return menuDAO.editDish(editedDishId, newDishName, description, price);
+            return menuDAO.editDish(editedDishId, newDishName, description, price, photo_link);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -82,9 +82,9 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public int addDish(BigDecimal price, String name, String description, int categoryForAdd) throws ServiceException {
+    public int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photo_link) throws ServiceException {
         try {
-            return menuDAO.addDish(price, name, description, categoryForAdd);
+            return menuDAO.addDish(price, name, description, categoryForAdd, photo_link);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
