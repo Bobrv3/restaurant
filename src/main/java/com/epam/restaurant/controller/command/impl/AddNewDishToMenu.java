@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.List;
 
 public class AddNewDishToMenu implements Command {
@@ -24,10 +25,13 @@ public class AddNewDishToMenu implements Command {
     private static final String DISH_NAME_PARAM = "dishName";
     private static final String DESCRIPTION_PARAM = "description";
     private static final String PRICE_PARAM = "price";
+    private static final String PHOTO_LINK_PARAM = "photoLink";
     private static final String MENU_ATTR = "menu";
     private static final String MAIN_PAGE_ADDR = "/home";
+    private static final String PATH_TO_PHOTO = "../../images/dishes/{0}";
 
     private static final String EX1 = "Error invalid address to redirect";
+    private static final String EX2 = "It's need to enter all fields";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
@@ -35,18 +39,23 @@ public class AddNewDishToMenu implements Command {
         String dishName = request.getParameter(DISH_NAME_PARAM);
         String description = request.getParameter(DESCRIPTION_PARAM);
         BigDecimal price = new BigDecimal(request.getParameter(PRICE_PARAM));
+        String photoLink = MessageFormat.format(PATH_TO_PHOTO, request.getParameter(PHOTO_LINK_PARAM));
+
+        if (categoryForAdd == 0 || dishName == null || description == null || price == null || photoLink == null) {
+            throw new ServiceException(EX2);
+        }
 
         MenuService menuService = serviceProvider.getMenuService();
-        int newDishId = menuService.addDish(price, dishName, description, categoryForAdd);
+        int newDishId = menuService.addDish(price, dishName, description, categoryForAdd, photoLink);
 
         Menu menu = (Menu) request.getSession().getAttribute(MENU_ATTR);
         List<Dish> dishes = menu.getDishes();
-        dishes.add(new Dish(newDishId, price, dishName, description, categoryForAdd));
+        dishes.add(new Dish(newDishId, price, dishName, description, categoryForAdd, photoLink));
 
         try {
             response.sendRedirect(MAIN_PAGE_ADDR);
         } catch (IOException e) {
-            LOGGER.error(EX1, e);
+            LOGGER.error(EX1, e.getMessage(), e.getStackTrace());
         }
     }
 }

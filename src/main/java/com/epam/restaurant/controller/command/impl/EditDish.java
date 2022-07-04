@@ -27,7 +27,7 @@ public class EditDish implements Command {
     private static final String EDITED_DISH_ID_PARAM = "editedDishId";
     private static final String DESCRIPTION_PARAM = "description";
     private static final String PRICE_PARAM = "price";
-    private static final String PHOTO_LINK_PARAM = "photo_link";
+    private static final String PHOTO_LINK_PARAM = "photoLink";
     private static final String MENU_ATTR = "menu";
     private static final String PATH_TO_PHOTO = "../../images/dishes/{0}";
 

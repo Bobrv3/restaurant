@@ -101,19 +101,23 @@ class SQLMenuDAOTest {
     }
 
     @Test
-    void editDish() throws DAOException {
-        int editedCategoryId = 2;
+    void editDish_ThrowEx_true() throws DAOException {
+        int editedDishId = 2;
 
         Criteria criteria = new Criteria();
-        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), editedCategoryId);
+        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), editedDishId);
 
         List<Dish> dishes = menuDAO.find(criteria);
-        String newCategoryName = dishes.get(0).getName();
+        String newDishName = dishes.get(0).getName();
         BigDecimal newPrice = dishes.get(0). getPrice();
         String newDescription = dishes.get(0).getDescription();
         String photo_link = dishes.get(0).getPhoto_link();
 
-        Assertions.assertTrue(menuDAO.editDish(editedCategoryId, newCategoryName, newDescription, newPrice, photo_link));
+        try {
+            menuDAO.editDish(editedDishId, newDishName, newDescription, newPrice, photo_link);
+        } catch (DAOException e) {
+            Assertions.assertTrue(e.getCause().getClass() == java.sql.SQLIntegrityConstraintViolationException.class);
+        }
     }
 
 //    @Test

@@ -304,7 +304,7 @@ public class SQLMenuDAO implements MenuDAO {
 
             return addedDishId;
         } catch (SQLException e) {
-            throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
+            throw new DAOException("Error when trying to create a prepareStatement in add Dish query", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);

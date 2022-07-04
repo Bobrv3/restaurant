@@ -65,7 +65,7 @@
                                     <td>
                                         <img src="${dish.photo_link}" alt="photo of ${dish.name}" class="dishPhoto">
                                         <br>
-                                        <input type="file" name="photo_link" accept="images/*">
+                                        <input type="file" name="photoLink" accept="images/*" required>
                                     </td>
                                 </form>
                             </c:if>
@@ -136,7 +136,7 @@
                                         <li /><input type="text" name="dishName" value="" placeholder="Dish name"
                                             required>
                                     </h3>
-                                    <textarea name="description" cols="90" rows="3" placeholder="Description..."
+                                    <textarea name="description" cols="60" rows="3" placeholder="Description..."
                                         required></textarea>
                                     <input type="submit" value="${btn_add}">
                                 </td>
@@ -144,8 +144,10 @@
                                     <input type="text" name="price" value="" placeholder="Price" required
                                         id="editedPrice">
                                 </td>
+                                <td>
+                                    <input type="file" name="photoLink" accept="images/*" required>
+                                </td>
                             </form>
-                            </td>
                         </tr>
                     </c:if>
                 </c:if>
