@@ -6,6 +6,7 @@
 
             <fmt:message bundle="${loc}" key="local.label.yourOrder" var="yourOrder_lbl" />
             <fmt:message bundle="${loc}" key="local.button.goToPlacingAnOrder" var="GoToPlacingAnOrder_btn" />
+            <fmt:message bundle="${loc}" key="local.button.cleanCurrentOrder" var="CleanCurrentOrder_btn" />
             <fmt:message bundle="${loc}" key="local.button.orderIsEmpty" var="orderIsEmptyFmt" />
 
             <!DOCTYPE html>
@@ -33,7 +34,7 @@
                                 <h1>${yourOrder_lbl}:</h1>
                             </div>
 
-                            <form action="restaurant" method="get" id="placeOrderForm">
+                            <form action="restaurant" method="post" id="placeOrderForm">
                                 <input type="hidden" name="command" value="move_to_place_order">
 
                                 <table>
@@ -65,11 +66,16 @@
                                         </tr>
                                     </c:forEach>
                                 </table>
-
-                                <c:if test="${order != null}">
-                                    <input type="submit" value="${GoToPlacingAnOrder_btn}" id="placeOrderBtn">
-                                </c:if>
+                                <input type="submit" value="${CleanCurrentOrder_btn}" form="cleanOrderForm"
+                                    id="placeOrderBtn">
+                                <input type="submit" value="${GoToPlacingAnOrder_btn}" form="placeOrderForm"
+                                    id="placeOrderBtn">
                             </form>
+
+                            <form action="restaurant" method="get" id="cleanOrderForm">
+                                <input type="hidden" name="command" value="clean_current_order">
+                            </form>
+
                         </c:if>
 
                         <c:if test="${order == null}">
