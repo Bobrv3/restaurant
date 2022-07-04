@@ -26,13 +26,14 @@ public class SQLMenuDAO implements MenuDAO {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     private static final String GET_ALL_CATEGORIES_QUERY = "SELECT * FROM categories ORDER BY id";
-    private static final String GET_MENU_QUERY = "SELECT dishes_id, name, description, price, category_id FROM menu where status != 1;";
+    private static final String GET_MENU_QUERY = "SELECT dishes_id, name, description, price, category_id, url FROM menu LEFT JOIN dish_photos on menu_dishes_id = dishes_id where status != 1;";
     private static final String FIND_DISH_BY_CRITERIA_QUERY = "Select dishes_id, name, description, price, category_id FROM menu where ";
     private static final String REMOVE_DISH_BY_CRITERIA_QUERY = "UPDATE menu SET status=1 where ";
     private static final String EDIT_CATEGORY_QUERY = "UPDATE categories SET name=? where id=?";
     private static final String EDIT_DISH_QUERY = "UPDATE menu SET name=?, description=?, price=? where dishes_id=?";
     private static final String ADD_DISH_QUERY = "INSERT INTO menu(price, name, description, status,  category_id) VALUES(?,?,?, 0, ?)";
     private static final String ADD_CATEGORY_QUERY = "INSERT INTO categories(name) VALUES(?)";
+    private static final String ADD_PHOTO_QUERY = "INSERT INTO dish_photos(url, menu_dishes_id) VALUES(?, ?)";
     private static final int GENERATED_KEYS = 1;
 
     private static final String AND = "AND ";
@@ -62,8 +63,9 @@ public class SQLMenuDAO implements MenuDAO {
                 String description = resultSet.getString(3);
                 BigDecimal price = BigDecimal.valueOf(resultSet.getDouble(4));
                 int category_id = resultSet.getInt(5);
+                String photo_link = resultSet.getString(6);
 
-                menu.add(new Dish(id, price, name, description, category_id));
+                menu.add(new Dish(id, price, name, description, category_id, photo_link));
             }
         } catch (SQLException e) {
             throw new DAOException("Error when trying to get menu", e);
@@ -267,7 +269,7 @@ public class SQLMenuDAO implements MenuDAO {
     }
 
     @Override
-    public int addDish(BigDecimal price, String name, String description, int categoryForAdd) throws DAOException {
+    public int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photo_link) throws DAOException {
         Connection connection = null;
         ResultSet resultSet = null;
         PreparedStatement statement = null;
@@ -284,8 +286,14 @@ public class SQLMenuDAO implements MenuDAO {
 
             resultSet = statement.getGeneratedKeys();
             resultSet.next();
+            int addedDishId = resultSet.getInt(GENERATED_KEYS);
 
-            return resultSet.getInt(GENERATED_KEYS);
+            statement = connection.prepareStatement(ADD_PHOTO_QUERY);
+            statement.setString(1, photo_link);
+            statement.setInt(2, addedDishId);
+            statement.executeUpdate();
+
+            return addedDishId;
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
         } catch (InterruptedException e) {

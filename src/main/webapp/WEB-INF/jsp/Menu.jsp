@@ -67,13 +67,17 @@
 
                             <c:if test="${param.editedDishId != dish.id}">
                                 <td class="col1">
-                                    <h3 class="DishName">
+                                    <b style="font-size: 15px;">
                                         <li />${dish.name}
-                                    </h3>
-                                    ${dish.description}
+                                    </b>
+                                    (${dish.description}) <br>
+
                                 </td>
                                 <td class="col2">
                                     ${dish.price}
+                                </td>
+                                <td>
+                                    <img src="${dish.photo_link}" alt="photo of ${dish.name}" class="dishPhoto">
                                 </td>
                             </c:if>
 

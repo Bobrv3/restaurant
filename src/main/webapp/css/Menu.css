@@ -80,7 +80,8 @@ button {
 }
 
 .col1 {
-    width: 600px;
+    width: 500px;
+    text-align: left;
 }
 
 .col2 {
@@ -89,4 +90,9 @@ button {
 
 .col3 {
     width: 160px;
+}
+
+.dishPhoto {
+    width: 100%;
+    height: 90%;
 }

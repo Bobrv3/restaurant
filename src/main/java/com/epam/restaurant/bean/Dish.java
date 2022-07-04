@@ -11,16 +11,26 @@ public class Dish implements Serializable {
     private String name;
     private String description;
     private int category_id;
+    private String photo_link;
 
     public Dish() {
     }
 
-    public Dish(int dishes_id, BigDecimal price, String name, String description, int category_id) {
-        this.id = dishes_id;
+    public Dish(int id, BigDecimal price, String name, String description, int category_id, String photo_link) {
+        this.id = id;
         this.price = price;
         this.name = name;
         this.description = description;
         this.category_id = category_id;
+        this.photo_link = photo_link;
+    }
+
+    public String getPhoto_link() {
+        return photo_link;
+    }
+
+    public void setPhoto_link(String photo_link) {
+        this.photo_link = photo_link;
     }
 
     public int getId() {
@@ -67,23 +77,24 @@ public class Dish implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Dish menu = (Dish) o;
-        return id == menu.id && category_id == menu.category_id && Objects.equals(price, menu.price) && Objects.equals(name, menu.name) && Objects.equals(description, menu.description);
+        Dish dish = (Dish) o;
+        return id == dish.id && category_id == dish.category_id && Objects.equals(price, dish.price) && Objects.equals(name, dish.name) && Objects.equals(description, dish.description) && Objects.equals(photo_link, dish.photo_link);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, price, name, description, category_id);
+        return Objects.hash(id, price, name, description, category_id, photo_link);
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " {" +
-                "dishes_id=" + id +
+                "id=" + id +
                 ", price=" + price +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", category_id=" + category_id +
+                ", photo_link='" + photo_link + '\'' +
                 '}';
     }
 }

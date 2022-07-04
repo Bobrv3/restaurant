@@ -49,7 +49,7 @@ class SQLMenuDAOTest {
         Menu menu = menuDAO.getMenu();
         int secondId = 1;
 
-        Assertions.assertEquals(dishWithSecondId, menu.getDishes().get(secondId));
+        Assertions.assertEquals(dishWithSecondId.getName(), menu.getDishes().get(secondId).getName());
     }
 
     @Test
