@@ -74,7 +74,7 @@
 
                                 </td>
                                 <td class="col2">
-                                    ${dish.price}
+                                    <b>${dish.price}</b>
                                 </td>
                                 <td>
                                     <img src="${dish.photo_link}" alt="photo of ${dish.name}" class="dishPhoto">
@@ -114,7 +114,7 @@
 
                     <c:if test="${!param.createDish || (param.createDish && param.categoryForAdd != category.id)}">
                         <tr>
-                            <td colspan="4">
+                            <td colspan="5">
                                 <a href="/home?createDish=true&categoryForAdd=${category.id}">
                                     <img src="../../images/addContent.png" alt="add dish" id="imgAddContent">
                                 </a>

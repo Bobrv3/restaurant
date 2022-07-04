@@ -1,5 +1,6 @@
 body {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    background-image: url(../../images/backgoundImg.jpg);
 }
 
 h1 {
@@ -28,7 +29,7 @@ table {
 }
 
 td {
-    color: #669;
+    color: black;
     padding: 10px 15px;
     text-align: center;
 }
@@ -95,4 +96,6 @@ button {
 .dishPhoto {
     width: 100%;
     height: 90%;
+    min-width: 145px;
+    min-height: 95px;
 }
