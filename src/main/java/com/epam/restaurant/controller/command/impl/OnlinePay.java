@@ -21,6 +21,7 @@ public class OnlinePay implements Command {
     private static final String QUANTITY_OF_DISHES_ATTR = "quantityOfDishes";
     private static final String ORDER_ATTR = "order";
     private static final String FINISHING_THE_ORDER_ADDR = "/finishingTheOrder";
+
     private static final String EX1 = "Invalid address to redirect in online pay";
 
     @Override

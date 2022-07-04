@@ -6,6 +6,8 @@ import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,27 +18,31 @@ import java.io.IOException;
 import java.util.List;
 
 public class GetMenu implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(GetMenu.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
+    private static final String MENU_ATTR = "menu";
+    private static final String CATEGORIES_ATTR = "categories";
+    private static final String MAIN_PAGE_ADDR = "/home";
+
+    private static final String EX1 = "Invalid address to redirect in online pay";
+
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         MenuService menuService = serviceProvider.getMenuService();
 
         Menu menu = menuService.getMenu();
         List<Category> categories = menuService.getCategories();
 
         HttpSession session = request.getSession();
-        session.setAttribute("menu", menu);
-        session.setAttribute("categories", categories);
+        session.setAttribute(MENU_ATTR, menu);
+        session.setAttribute(CATEGORIES_ATTR, categories);
 
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(MAIN_PAGE_ADDR);
         try {
             requestDispatcher.forward(request, response);
-        } catch (ServletException e) {
-            // TODO обработать
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(EX1, e);
         }
     }
 }
