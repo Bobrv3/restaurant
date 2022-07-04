@@ -32,6 +32,10 @@ body {
     }
 }
 
+h1 {
+    text-align: center;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: auto auto;
@@ -46,4 +50,10 @@ body {
     text-align: left;
     padding: 10px;
     font-size: 30px;
+}
+
+#goBackImg {
+    margin-left: 2%;
+    width: 2em;
+    height: 2em;
 }

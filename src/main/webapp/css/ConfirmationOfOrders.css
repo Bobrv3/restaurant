@@ -49,10 +49,43 @@ th {
     border: 1px solid;
 }
 
+td {
+    border: 1px solid;
+}
+
 tr {
     border: 1px solid;
 }
 
-td {
-    border: 1px solid;
+tr:hover td {
+    background: #e8edff;
+}
+
+#confirmBtn {
+    display: inline-block;
+    border-radius: 30px;
+    background: #ffc107;
+    border-color: #ffc107;
+    margin: 4px;
+    width: 100%;
+    min-width: 75px;
+}
+
+#confirmBtn:hover {
+    background: #03fc7f;
+    color: black;
+    border-color: #03fc7f;
+}
+
+#goBackImg {
+    margin-left: 2%;
+    width: 2em;
+    height: 2em;
+}
+
+.box {
+    display: flex;
+    flex-direction: row;
+    width: 64%;
+    justify-content: space-between;
 }

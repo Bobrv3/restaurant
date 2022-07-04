@@ -52,7 +52,7 @@ table {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
     font-size: 14px;
     background: white;
-    width: 80%;
+    width: 90%;
     border-collapse: collapse;
     text-align: left;
 }
@@ -95,4 +95,24 @@ button {
     border-color: #ffc107;
     margin-top: 1%;
     margin-bottom: 2%;
+}
+
+#goBackImg {
+    margin-left: 2%;
+    width: 2em;
+    height: 2em;
+}
+
+.box {
+    display: flex;
+    flex-direction: row;
+    width: 56%;
+    justify-content: space-between;
+}
+
+.boxEmpty {
+    display: flex;
+    flex-direction: row;
+    width: 61%;
+    justify-content: space-between;
 }

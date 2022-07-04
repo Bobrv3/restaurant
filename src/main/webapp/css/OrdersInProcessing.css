@@ -39,7 +39,9 @@ body {
 
 table {
     border-collapse: collapse;
-    width: 40%;
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
     text-align: center;
 }
 
@@ -51,6 +53,23 @@ tr {
     border: 1px solid;
 }
 
+tr:hover td {
+    background: #e8edff;
+}
+
 td {
     border: 1px solid;
+}
+
+#goBackImg {
+    margin-left: 2%;
+    width: 2em;
+    height: 2em;
+}
+
+.box {
+    display: flex;
+    flex-direction: row;
+    width: 64%;
+    justify-content: space-between;
 }

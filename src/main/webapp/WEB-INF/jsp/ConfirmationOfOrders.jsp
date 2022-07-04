@@ -31,7 +31,13 @@
 
                 <div class="wrapper">
                     <main class="main">
-                        <h1>${confirmationOfOrdersFmt}</h1>
+
+                        <div class="box">
+                            <a href="/showAccount">
+                                <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                            </a>
+                            <h1>${confirmationOfOrdersFmt}</h1>
+                        </div>
 
                         <table>
                             <th>№</th>
@@ -70,7 +76,7 @@
                                         <form action="restaurant" method="post">
                                             <input type="hidden" name="command" value="confirm_order">
                                             <input type="hidden" name="confirmedOrderID" value="${order.id}">
-                                            <input type="submit" value="${confirmFmt} &#10004;">
+                                            <input type="submit" value="${confirmFmt} &#10004;" id="confirmBtn">
                                         </form>
                                     </td>
                                 </tr>

@@ -28,7 +28,12 @@
 
                 <div class="wrapper">
                     <main class="main">
-                        <h1>${ordersInProcessingFmt}</h1>
+                        <div class="box">
+                            <a href="/showAccount">
+                                <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                            </a>
+                            <h1>${ordersInProcessingFmt}</h1>
+                        </div>
 
                         <c:if test="${ordersInProcessing == null}">
                             <jsp:forward page="/restaurant">

@@ -38,9 +38,9 @@ body {
 
 table {
     border-collapse: collapse;
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
     text-align: center;
 }
 
@@ -58,4 +58,37 @@ td {
 
 h1 {
     text-align: center;
+}
+
+tr:hover td {
+    background: #e8edff;
+}
+
+#doneBtn {
+    display: inline-block;
+    border-radius: 30px;
+    background: #ffc107;
+    border-color: #ffc107;
+    margin: 4px;
+    width: 100%;
+    min-width: 75px;
+}
+
+#doneBtn:hover {
+    background: #03fc7f;
+    color: black;
+    border-color: #03fc7f;
+}
+
+#goBackImg {
+    margin-left: 2%;
+    width: 2em;
+    height: 2em;
+}
+
+.box {
+    display: flex;
+    flex-direction: row;
+    width: 55%;
+    justify-content: space-between;
 }

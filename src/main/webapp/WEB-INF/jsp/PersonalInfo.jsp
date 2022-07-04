@@ -30,9 +30,15 @@
                     </jsp:forward>
                 </c:if>
 
+                <a href="/showAccount">
+                    <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                </a>
+
                 <div class="wrapper">
                     <main class="main">
+
                         <h2>${personalInfoFmt}</h2>
+
                         <div class="grid-container">
                             <div>${nameFmt}</div>
                             <div>${userData.name}</div>

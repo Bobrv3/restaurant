@@ -6,6 +6,7 @@
 
             <fmt:message bundle="${loc}" key="local.label.yourOrder" var="yourOrder_lbl" />
             <fmt:message bundle="${loc}" key="local.button.goToPlacingAnOrder" var="GoToPlacingAnOrder_btn" />
+            <fmt:message bundle="${loc}" key="local.button.orderIsEmpty" var="orderIsEmptyFmt" />
 
             <!DOCTYPE html>
             <html>
@@ -25,7 +26,12 @@
                 <div class="wrapper">
                     <main class="main">
                         <c:if test="${order != null}">
-                            <h1>${yourOrder_lbl}:</h1>
+                            <div class="box">
+                                <a href="/showAccount">
+                                    <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                                </a>
+                                <h1>${yourOrder_lbl}:</h1>
+                            </div>
 
                             <form action="restaurant" method="get" id="placeOrderForm">
                                 <input type="hidden" name="command" value="move_to_place_order">
@@ -67,7 +73,13 @@
                         </c:if>
 
                         <c:if test="${order == null}">
-                            <h1>Your order is empty</h1>
+                            <div class="boxEmpty">
+                                <a href="/showAccount">
+                                    <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                                </a>
+                                <h1>${orderIsEmptyFmt}</h1>
+                            </div>
+
                         </c:if>
                     </main>
                 </div>

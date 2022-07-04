@@ -89,8 +89,9 @@
                                     <input type="submit" value="${btn_add}" class="yellow_button" id="addToOrderBtn">
                                 </form>
                             </td>
-                            <td>
-                                <c:if test="${user.roleId == 1}">
+
+                            <c:if test="${user.roleId == 1}">
+                                <td>
                                     <a href="/restaurant?command=remove_from_menu&&dishId=${dish.id}">
                                         <img src="../../images/remove.png" alt="remove" class="imgInTd">
                                     </a>
@@ -98,8 +99,9 @@
                                     <a href="/home?editedDishId=${dish.id}">
                                         <img src="../../images/edit.png" alt="edit" class="imgInTd">
                                     </a>
-                                </c:if>
-                            </td>
+                                </td>
+                            </c:if>
+
                         </tr>
                     </c:if>
                 </c:forEach>

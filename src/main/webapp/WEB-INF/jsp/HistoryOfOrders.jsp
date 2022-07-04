@@ -27,7 +27,12 @@
 
                 <div class="wrapper">
                     <main class="main">
-                        <h1>${historyOfOrdersFmt}</h1>
+                        <div class="box">
+                            <a href="/showAccount">
+                                <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                            </a>
+                            <h1>${historyOfOrdersFmt}</h1>
+                        </div>
 
                         <c:if test="${ordersHistory == null}">
                             <jsp:forward page="/restaurant">

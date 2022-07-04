@@ -28,7 +28,13 @@
 
                 <div class="wrapper">
                     <main class="main">
-                        <h1>${ordersFmt}</h1>
+
+                        <div class="box">
+                            <a href="/showAccount">
+                                <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                            </a>
+                            <h1>${ordersFmt}</h1>
+                        </div>
 
                         <table>
                             <th>№</th>
@@ -53,7 +59,7 @@
                                         <form action="restaurant" method="post">
                                             <input type="hidden" name="command" value="order_cooked">
                                             <input type="hidden" name="cookedOrderId" value="${order.orderId}">
-                                            <input type="submit" value="${doneFmt} &#10004;">
+                                            <input type="submit" value="${doneFmt} &#10004;" id="doneBtn">
                                         </form>
                                     </td>
                                 </tr>
