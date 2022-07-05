@@ -16,7 +16,7 @@ public interface MenuDAO {
 
     List<Dish> find(Criteria criteria) throws DAOException;
 
-    int remove(Criteria criteria) throws DAOException;
+    int removeDish(Criteria criteria) throws DAOException;
 
     boolean editCategory(int editedCategoryId, String newCategoryName) throws DAOException;
 
@@ -25,4 +25,6 @@ public interface MenuDAO {
     int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photo_link) throws DAOException;
 
     int addCategory(String categoryName) throws DAOException;
+
+    boolean removeCategory(int categoryId) throws DAOException;
 }

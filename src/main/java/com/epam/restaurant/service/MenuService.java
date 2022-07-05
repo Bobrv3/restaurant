@@ -16,7 +16,7 @@ public interface MenuService {
 
     List<Dish> find(Criteria criteria) throws ServiceException;
 
-    int remove(Criteria criteria) throws ServiceException;
+    int removeDish(Criteria criteria) throws ServiceException;
 
     boolean editCategory(int editedCategoryId, String newCategoryName) throws ServiceException;
 
@@ -25,4 +25,6 @@ public interface MenuService {
     int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photo_link) throws ServiceException;
 
     int addCategory(String categoryName) throws ServiceException;
+
+    boolean removeCategory(int categoryId) throws ServiceException;
 }

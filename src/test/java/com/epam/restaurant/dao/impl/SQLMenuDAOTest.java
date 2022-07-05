@@ -10,6 +10,7 @@ import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.MenuDAO;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -82,7 +83,7 @@ class SQLMenuDAOTest {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), 3);
 
-        int numOdRemovedDishes = menuDAO.remove(criteria);
+        int numOdRemovedDishes = menuDAO.removeDish(criteria);
 
         Assertions.assertEquals(1, numOdRemovedDishes);
     }
@@ -120,7 +121,12 @@ class SQLMenuDAOTest {
         }
     }
 
-//    @Test
+    @Test
+    void removeCategory() throws DAOException {
+        Assertions.assertTrue(menuDAO.removeCategory(7));
+    }
+
+    //    @Test
 //    void addCategory_ReturnedIndxMoreThan0_true() throws DAOException {
 //        Assertions.assertTrue(menuDAO.addCategory("Vines") > 0);
 //    }

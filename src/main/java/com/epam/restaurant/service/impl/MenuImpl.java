@@ -54,9 +54,9 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public int remove(Criteria criteria) throws ServiceException {
+    public int removeDish(Criteria criteria) throws ServiceException {
         try {
-            return menuDAO.remove(criteria);
+            return menuDAO.removeDish(criteria);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -94,6 +94,15 @@ public class MenuImpl implements MenuService {
     public int addCategory(String categoryName) throws ServiceException {
         try {
             return menuDAO.addCategory(categoryName);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean removeCategory(int categoryId) throws ServiceException {
+        try {
+            return menuDAO.removeCategory(categoryId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

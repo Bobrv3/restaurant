@@ -48,7 +48,7 @@ public class RemoveDishFromMenu implements Command {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), idToRemove);
 
-        menuService.remove(criteria);
+        menuService.removeDish(criteria);
     }
 
     private void removeDishFromSessionMenu(HttpServletRequest request, int idToRemove) {

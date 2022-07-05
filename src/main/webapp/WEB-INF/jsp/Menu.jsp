@@ -37,6 +37,13 @@
                         <a href="/home?editedCategory=${category.id}">
                             <img src="../../images/edit.png" alt="edit" class="imgInTd">
                         </a>
+
+                        <form action="restaurant" method="post">
+                            <input type="hidden" name="command" value="remove_category">
+                            <input type="hidden" name="categoryId" value="${category.id}">
+
+                            <input type="image" src="../../images/remove.png" class="imgInTd">
+                        </form>
                     </c:if>
                 </h2>
             </c:if>
@@ -100,7 +107,7 @@
                             </td>
 
                             <c:if test="${user.roleId == 1}">
-                                <td>
+                                <td style="padding-right: 30px;">
                                     <a href="/restaurant?command=remove_from_menu&&dishId=${dish.id}">
                                         <img src="../../images/remove.png" alt="remove" class="imgInTd">
                                     </a>

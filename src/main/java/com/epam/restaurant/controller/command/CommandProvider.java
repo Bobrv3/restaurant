@@ -24,6 +24,7 @@ import com.epam.restaurant.controller.command.impl.PlaceOrder;
 import com.epam.restaurant.controller.command.impl.PrintUserRegistrData;
 import com.epam.restaurant.controller.command.impl.QuitFromAccount;
 import com.epam.restaurant.controller.command.impl.Registration;
+import com.epam.restaurant.controller.command.impl.RemoveCategory;
 import com.epam.restaurant.controller.command.impl.RemoveDishFromMenu;
 import com.epam.restaurant.controller.command.impl.RemoveDishFromOrder;
 import com.epam.restaurant.controller.command.impl.ConfirmOrder;
@@ -65,6 +66,7 @@ public final class CommandProvider {
         repository.put(CommandName.MOVE_TO_COOK_ORDERS, new MoveToCookOrders());
         repository.put(CommandName.ORDER_COOKED, new MakeOrderCooked());
         repository.put(CommandName.CLEAN_CURRENT_ORDER, new CleanCurrentOrder());
+        repository.put(CommandName.REMOVE_CATEGORY, new RemoveCategory());
     }
 
     public Command getCommand(String name) {
