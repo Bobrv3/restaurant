@@ -27,8 +27,8 @@
                     <input type="hidden" name="command" value="edit_category">
                     <input type="hidden" name="editedCategoryId" value="${category.id}">
 
-                    <input type="text" name="categoryName" value="${category.name}" required>
-                    <input type="submit" value="${saveFmt}">
+                    <input type="text" name="categoryName" value="${category.name}" required style="font-size: 20px;">
+                    <input type="image" src="../../images/save.png" id="imgInEditCategory">
                 </form>
             </c:if>
             <c:if test="${param.editedCategory != category.id}">
