@@ -41,11 +41,68 @@
 
                         <div class="grid-container">
                             <div>${nameFmt}</div>
-                            <div>${userData.name}</div>
+                            <div>
+                                <c:if test="${!param.editName}">
+                                    ${userData.name}
+                                </c:if>
+                                <c:if test="${param.editName}">
+                                    <form action="restaurant" method="get" id="editUser">
+                                        <input type="hidden" name="command" value="edit_user">
+                                        <input type="text" name="userName" value="${userData.name}" required>
+                                    </form>
+                                </c:if>
+                            </div>
+                            <div>
+                                <c:if test="${!param.editName}">
+                                    <a href="/personalInfo?editName=true">
+                                        <img src="../../images/edit.png" alt="edit name" id="editImg">
+                                    </a>
+                                </c:if>
+                                <c:if test="${param.editName}">
+                                    <input form="editUser" type="image" src="../../images/save.png" id="editImg">
+                                </c:if>
+                            </div>
+
                             <div>${phoneNumberFmt}</div>
-                            <div>${userData.phoneNumber}</div>
+                            <div>
+                                <c:if test="${!param.editPhone}">
+                                    ${userData.phoneNumber}
+                                </c:if>
+                                <c:if test="${param.editPhone}">
+                                    <input type="text" name="phoneNumber" value="${userData.phoneNumber}" required>
+                                </c:if>
+                            </div>
+                            <div>
+                                <c:if test="${!param.editPhone}">
+                                    <a href="/personalInfo?editPhone=true">
+                                        <img src="../../images/edit.png" alt="edit phoneNumber" id="editImg">
+                                    </a>
+                                </c:if>
+                                <c:if test="${param.editPhone}">
+                                    <input form="editUser" type="image" src="../../images/save.png" id="editImg">
+                                </c:if>
+                            </div>
+
                             <div>${emailFmt}</div>
-                            <div>${userData.email}</div>
+                            <div>
+                                <c:if test="${!param.editEmail}">
+                                    ${userData.email}
+                                </c:if>
+                                <c:if test="${param.editEmail}">
+                                    <input type="text" name="email" value="${userData.email}" required>
+                                </c:if>
+                            </div>
+                            <div>
+                                <c:if test="${!param.editEmail}">
+                                    <a href="/personalInfo?editEmail=true">
+                                        <img src="../../images/edit.png" alt="edit email" id="editImg">
+                                    </a>
+                                </c:if>
+                                <c:if test="${param.editEmail}">
+                                    <input form="editUser" type="image" src="../../images/save.png" id="editImg">
+                                </c:if>
+                            </div>
+
                         </div>
                     </main>
                 </div>
