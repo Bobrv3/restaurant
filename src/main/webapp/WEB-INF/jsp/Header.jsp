@@ -17,35 +17,39 @@
                 <form action="restaurant" method="get">
                     <input type="hidden" name="command" value="change_locale">
                     <input type="hidden" name="locale" value="en">
-                    <input type="submit" value="${en_button}">
+                    <input type="submit" value="${en_button}" class="localeBtn">
                 </form>
                 <form action="restaurant" method="get">
                     <input type="hidden" name="command" value="change_locale">
                     <input type="hidden" name="locale" value="ru">
-                    <input type="submit" value="${ru_button}">
+                    <input type="submit" value="${ru_button}" class="localeBtn">
                 </form>
-                <a id="homeLink" href="/home">${menu_link}</a></li>
+                <a id="homeLink" href="/home" class="headLink">${menu_link}</a></li>
             </div>
-            <div>
-                <c:if test="${user == null}">
-                    <a href="/authorizationPage">
-                        <button id="signIn_button">${signIn_btn}</button>
-                    </a>
-                    <a href="/registrationPage">
-                        <button id="signUp_button">${signUp_btn}</button>
-                    </a>
-                </c:if>
+
+            <div class="parentBox">
+                <div style="padding: 1em;">
+                    <c:if test="${user == null}">
+                        <a href="/authorizationPage">
+                            <button id="signIn_button">${signIn_btn}</button>
+                        </a>
+                        <a href="/registrationPage">
+                            <button id="signUp_button">${signUp_btn}</button>
+                        </a>
+                    </c:if>
+                </div>
 
                 <c:if test="${user != null}">
-                    <a href="/restaurant?command=move_to_account">
-                        <img id="accImg" src="../../images/acc.png" alt="acc">
+                    <div class="box">
+                        <a href="/restaurant?command=move_to_account" id="moveToAcc">
+                            <img id="accImg" src="../../images/accHeader.png" alt="acc">
+                        </a>
                         ${user.getName()}
-                    </a>
+                    </div>
                 </c:if>
-
-                <a href="/showCurrentOrder">
-                    <img id="orderImg" src="../../images/order.png">${quantityOfDishes}
+                <a href="/showCurrentOrder" class="headLink">
+                    <img id="orderImg" src="../../images/orderHeader.png">${quantityOfDishes}
                 </a>
-
             </div>
+
         </header>
