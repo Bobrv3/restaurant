@@ -6,6 +6,10 @@ header {
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+}
+
 form {
     display: inline-block;
     vertical-align: middle;
