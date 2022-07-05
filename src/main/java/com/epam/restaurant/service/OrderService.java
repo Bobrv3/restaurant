@@ -15,11 +15,13 @@ public interface OrderService {
     // TODO переделать возвращаемый тип
     void createOderDetail(int oderId, int menuId, Integer quantity, String methodOfReceiving) throws ServiceException;
 
-    List<Order> find(Criteria criteria) throws ServiceException;
+    List<Order> getHistoryOfOrders(int userId) throws ServiceException;
 
     Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws ServiceException;
 
     boolean updateOrderStatus(int orderID, String status) throws ServiceException;
 
     List<OrderForCooking> findOrdersWithDishInfo(Criteria criteria) throws ServiceException;
+
+    List<Order> find(Criteria orderCriteria) throws ServiceException;
 }

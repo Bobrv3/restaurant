@@ -40,11 +40,7 @@ public class GetHistoryOfOrders implements Command {
         userCriteria.add(SearchCriteria.Users.LOGIN.toString(), user.getLogin());
 
         List<RegistrationUserData> registrationUserData = serviceProvider.getUserService().find(userCriteria);
-
-        Criteria orderCriteria = new Criteria();
-        orderCriteria.add(SearchCriteria.Orders.USER_ID.toString(), registrationUserData.get(FOUND_USER).getId());
-        orderCriteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "confirmed");
-        List<Order> ordersHistory = orderService.find(orderCriteria);
+        List<Order> ordersHistory = orderService.getHistoryOfOrders(registrationUserData.get(FOUND_USER).getId());
 
         session.setAttribute(ORDERS_HISTORY_ATTR, ordersHistory);
 

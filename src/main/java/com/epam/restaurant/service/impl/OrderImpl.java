@@ -47,10 +47,10 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
-    public List<Order> find(Criteria criteria) throws ServiceException {
+    public List<Order> getHistoryOfOrders(int userId) throws ServiceException {
         try {
             OrderDAO orderDAO = daoProvider.getOrderDAO();
-            List<Order> orders = orderDAO.find(criteria);
+            List<Order> orders = orderDAO.getHistoryOfOrders(userId);
 
             return orders;
         } catch (DAOException e) {
@@ -87,6 +87,18 @@ public class OrderImpl implements OrderService {
             OrderDAO orderDAO = daoProvider.getOrderDAO();
 
             return orderDAO.findOrdersWithDishInfo(criteria);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Order> find(Criteria orderCriteria) throws ServiceException {
+        try {
+            OrderDAO orderDAO = daoProvider.getOrderDAO();
+            List<Order> orders = orderDAO.find(orderCriteria);
+
+            return orders;
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

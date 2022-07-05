@@ -28,12 +28,14 @@ public class SQLOrderDAO implements OrderDAO {
 
     private static final String INSERT_ORDER_QUERY = "INSERT INTO orders (date, order_status, user_id) VALUES (?, ?, ?)";
     private static final String INSERT_ORDER_DETAIL_QUERY = "INSERT INTO order_details (orders_id, menu_dishes_id, quantity, methodOfReceiving) VALUES (?, ?, ?, ?)";
-    private static final String FIND_ORDER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where {0} group by ord.id;";
+    private static final String FIND_ORDER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, order_status FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where {0} group by ord.id;";
+    private static final String GET_ORDERS_WITHOUT_STATUS_INPROCESSING_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, order_status FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where user_id=? AND order_status!='in processing' group by ord.id;";
     private static final String FIND_ORDER_WITH_USER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, u.name, phone_number, email FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id LEFT JOIN users u on user_id=u.id where {0} group by ord.id;";
     private static final String FIND_ORDER_WITH_DISH_BY_CRITERIA_QUERY = "SELECT ord.id,  m.name, methodOfReceiving, quantity FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where {0};";
     private static final String UPDATE_ORDER_STATUS_QUERY = "UPDATE orders SET order_status=? where id=?;";
 
     private static final String AND = "AND ";
+    private static final String OR = "OR ";
     private static final int NUM_OF_UPDATED_ROWS = 1;
 
     private static final String IN_PROCESSING = "in processing";
@@ -132,6 +134,46 @@ public class SQLOrderDAO implements OrderDAO {
                 order.setTotalPrice(resultSet.getBigDecimal(2));
                 order.setDateTime(resultSet.getTimestamp(3));
                 order.setMethodOfReceiving(resultSet.getString(4));
+                order.setStatus(resultSet.getString(5));
+                orders.add(order);
+            }
+
+            return orders;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to find", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
+    }
+
+    @Override
+    public List<Order> getHistoryOfOrders(int userId) throws DAOException {
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        Connection connection = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            statement = connection.prepareStatement(GET_ORDERS_WITHOUT_STATUS_INPROCESSING_QUERY);
+            statement.setInt(1, userId);
+            resultSet = statement.executeQuery();
+
+            List<Order> orders = new ArrayList<>();
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.setId(resultSet.getInt(1));
+                order.setTotalPrice(resultSet.getBigDecimal(2));
+                order.setDateTime(resultSet.getTimestamp(3));
+                order.setMethodOfReceiving(resultSet.getString(4));
+                order.setStatus(resultSet.getString(5));
                 orders.add(order);
             }
 

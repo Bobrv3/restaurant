@@ -8,6 +8,7 @@
             <fmt:message bundle="${loc}" key="local.txt.ordersInProcessing" var="ordersInProcessingFmt" />
             <fmt:message bundle="${loc}" key="local.h2.methodOfReceiving" var="methodOfReceivingFmt" />
             <fmt:message bundle="${loc}" key="local.label.totalPrice" var="totalFmt" />
+            <fmt:message bundle="${loc}" key="local.label.statusOfOrder" var="statusFmt" />
             <fmt:message bundle="${loc}" key="local.txt.date" var="dateFmt" />
             <fmt:message bundle="${loc}" key="local.txt.noOrdersInProcessing" var="noOrdersInProcessingFmt" />
 
@@ -52,6 +53,7 @@
                                 <th>${totalFmt}</th>
                                 <th>${dateFmt}</th>
                                 <th>${methodOfReceivingFmt}</th>
+                                <th>${statusFmt}</th>
 
                                 <c:forEach items="${ordersInProcessing}" var="order">
                                     <tr>
@@ -67,6 +69,9 @@
                                         </td>
                                         <td>
                                             ${order.methodOfReceiving}
+                                        </td>
+                                        <td>
+                                            ${order.status}
                                         </td>
                                     </tr>
 

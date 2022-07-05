@@ -13,14 +13,27 @@ public class Order {
     private BigDecimal totalPrice;
     private Timestamp dateTime;
     private String methodOfReceiving;
+    private String status;
 
     public Order() {
 
     }
 
-    public Order(long id, Map<Dish, Integer> dishes) {
+    public Order(long id, Map<Dish, Integer> orderList, BigDecimal totalPrice, Timestamp dateTime, String methodOfReceiving, String status) {
         this.id = id;
-        this.orderList = dishes;
+        this.orderList = orderList;
+        this.totalPrice = totalPrice;
+        this.dateTime = dateTime;
+        this.methodOfReceiving = methodOfReceiving;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getMethodOfReceiving() {
@@ -68,19 +81,23 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id && Objects.equals(orderList, order.orderList);
+        return id == order.id && Objects.equals(orderList, order.orderList) && Objects.equals(totalPrice, order.totalPrice) && Objects.equals(dateTime, order.dateTime) && Objects.equals(methodOfReceiving, order.methodOfReceiving) && Objects.equals(status, order.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, orderList);
+        return Objects.hash(id, orderList, totalPrice, dateTime, methodOfReceiving, status);
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " {" +
                 "id=" + id +
-                ", dishes=" + orderList +
+                ", orderList=" + orderList +
+                ", totalPrice=" + totalPrice +
+                ", dateTime=" + dateTime +
+                ", methodOfReceiving='" + methodOfReceiving + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

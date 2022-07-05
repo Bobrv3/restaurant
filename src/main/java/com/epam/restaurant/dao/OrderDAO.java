@@ -21,4 +21,6 @@ public interface OrderDAO {
     boolean updateOrderStatus(int orderID, String status) throws DAOException;
 
     List<OrderForCooking> findOrdersWithDishInfo(Criteria criteria) throws DAOException;
+
+    List<Order> getHistoryOfOrders(int userId) throws DAOException;
 }
