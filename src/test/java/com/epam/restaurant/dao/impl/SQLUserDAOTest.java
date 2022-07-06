@@ -31,6 +31,12 @@ class SQLUserDAOTest {
     private final String non_existent_login = "jhgjhj";
     private final char[] non_correct_password = new char[] {'1', '5', '8'};
 
+    private Criteria criteria = new Criteria();
+
+    public SQLUserDAOTest() {
+        criteria.add(SearchCriteria.Users.LOGIN.name(), "testUs4");
+    }
+
     @BeforeAll
     static void beforeAll() throws SQLException, ClassNotFoundException, InterruptedException {
         connectionPool = ConnectionPool.getInstance();
@@ -54,14 +60,14 @@ class SQLUserDAOTest {
     void signIn_UserNotExist_Null() throws DAOException {
         AuthorizedUser actual = userDAO.signIn(non_existent_login, non_correct_password);
 
-        Assertions.assertNull(actual);
+        Assertions.assertNull(actual.getLogin());
     }
 
     @Test
     void signIn_UserExistPasswordNotCorrect_Null() throws DAOException {
         AuthorizedUser actual = userDAO.signIn(existing_login, non_correct_password);
 
-        Assertions.assertNull(actual);
+        Assertions.assertNull(actual.getLogin());
     }
 
 //    @Test
@@ -100,12 +106,45 @@ class SQLUserDAOTest {
     }
 
     @Test
-    void find_UserWithCriteriaNoExist_EmptyList() throws DAOException {
+    void find_UserWithCriteriaNoExist_EmptyList_true() throws DAOException {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Users.LOGIN.toString(), "fgfdsgdsfg");
 
         List<RegistrationUserData> actual = userDAO.find(criteria);
 
         Assertions.assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    void updateUserName_succsesfull_true() throws DAOException {
+        RegistrationUserData userDataInDB = userDAO.find(criteria).get(0);
+
+        RegistrationUserData userData = new RegistrationUserData();
+        userData.setName(userDataInDB.getName());
+
+        Assertions.assertTrue(userDAO.updateUser(userDataInDB.getLogin(), userData));
+    }
+
+    @Test
+    void updateUserPhone_succsesfull_true() throws DAOException {
+        RegistrationUserData userDataInDB = userDAO.find(criteria).get(0);
+
+        RegistrationUserData userData = new RegistrationUserData();
+        userData.setName(userDataInDB.getPhoneNumber());
+
+        Assertions.assertTrue(userDAO.updateUser(userDataInDB.getLogin(), userData));
+    }
+
+    @Test
+    void updateUserEmail_succsesfull_true() throws DAOException {
+        Criteria criteria = new Criteria();
+        criteria.add(SearchCriteria.Users.LOGIN.name(), "testUs4");
+
+        RegistrationUserData userDataInDB = userDAO.find(criteria).get(0);
+
+        RegistrationUserData userData = new RegistrationUserData();
+        userData.setName(userDataInDB.getEmail());
+
+        Assertions.assertTrue(userDAO.updateUser(userDataInDB.getLogin(), userData));
     }
 }

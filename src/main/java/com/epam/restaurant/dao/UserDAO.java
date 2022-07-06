@@ -13,5 +13,5 @@ public interface UserDAO {
 
     List<RegistrationUserData> find(Criteria criteria) throws DAOException;
 
-    boolean updateUser(String login, Criteria criteria) throws DAOException;
+    boolean updateUser(String login, RegistrationUserData userData) throws DAOException;
 }

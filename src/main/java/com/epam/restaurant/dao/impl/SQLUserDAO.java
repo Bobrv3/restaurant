@@ -33,7 +33,7 @@ public class SQLUserDAO implements UserDAO {
     private static final String UPDATE_USER_BY_CRITERIA_QUERY = "UPDATE users SET ";
 
     private static final String AND = "AND ";
-    private static final String COMMA = "COMMA ";
+    private static final String COMMA = ", ";
 
     @Override
     public AuthorizedUser signIn(String login, char[] password) throws DAOException {
@@ -179,18 +179,22 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean updateUser(String login, Criteria criteria) throws DAOException {
+    public boolean updateUser(String login, RegistrationUserData userData) throws DAOException {
         Connection connection = null;
         Statement statement = null;
-
-        Map<String, Object> criterias = criteria.getCriteria();
 
         try {
             connection = connectionPool.takeConnection();
 
             StringBuilder queryBuilder = new StringBuilder(UPDATE_USER_BY_CRITERIA_QUERY);
-            for (String key : criterias.keySet()) {
-                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), COMMA));
+            if (userData.getName() != null) {
+                queryBuilder.append(MessageFormat.format("name=''{0}'' {1}", userData.getName(), COMMA));
+            }
+            if (userData.getPhoneNumber() != null) {
+                queryBuilder.append(MessageFormat.format("phone_number=''{0}'' {1}", userData.getPhoneNumber(), COMMA));
+            }
+            if (userData.getEmail() != null) {
+                queryBuilder.append(MessageFormat.format("email=''{0}'' {1}", userData.getEmail(), COMMA));
             }
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - COMMA.length()));
             queryBuilder.append(MessageFormat.format(" where login=''{0}''", login));

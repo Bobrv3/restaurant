@@ -11,8 +11,8 @@ public class RegistrationUserData implements Serializable {
     private String name;
     private String phoneNumber;
     private String email;
-    private int roleId;
-    private int id;
+    private Integer roleId;
+    private Integer id;
 
     public RegistrationUserData() {
     }

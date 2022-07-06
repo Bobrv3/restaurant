@@ -6,10 +6,10 @@ import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
 import com.epam.restaurant.service.UserService;
+import com.epam.restaurant.service.validation.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,13 +28,9 @@ public class Registration implements Command {
     private static final int ROLE_ID = 2;
 
     private static final String USER_ATTR = "user";
-    private static final String INVALID_SIGN_UP_ATTR = "invalidSignUp";
 
     private static final String HOME_ADDRESS = "/home";
-    private static final String REGISTR_PAGE_ADDRESS = "/registrationPage";
-
-    private static final String EX1 = "Error to forward in the registration command..";
-    private static final String EX2 = "Invalid address - {0}: getRequestDispatcher({0}) in the registration command..";
+    private static final String REGISTR_PAGE_ADDRESS_WITH_MSG = "/registrationPage?invalidSignUp=true&validationMessage={0}";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
@@ -49,24 +45,24 @@ public class Registration implements Command {
                         ROLE_ID);
 
         UserService userService = serviceProvider.getUserService();
-        if (!userService.signUp(userData)) {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(REGISTR_PAGE_ADDRESS);
-            try {
-                request.setAttribute(INVALID_SIGN_UP_ATTR, true);
-                requestDispatcher.forward(request, response);
-            } catch (ServletException e) {
-                LOGGER.error(EX1, e);
-            } catch (IOException e) {
-                LOGGER.error(MessageFormat.format(EX2, REGISTR_PAGE_ADDRESS), e);
-            }
-        }
-
-        request.getSession().setAttribute(USER_ATTR, new AuthorizedUser(userData.getLogin(), userData.getName(), userData.getRoleId()));
 
         try {
+            boolean registred = userService.signUp(userData);
+
+            request.getSession().setAttribute(USER_ATTR, new AuthorizedUser(userData.getLogin(), userData.getName(), userData.getRoleId()));
+
             response.sendRedirect(HOME_ADDRESS);
+        } catch (ValidationException e) {
+            try {
+                request.getRequestDispatcher(MessageFormat.format(REGISTR_PAGE_ADDRESS_WITH_MSG, e.getMessage())).forward(request, response);
+            } catch (ServletException ex) {
+                LOGGER.error("Error to forward in the registration command..", ex);
+            } catch (IOException ex) {
+                LOGGER.error("Invalid address in getRequestDispatcher() in the registration command..", ex);
+            }
+
         } catch (IOException e) {
-            LOGGER.error(MessageFormat.format(EX2, HOME_ADDRESS), e);
+            LOGGER.error("Invalid address in getRequestDispatcher() in the registration command..", e);
         }
     }
 }
