@@ -28,5 +28,6 @@ public enum CommandName {
     MOVE_TO_COOK_ORDERS,
     ORDER_COOKED,
     CLEAN_CURRENT_ORDER,
-    REMOVE_CATEGORY
+    REMOVE_CATEGORY,
+    EDIT_USER
 }

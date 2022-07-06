@@ -8,6 +8,10 @@ import java.util.List;
 
 public interface UserDAO {
     AuthorizedUser signIn(String login, char[] password) throws DAOException;
+
     boolean signUp(RegistrationUserData userData) throws DAOException;
+
     List<RegistrationUserData> find(Criteria criteria) throws DAOException;
+
+    boolean updateUser(String login, Criteria criteria) throws DAOException;
 }

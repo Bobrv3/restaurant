@@ -58,7 +58,7 @@ h1 {
     height: 2em;
 }
 
-#editImg {
+.editImg {
     min-width: 20px;
     min-height: 20px;
     max-width: 20px;

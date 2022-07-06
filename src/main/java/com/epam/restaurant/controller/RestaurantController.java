@@ -26,10 +26,16 @@ public class RestaurantController extends HttpServlet {
         try {
             command.execute(req, resp);
         } catch (ServiceException | ServletException e) {
-            LOGGER.error(e.getMessage(), e.getStackTrace().toString());
+            LOGGER.error(e.getMessage(), e);
 
-            String errorMsg = e.getMessage().substring(e.getMessage().lastIndexOf(":"));
-            resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
+            int lastIndx = e.getMessage().lastIndexOf(":");
+            if (lastIndx == -1) {
+                String errorMsg = e.getMessage();
+                resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
+            } else {
+                String errorMsg = e.getMessage().substring(lastIndx);
+                resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
+            }
         }
     }
 
@@ -40,7 +46,7 @@ public class RestaurantController extends HttpServlet {
         try {
             command.execute(req, resp);
         } catch (ServiceException | ServletException e) {
-            LOGGER.error(e.getMessage(), e.getStackTrace().toString());
+            LOGGER.error(e.getMessage(), e);
 
             int lastIndx = e.getMessage().lastIndexOf(":");
             if (lastIndx == -1) {

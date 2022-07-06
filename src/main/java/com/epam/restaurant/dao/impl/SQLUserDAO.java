@@ -29,8 +29,10 @@ public class SQLUserDAO implements UserDAO {
     private static final String CHECK_USER_EXISTENCE_QUERY = "SELECT id FROM users WHERE login=?";
     private static final String REGISTER_USER_QUERY = "INSERT INTO users(login, password, name, phone_number, email, role_id) VALUES(?,?,?,?,?,?)";
     private static final String FIND_USER_BY_CRITERIA_QUERY = "Select login, name, role_id, id, phone_number, email from users where ";
+    private static final String UPDATE_USER_BY_CRITERIA_QUERY = "UPDATE users SET ";
 
     private static final String AND = "AND ";
+    private static final String COMMA = "COMMA ";
 
     @Override
     public AuthorizedUser signIn(String login, char[] password) throws DAOException {
@@ -169,6 +171,44 @@ public class SQLUserDAO implements UserDAO {
         } finally {
             try {
                 connectionPool.closeConnection(connection, statement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
+    }
+
+    @Override
+    public boolean updateUser(String login, Criteria criteria) throws DAOException {
+        Connection connection = null;
+        Statement statement = null;
+
+        Map<String, Object> criterias = criteria.getCriteria();
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            StringBuilder queryBuilder = new StringBuilder(UPDATE_USER_BY_CRITERIA_QUERY);
+            for (String key : criterias.keySet()) {
+                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), COMMA));
+            }
+            queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - COMMA.length()));
+            queryBuilder.append(MessageFormat.format(" where login=''{0}''", login));
+
+            statement = connection.createStatement();
+
+            return statement.executeUpdate(queryBuilder.toString()) == 1;
+
+        } catch (SQLException e) {
+            if (e.getClass() == com.mysql.cj.jdbc.exceptions.MysqlDataTruncation.class) {
+                throw new DAOException("Error the allowed length of input data has been exceeded", e);
+            }
+            throw new DAOException("Error when trying to create a statement user edit query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, null);
             } catch (SQLException e) {
                 LOGGER.error("Error to close connection...", e);
             }

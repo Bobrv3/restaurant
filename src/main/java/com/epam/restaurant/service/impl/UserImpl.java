@@ -14,6 +14,7 @@ import java.util.List;
 
 public class UserImpl implements UserService {
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
+    private static final UserDAO userDAO = daoProvider.getUserDAO();
 
     @Override
     public AuthorizedUser signIn(String login, char[] password) throws ServiceException {
@@ -24,7 +25,6 @@ public class UserImpl implements UserService {
         AuthorizedUser user = null;
 
         try {
-            UserDAO userDAO = daoProvider.getUserDAO();
             user = userDAO.signIn(login, password);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -36,7 +36,7 @@ public class UserImpl implements UserService {
     @Override
     public boolean signUp(RegistrationUserData userData) throws ServiceException {
         // TODO validate
-        UserDAO userDAO = daoProvider.getUserDAO();
+
         boolean result = false;
         try {
             result = userDAO.signUp(userData);
@@ -49,9 +49,17 @@ public class UserImpl implements UserService {
 
     @Override
     public List<RegistrationUserData> find(Criteria criteria) throws ServiceException {
-        UserDAO userDAO = daoProvider.getUserDAO();
         try {
             return userDAO.find(criteria);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean updateUser(String login, Criteria criteria) throws ServiceException {
+        try {
+            return userDAO.updateUser(login, criteria);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

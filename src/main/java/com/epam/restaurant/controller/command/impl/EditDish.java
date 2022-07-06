@@ -32,7 +32,6 @@ public class EditDish implements Command {
     private static final String PATH_TO_PHOTO = "../../images/dishes/{0}";
 
     private static final String EX1 = "Error invalid address to redirect";
-    private static final String ERROR_MESSAGE_ATTR = "Error message";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
@@ -49,7 +48,7 @@ public class EditDish implements Command {
 
             response.sendRedirect(MAIN_PAGE_ADDR);
         } catch (IOException e) {
-            LOGGER.error(EX1, e);
+            LOGGER.error(EX1, e.getMessage());
         }
     }
 

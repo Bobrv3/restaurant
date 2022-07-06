@@ -8,6 +8,10 @@ import java.util.List;
 
 public interface UserService {
     AuthorizedUser signIn(String login, char[] password) throws ServiceException;
+
     boolean signUp(RegistrationUserData userData) throws ServiceException;
+
     List<RegistrationUserData> find(Criteria criteria) throws ServiceException;
+
+    boolean updateUser(String login, Criteria criteria) throws ServiceException;
 }
