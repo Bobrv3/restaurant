@@ -27,7 +27,7 @@
                 <a id="homeLink" href="/home" class="headLink">${menu_link}</a></li>
             </div>
 
-            <div class="parentBox">
+            <div class="parentBoxHeader">
                 <div style="padding: 1em;">
                     <c:if test="${user == null}">
                         <a href="/authorizationPage">
@@ -40,7 +40,7 @@
                 </div>
 
                 <c:if test="${user != null}">
-                    <div class="box">
+                    <div class="boxHeader">
                         <a href="/restaurant?command=move_to_account" id="moveToAcc">
                             <img id="accImg" src="../../images/accHeader.png" alt="acc">
                         </a>

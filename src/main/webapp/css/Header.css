@@ -93,13 +93,13 @@ header div {
     height: 2em;
 }
 
-.box {
+.boxHeader {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.parentBox {
+.parentBoxHeader {
     display: inline-flex;
     flex-direction: row;
     align-items: center;
