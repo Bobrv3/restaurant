@@ -32,7 +32,7 @@ public class Authorization implements Command {
     private static final String AUTH_PAGE_ADDRESS = "/authorizationPage";
 
     private static final String EX1 = "Error to forward in the authorization command..";
-    private static final String EX2 = "Invalid address - {0}: getRequestDispatcher({0}) in the authorization command..";
+    private static final String EX2 = "Invalid address to forward or redirect in the authorization command..";
     private static final String EX3 = "Invalid username or password...";
 
     @Override
@@ -44,26 +44,19 @@ public class Authorization implements Command {
 
         try {
             AuthorizedUser user = userService.signIn(login, password);
-            if (user == null) {
-                throw new NullPointerException();
-            }
-
-            request.getSession().setAttribute(USER_ATTR, user);
-
-            response.sendRedirect(HOME_ADDRESS);
-        } catch (NullPointerException e) {
-            LOGGER.info(EX3, e);
-            request.setAttribute(INVALID_SIGN_IN_ATTR, true);
-
-            try {
+            if (user.getLogin() == null) {
+                LOGGER.info(EX3);
+                request.setAttribute(INVALID_SIGN_IN_ATTR, true);
                 request.getRequestDispatcher(AUTH_PAGE_ADDRESS).forward(request, response);
-            } catch (ServletException ex) {
-                LOGGER.error(EX1, ex);
-            } catch (IOException ex) {
-                LOGGER.error(MessageFormat.format(EX2, AUTH_PAGE_ADDRESS), ex);
+            } else {
+                request.getSession().setAttribute(USER_ATTR, user);
+
+                response.sendRedirect(HOME_ADDRESS);
             }
+        } catch (ServletException ex) {
+            LOGGER.error(EX1, ex);
         } catch (IOException ex) {
-            LOGGER.error(MessageFormat.format(EX2, HOME_ADDRESS), ex);
+            LOGGER.error(MessageFormat.format(EX2, ex));
         }
     }
 }

@@ -14,7 +14,7 @@
 
         <h1>${menu_link}</h1>
 
-        <c:if test="${menu == null}">
+        <c:if test="${menu.dishes == null}">
             <jsp:forward page="/restaurant">
                 <jsp:param name="command" value="get_menu" />
             </jsp:forward>

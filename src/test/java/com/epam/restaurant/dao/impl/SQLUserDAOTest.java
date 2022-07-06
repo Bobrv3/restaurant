@@ -86,7 +86,7 @@ class SQLUserDAOTest {
         RegistrationUserData userData = new RegistrationUserData();
         userData.setId(10);
         userData.setLogin("testUs4");
-        userData.setName("TestUser");
+        userData.setName("TestUser4");
         userData.setPhoneNumber("+375446785678");
         userData.setEmail("ant@gmail.com");
         userData.setRoleId(2);
@@ -100,12 +100,12 @@ class SQLUserDAOTest {
     }
 
     @Test
-    void find_UserWithCriteriaNoExist_null() throws DAOException {
+    void find_UserWithCriteriaNoExist_EmptyList() throws DAOException {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Users.LOGIN.toString(), "fgfdsgdsfg");
 
         List<RegistrationUserData> actual = userDAO.find(criteria);
 
-        Assertions.assertNull(actual);
+        Assertions.assertTrue(actual.isEmpty());
     }
 }

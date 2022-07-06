@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -48,12 +49,12 @@ public class SQLUserDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             if (!resultSet.next()) {
-                return null;
+                return new AuthorizedUser();
             }
             if (!BCrypt.checkpw(
                     Arrays.toString(password),                   // auth user psw
                         resultSet.getString(4))) {   // psw from db
-                return null;
+                return new AuthorizedUser();
             }
 
             AuthorizedUser user = new AuthorizedUser();
@@ -146,7 +147,7 @@ public class SQLUserDAO implements UserDAO {
             resultSet = statement.executeQuery(queryBuilder.toString());
 
             if (!resultSet.isBeforeFirst()) {
-                return null;
+                return Collections.emptyList();
             }
 
             List<RegistrationUserData> users = new ArrayList<>();

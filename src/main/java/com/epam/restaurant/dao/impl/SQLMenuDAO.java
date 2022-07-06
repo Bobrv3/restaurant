@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public class SQLMenuDAO implements MenuDAO {
             resultSet = statement.executeQuery(GET_MENU_QUERY);
 
             if (!resultSet.isBeforeFirst()) {
-                return null;
+                return new Menu();
             }
 
             menu = new Menu();
@@ -65,10 +66,10 @@ public class SQLMenuDAO implements MenuDAO {
                 String name = resultSet.getString(2);
                 String description = resultSet.getString(3);
                 BigDecimal price = BigDecimal.valueOf(resultSet.getDouble(4));
-                int category_id = resultSet.getInt(5);
-                String photo_link = resultSet.getString(6);
+                int categoryId = resultSet.getInt(5);
+                String photoLink = resultSet.getString(6);
 
-                menu.add(new Dish(id, price, name, description, category_id, photo_link));
+                menu.add(new Dish(id, price, name, description, categoryId, photoLink));
             }
         } catch (SQLException e) {
             throw new DAOException("Error when trying to get menu", e);
@@ -101,7 +102,7 @@ public class SQLMenuDAO implements MenuDAO {
             resultSet = statement.executeQuery(GET_ALL_CATEGORIES_QUERY);
 
             if (!resultSet.isBeforeFirst()) {
-                return null;
+                return Collections.emptyList();
             }
 
             categories = new ArrayList<>();
@@ -148,7 +149,7 @@ public class SQLMenuDAO implements MenuDAO {
             resultSet = statement.executeQuery(queryBuilder.toString());
 
             if (!resultSet.isBeforeFirst()) {
-                return null;
+                return Collections.emptyList();
             }
 
             List<Dish> dishes = new ArrayList<>();
@@ -264,7 +265,7 @@ public class SQLMenuDAO implements MenuDAO {
 
         } catch (SQLException e) {
             if (e.getClass() == java.sql.SQLIntegrityConstraintViolationException.class){
-                throw new DAOException("A dish with such a photo already exists. ", e);
+                throw new DAOException("A dish with such photo already exists. ", e);
             }
             throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
         } catch (InterruptedException e) {
