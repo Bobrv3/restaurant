@@ -16,7 +16,7 @@ import java.text.MessageFormat;
 
 public class RestaurantController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(RestaurantController.class);
-    private static final CommandProvider commandProvider = new CommandProvider();
+    private static final CommandProvider commandProvider = CommandProvider.getInstance();
     private static final String PARAMETER_COMMAND = "command";
 
     @Override

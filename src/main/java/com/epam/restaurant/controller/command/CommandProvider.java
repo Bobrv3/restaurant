@@ -37,9 +37,10 @@ import java.util.Map;
 
 public final class CommandProvider {
     private static final Logger LOGGER = LogManager.getLogger(CommandProvider.class);
+    private static final CommandProvider instance = new CommandProvider();
     private final Map<CommandName, Command> repository = new HashMap<>();
 
-    public CommandProvider () {
+    private CommandProvider () {
         repository.put(CommandName.AUTHORIZATION, new Authorization());
         repository.put(CommandName.REGISTRATION, new Registration());
         repository.put(CommandName.NONAME_COMMAND, new NoNameCommand());
@@ -82,5 +83,9 @@ public final class CommandProvider {
             command = repository.get(CommandName.NONAME_COMMAND);
         }
         return command;
+    }
+
+    public static CommandProvider getInstance() {
+        return instance;
     }
 }
