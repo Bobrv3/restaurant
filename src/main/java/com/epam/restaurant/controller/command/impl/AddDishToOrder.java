@@ -8,17 +8,23 @@ import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
+import com.epam.restaurant.service.validation.ValidationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
 public class AddDishToOrder implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(AddDishToOrder.class);
     private static final ServiceProvider serviceProvider =  ServiceProvider.getInstance();
+
     private static final int FOUND_DISH = 0;
 
     @Override
@@ -39,29 +45,35 @@ public class AddDishToOrder implements Command {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), dishId);
 
-        MenuService menuService = serviceProvider.getMenuService();
-        List<Dish> dishes = menuService.find(criteria);
-
-        Dish dish = dishes.get(FOUND_DISH);
-        Integer newQuantity = Integer.parseInt(request.getParameter("quantity"));
-
-        if (order.getOrderList().containsKey(dish)) {
-            Integer currentQuantity = order.getOrderList().get(dish);
-            currentQuantity += newQuantity;
-
-            order.getOrderList().put(dish, currentQuantity);
-        } else {
-            order.getOrderList().put(dish, newQuantity);
-        }
-
-        setQuantityOfDishesToSession(order.getOrderList(), session);
-
         // TODO вывести сообщение о том, что блюдо добавлено в корзину
 
         try {
+            MenuService menuService = serviceProvider.getMenuService();
+            List<Dish> dishes = menuService.find(criteria);
+
+            Dish dish = dishes.get(FOUND_DISH);
+            Integer newQuantity = Integer.parseInt(request.getParameter("quantity"));
+
+            if (order.getOrderList().containsKey(dish)) {
+                Integer currentQuantity = order.getOrderList().get(dish);
+                currentQuantity += newQuantity;
+
+                order.getOrderList().put(dish, currentQuantity);
+            } else {
+                order.getOrderList().put(dish, newQuantity);
+            }
+
+            setQuantityOfDishesToSession(order.getOrderList(), session);
+
             request.getRequestDispatcher("/home").forward(request, response);
         }  catch (IOException e) {
             e.printStackTrace();
+        } catch (ValidationException e) {
+            try {
+                request.getRequestDispatcher(MessageFormat.format("/home?invalidDish=true&errMsgUpdDish={0}", e.getMessage())).forward(request, response);
+            } catch (IOException ex) {
+                LOGGER.error("Error invalid address to forward when Add Dish To Order", e);
+            }
         }
     }
 

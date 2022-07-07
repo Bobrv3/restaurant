@@ -8,6 +8,7 @@ import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
+import com.epam.restaurant.service.validation.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.List;
 
 public class RemoveDishFromMenu implements Command {
@@ -29,16 +31,22 @@ public class RemoveDishFromMenu implements Command {
     private static final String EX1 = "Error invalid address to redirect";
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
-        int idToRemove = Integer.parseInt(request.getParameter(DISH_ID_PARAM));
-
-        removeFromDB(idToRemove);
-
-        removeDishFromSessionMenu(request, idToRemove);
+        Integer idToRemove = Integer.parseInt(request.getParameter(DISH_ID_PARAM));
 
         try {
+            removeFromDB(idToRemove);
+
+            removeDishFromSessionMenu(request, idToRemove);
+
             response.sendRedirect(MAIN_PAGE_ADDR);
         } catch (IOException e) {
             LOGGER.error(EX1, e);
+        } catch (ValidationException e) {
+            try {
+                request.getRequestDispatcher(MessageFormat.format("/home?invalidDish=true&errMsgUpdDish={0}", e.getMessage())).forward(request, response);
+            } catch (IOException ex) {
+                LOGGER.error("Error invalid address to forward when Remove Dish From Menu", e);
+            }
         }
     }
 
@@ -62,7 +70,5 @@ public class RemoveDishFromMenu implements Command {
                 break;
             }
         }
-
-        session.setAttribute(MENU_ATTR, menu);
     }
 }

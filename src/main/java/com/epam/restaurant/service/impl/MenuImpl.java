@@ -10,6 +10,9 @@ import com.epam.restaurant.dao.MenuDAO;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.validation.CategoryValidator;
+import com.epam.restaurant.service.validation.DishValidator;
+import com.epam.restaurant.service.validation.ValidationException;
+import com.epam.restaurant.service.validation.ValidationType;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,42 +23,37 @@ public class MenuImpl implements MenuService {
 
     @Override
     public Menu getMenu() throws ServiceException {
-        Menu menu = null;
         try {
-            menu = menuDAO.getMenu();
+            return menuDAO.getMenu();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-
-        return menu;
     }
 
     @Override
     public List<Category> getCategories() throws ServiceException {
-        List<Category> categories = null;
         try {
-            categories = menuDAO.getCategories();
+            return menuDAO.getCategories();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-
-        return categories;
     }
 
     @Override
     public List<Dish> find(Criteria criteria) throws ServiceException {
-        List<Dish> dishes = null;
+        DishValidator.validate(criteria);
+
         try {
-            dishes = menuDAO.find(criteria);
+            return menuDAO.find(criteria);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-
-        return dishes;
     }
 
     @Override
     public int removeDish(Criteria criteria) throws ServiceException {
+        DishValidator.validate(criteria);
+
         try {
             return menuDAO.removeDish(criteria);
         } catch (DAOException e) {
@@ -75,9 +73,11 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price, String photo_link) throws ServiceException {
+    public boolean editDish(Integer editedDishId, String newDishName, String description, BigDecimal price, String photoLink) throws ServiceException {
+        DishValidator.validate(editedDishId, newDishName, description, price, photoLink);
+
         try {
-            return menuDAO.editDish(editedDishId, newDishName, description, price, photo_link);
+            return menuDAO.editDish(editedDishId, newDishName, description, price, photoLink);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -85,9 +85,11 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photo_link) throws ServiceException {
+    public int addDish(BigDecimal price, String name, String description, Integer categoryForAdd, String photoLink) throws ServiceException {
+        DishValidator.validate(price, name, description, categoryForAdd, photoLink);
+
         try {
-            return menuDAO.addDish(price, name, description, categoryForAdd, photo_link);
+            return menuDAO.addDish(price, name, description, categoryForAdd, photoLink);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -95,6 +97,8 @@ public class MenuImpl implements MenuService {
 
     @Override
     public int addCategory(String categoryName) throws ServiceException {
+        CategoryValidator.validate(categoryName);
+
         try {
             return menuDAO.addCategory(categoryName);
         } catch (DAOException e) {
@@ -103,7 +107,9 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public boolean removeCategory(int categoryId) throws ServiceException {
+    public boolean removeCategory(Integer categoryId) throws ServiceException {
+        CategoryValidator.validate(categoryId);
+
         try {
             return menuDAO.removeCategory(categoryId);
         } catch (DAOException e) {

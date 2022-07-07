@@ -6,6 +6,7 @@ import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
+import com.epam.restaurant.service.validation.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,32 +31,31 @@ public class AddNewDishToMenu implements Command {
     private static final String MAIN_PAGE_ADDR = "/home";
     private static final String PATH_TO_PHOTO = "../../images/dishes/{0}";
 
-    private static final String EX1 = "Error invalid address to redirect";
-    private static final String EX2 = "It's need to enter all fields";
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
-        int categoryForAdd = Integer.parseInt(request.getParameter(CATEGORY_FOR_ADD_PARAM));
+        Integer categoryForAdd = Integer.parseInt(request.getParameter(CATEGORY_FOR_ADD_PARAM));
         String dishName = request.getParameter(DISH_NAME_PARAM);
         String description = request.getParameter(DESCRIPTION_PARAM);
         BigDecimal price = new BigDecimal(request.getParameter(PRICE_PARAM));
         String photoLink = MessageFormat.format(PATH_TO_PHOTO, request.getParameter(PHOTO_LINK_PARAM));
 
-        if (categoryForAdd == 0 || dishName == null || description == null || price == null || photoLink == null) {
-            throw new ServiceException(EX2);
-        }
-
-        MenuService menuService = serviceProvider.getMenuService();
-        int newDishId = menuService.addDish(price, dishName, description, categoryForAdd, photoLink);
-
-        Menu menu = (Menu) request.getSession().getAttribute(MENU_ATTR);
-        List<Dish> dishes = menu.getDishes();
-        dishes.add(new Dish(newDishId, price, dishName, description, categoryForAdd, photoLink));
-
         try {
+            MenuService menuService = serviceProvider.getMenuService();
+            int newDishId = menuService.addDish(price, dishName, description, categoryForAdd, photoLink);
+
+            Menu menu = (Menu) request.getSession().getAttribute(MENU_ATTR);
+            List<Dish> dishes = menu.getDishes();
+            dishes.add(new Dish(newDishId, price, dishName, description, categoryForAdd, photoLink));
+
             response.sendRedirect(MAIN_PAGE_ADDR);
         } catch (IOException e) {
-            LOGGER.error(EX1, e.getMessage(), e.getStackTrace());
+            LOGGER.error("Error invalid address to redirect when Add New Dish To Menu", e);
+        } catch (ValidationException e) {
+            try {
+                request.getRequestDispatcher(MessageFormat.format("/home?invalidDish=true&errMsgUpdDish={0}", e.getMessage())).forward(request, response);
+            } catch (IOException ex) {
+                LOGGER.error("Error invalid address to forward when Add New Dish To Menu", e);
+            }
         }
     }
 }

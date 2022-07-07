@@ -1,12 +1,12 @@
 package com.epam.restaurant.controller.command.impl;
 
-import com.epam.restaurant.bean.Category;
 import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Menu;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
+import com.epam.restaurant.service.validation.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,24 +31,28 @@ public class EditDish implements Command {
     private static final String MENU_ATTR = "menu";
     private static final String PATH_TO_PHOTO = "../../images/dishes/{0}";
 
-    private static final String EX1 = "Error invalid address to redirect";
-
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-        int editedDishId = Integer.parseInt(request.getParameter(EDITED_DISH_ID_PARAM));
-        String newDishName = request.getParameter(DISH_NAME_PARAM);
-        String description = request.getParameter(DESCRIPTION_PARAM);
-        BigDecimal price = new BigDecimal(request.getParameter(PRICE_PARAM));
-        String photoLink = MessageFormat.format(PATH_TO_PHOTO, request.getParameter(PHOTO_LINK_PARAM));
-
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         try {
+            int editedDishId = Integer.parseInt(request.getParameter(EDITED_DISH_ID_PARAM));
+            String newDishName = request.getParameter(DISH_NAME_PARAM);
+            String description = request.getParameter(DESCRIPTION_PARAM);
+            BigDecimal price = new BigDecimal(request.getParameter(PRICE_PARAM));
+            String photoLink = MessageFormat.format(PATH_TO_PHOTO, request.getParameter(PHOTO_LINK_PARAM));
+
             editCategoryInDB(editedDishId, newDishName, description, price, photoLink);
 
             editDishInSession(request, editedDishId, newDishName, description, price, photoLink);
 
             response.sendRedirect(MAIN_PAGE_ADDR);
         } catch (IOException e) {
-            LOGGER.error(EX1, e.getMessage());
+            LOGGER.error("Error invalid address to redirect", e.getMessage());
+        } catch (ValidationException | NumberFormatException e) {
+            try {
+                request.getRequestDispatcher(MessageFormat.format("/home?invalidDish=true&errMsgUpdDish={0}", e.getMessage())).forward(request, response);
+            } catch (IOException ex) {
+                LOGGER.error("Error invalid address to forward when Edit Dish", e);
+            }
         }
     }
 
@@ -65,8 +69,6 @@ public class EditDish implements Command {
                 break;
             }
         }
-
-        request.getSession().setAttribute(MENU_ATTR, menu);
     }
 
     private void editCategoryInDB(int editedDishId, String newDishName, String description, BigDecimal price, String photo_link) throws ServiceException {

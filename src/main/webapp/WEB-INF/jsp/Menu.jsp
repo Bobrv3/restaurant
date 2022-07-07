@@ -20,8 +20,9 @@
             </jsp:forward>
         </c:if>
 
-        <c:if test="${param.invalidCategory}">
+        <c:if test="${param.invalidCategory || param.invalidDish}">
             <h3 style="color: red; text-align: center;">${param.errMsgUpdCategory}</h3>
+            <h3 style="color: red; text-align: center;">${param.errMsgUpdDish}</h3>
         </c:if>
 
         <c:forEach items="${categories}" var="category">
