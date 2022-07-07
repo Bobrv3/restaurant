@@ -9,6 +9,7 @@ import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.MenuDAO;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
+import com.epam.restaurant.service.validation.CategoryValidator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -63,7 +64,9 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public boolean editCategory(int editedCategoryId, String newCategoryName) throws ServiceException {
+    public boolean editCategory(Integer editedCategoryId, String newCategoryName) throws ServiceException {
+        CategoryValidator.validate(editedCategoryId, newCategoryName);
+
         try {
             return menuDAO.editCategory(editedCategoryId, newCategoryName);
         } catch (DAOException e) {

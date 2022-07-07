@@ -18,7 +18,7 @@ public interface MenuService {
 
     int removeDish(Criteria criteria) throws ServiceException;
 
-    boolean editCategory(int editedCategoryId, String newCategoryName) throws ServiceException;
+    boolean editCategory(Integer editedCategoryId, String newCategoryName) throws ServiceException;
 
     boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price, String photo_link) throws ServiceException;
 

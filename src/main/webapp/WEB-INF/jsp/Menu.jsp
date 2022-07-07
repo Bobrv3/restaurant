@@ -20,8 +20,11 @@
             </jsp:forward>
         </c:if>
 
-        <c:forEach items="${categories}" var="category">
+        <c:if test="${param.invalidCategory}">
+            <h3 style="color: red; text-align: center;">${param.errMsgUpdCategory}</h3>
+        </c:if>
 
+        <c:forEach items="${categories}" var="category">
             <c:if test="${param.editedCategory == category.id}">
                 <form action="restaurant" method="post" style="width: 84%;" class="CategoryName">
                     <input type="hidden" name="command" value="edit_category">
