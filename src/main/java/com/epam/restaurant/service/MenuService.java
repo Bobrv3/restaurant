@@ -20,9 +20,9 @@ public interface MenuService {
 
     boolean editCategory(Integer editedCategoryId, String newCategoryName) throws ServiceException;
 
-    boolean editDish(Integer editedDishId, String newDishName, String description, BigDecimal price, String photo_link) throws ServiceException;
+    boolean editDish(Integer editedDishId, String newDishName, String description, BigDecimal price, String photoLink) throws ServiceException;
 
-    int addDish(BigDecimal price, String name, String description, Integer categoryForAdd, String photo_link) throws ServiceException;
+    int addDish(BigDecimal price, String name, String description, Integer categoryForAdd, String photoLink) throws ServiceException;
 
     int addCategory(String categoryName) throws ServiceException;
 

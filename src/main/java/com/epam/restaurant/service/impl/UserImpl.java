@@ -1,10 +1,8 @@
 package com.epam.restaurant.service.impl;
 
-import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.AuthorizedUser;
+import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
-import com.epam.restaurant.bean.criteria.SearchCriteria;
-import com.epam.restaurant.controller.command.impl.Registration;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.UserDAO;
@@ -12,13 +10,11 @@ import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.UserService;
 import com.epam.restaurant.service.validation.UserValidator;
 import com.epam.restaurant.service.validation.ValidationException;
-import com.epam.restaurant.service.validation.ValidationType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 
 public class UserImpl implements UserService {

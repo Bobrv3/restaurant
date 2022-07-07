@@ -35,7 +35,6 @@ public class SQLOrderDAO implements OrderDAO {
     private static final String UPDATE_ORDER_STATUS_QUERY = "UPDATE orders SET order_status=? where id=?;";
 
     private static final String AND = "AND ";
-    private static final String OR = "OR ";
     private static final int NUM_OF_UPDATED_ROWS = 1;
 
     private static final String IN_PROCESSING = "in processing";
@@ -118,10 +117,11 @@ public class SQLOrderDAO implements OrderDAO {
             Map<String, Object> criterias = criteria.getCriteria();
 
             StringBuilder where = new StringBuilder("");
-            for (String key : criterias.keySet()) {
-                where.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), AND));
+            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
+                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue(), AND));
             }
             where = new StringBuilder(where.substring(0, where.length() - AND.length()));
+
             String query = MessageFormat.format(FIND_ORDER_BY_CRITERIA_QUERY, where);
 
             statement = connection.createStatement();
@@ -204,10 +204,11 @@ public class SQLOrderDAO implements OrderDAO {
             Map<String, Object> criterias = criteria.getCriteria();
 
             StringBuilder where = new StringBuilder("");
-            for (String key : criterias.keySet()) {
-                where.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), AND));
+            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
+                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue(), AND));
             }
             where = new StringBuilder(where.substring(0, where.length() - AND.length()));
+
             String query = MessageFormat.format(FIND_ORDER_WITH_USER_BY_CRITERIA_QUERY, where);
 
             statement = connection.createStatement();
@@ -284,10 +285,11 @@ public class SQLOrderDAO implements OrderDAO {
             Map<String, Object> criterias = criteria.getCriteria();
 
             StringBuilder where = new StringBuilder("");
-            for (String key : criterias.keySet()) {
-                where.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), AND));
+            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
+                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue(), AND));
             }
             where = new StringBuilder(where.substring(0, where.length() - AND.length()));
+
             String query = MessageFormat.format(FIND_ORDER_WITH_DISH_BY_CRITERIA_QUERY, where);
 
             statement = connection.createStatement();

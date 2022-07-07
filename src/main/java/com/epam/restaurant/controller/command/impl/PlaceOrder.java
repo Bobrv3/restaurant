@@ -74,7 +74,6 @@ public class PlaceOrder implements Command {
         int orderId = orderService.createOder(order, user.getLogin());
 
         // create order detail
-        Menu menu = (Menu) session.getAttribute(MENU_ADDR);
         String methodOfReceiving = (String) request.getSession().getAttribute(RECEIVING_PARAM);
 
         for (Dish dish : order.getOrderList().keySet()) {

@@ -68,7 +68,7 @@
                                     </a>
                                 </c:if>
                                 <c:if test="${param.editName}">
-                                    <input form="editName" type="image" src="../../images/save.png" class="editImg"
+                                    <input form="editName" type="image" src="../../images/save.png" alt="save" class="editImg"
                                         id="name">
                                 </c:if>
                             </div>
@@ -94,7 +94,7 @@
                                     </a>
                                 </c:if>
                                 <c:if test="${param.editPhone}">
-                                    <input form="editPhone" type="image" src="../../images/save.png" class="editImg"
+                                    <input form="editPhone" type="image" src="../../images/save.png" alt="save" class="editImg"
                                         id="phone">
                                 </c:if>
                             </div>
@@ -119,7 +119,7 @@
                                     </a>
                                 </c:if>
                                 <c:if test="${param.editEmail}">
-                                    <input form="editEmail" type="image" src="../../images/save.png" class="editImg"
+                                    <input form="editEmail" type="image" src="../../images/save.png" alt="save" class="editImg"
                                         id="email">
                                 </c:if>
                             </div>

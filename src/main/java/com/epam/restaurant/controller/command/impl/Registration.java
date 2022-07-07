@@ -47,7 +47,7 @@ public class Registration implements Command {
         UserService userService = serviceProvider.getUserService();
 
         try {
-            boolean registred = userService.signUp(userData);
+            userService.signUp(userData);
 
             request.getSession().setAttribute(USER_ATTR, new AuthorizedUser(userData.getLogin(), userData.getName(), userData.getRoleId()));
 

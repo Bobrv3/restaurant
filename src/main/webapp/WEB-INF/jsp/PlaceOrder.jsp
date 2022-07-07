@@ -40,17 +40,38 @@
                                     <input type="hidden" name="command" value="place_order">
 
                                     <h2>${methodOfReceivingFmt}</h2>
-                                    <label for="takeaway">${takeawayFmt}</label>
-                                    <input type="radio" id="takeaway" name="receiving" value="takeaway" checked><br>
-                                    <label for="inPlace">${inPlaceFmt}</label>
-                                    <input type="radio" id="inPlace" name="receiving" value="in place">
+                                    <div class="grid-container">
+                                        <div>
+                                            <label for="takeaway">${takeawayFmt}</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" id="takeaway" name="receiving" value="takeaway"
+                                                checked><br>
+                                        </div>
+                                        <div>
+                                            <label for="inPlace">${inPlaceFmt}</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" id="inPlace" name="receiving" value="in place">
+                                        </div>
+                                    </div>
 
                                     <h2>${paymentMethodFmt}</h2>
-                                    <c:forEach items="${paymentMethods}" var="paymentMethod">
-                                        <label for="${paymentMethod.getMethod()}">${paymentMethod.getMethod()}</label>
-                                        <input type="radio" id="${paymentMethod.getMethod()}" name="paymentBy"
-                                            value="${paymentMethod.getId()}" checked><br>
-                                    </c:forEach>
+
+                                    <div class="grid-container">
+                                        <c:forEach items="${paymentMethods}" var="paymentMethod">
+                                            <div>
+                                                <label
+                                                    for="${paymentMethod.getMethod()}">${paymentMethod.getMethod()}</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="${paymentMethod.getMethod()}" name="paymentBy"
+                                                    value="${paymentMethod.getId()}" checked><br>
+                                            </div>
+
+                                        </c:forEach>
+                                    </div>
+
                                     <br>
                                     <input id="placeOrderBtn" type="submit" value="${placeOrderFmt}" <c:if
                                         test="${user == null}">disabled</c:if>>

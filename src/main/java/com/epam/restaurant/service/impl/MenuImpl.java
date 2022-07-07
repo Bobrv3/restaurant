@@ -11,8 +11,6 @@ import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.validation.CategoryValidator;
 import com.epam.restaurant.service.validation.DishValidator;
-import com.epam.restaurant.service.validation.ValidationException;
-import com.epam.restaurant.service.validation.ValidationType;
 
 import java.math.BigDecimal;
 import java.util.List;

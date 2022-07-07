@@ -11,10 +11,10 @@ import java.util.List;
 
 public class PaymentImpl implements PaymentService {
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
+    private static final PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
 
     @Override
     public int createInvoice(int orderId) throws ServiceException {
-        PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
         try {
             int invoiceId = paymentDAO.createInvoice(orderId);
             return invoiceId;
@@ -25,11 +25,8 @@ public class PaymentImpl implements PaymentService {
 
     @Override
     public List<PaymentMethod> getPaymentMethods() throws ServiceException {
-        PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
-
         try {
-            List<PaymentMethod> paymentMethod = paymentDAO.getPaymentMethods();
-            return paymentMethod;
+            return paymentDAO.getPaymentMethods();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -37,8 +34,6 @@ public class PaymentImpl implements PaymentService {
 
     @Override
     public void createPayment(int invoiceId, int paymentMethodId) throws ServiceException {
-        PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
-
         try {
             paymentDAO.createPayment(invoiceId, paymentMethodId);
         } catch (DAOException e) {

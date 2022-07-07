@@ -46,7 +46,7 @@ public class EditDish implements Command {
 
             response.sendRedirect(MAIN_PAGE_ADDR);
         } catch (IOException e) {
-            LOGGER.error("Error invalid address to redirect", e.getMessage());
+            LOGGER.error("Error invalid address to redirect", e);
         } catch (ValidationException | NumberFormatException e) {
             try {
                 request.getRequestDispatcher(MessageFormat.format("/home?invalidDish=true&errMsgUpdDish={0}", e.getMessage())).forward(request, response);
@@ -56,7 +56,7 @@ public class EditDish implements Command {
         }
     }
 
-    private void editDishInSession(HttpServletRequest request, int editedDishId, String newDishName, String description, BigDecimal price, String photo_link) {
+    private void editDishInSession(HttpServletRequest request, int editedDishId, String newDishName, String description, BigDecimal price, String photoLink) {
         Menu menu = (Menu) request.getSession().getAttribute(MENU_ATTR);
         List<Dish> dishes = menu.getDishes();
 
@@ -65,15 +65,15 @@ public class EditDish implements Command {
                 dish.setName(newDishName);
                 dish.setDescription(description);
                 dish.setPrice(price);
-                dish.setPhoto_link(photo_link);
+                dish.setPhotoLink(photoLink);
                 break;
             }
         }
     }
 
-    private void editCategoryInDB(int editedDishId, String newDishName, String description, BigDecimal price, String photo_link) throws ServiceException {
+    private void editCategoryInDB(int editedDishId, String newDishName, String description, BigDecimal price, String photoLink) throws ServiceException {
         MenuService menuService = serviceProvider.getMenuService();
 
-        menuService.editDish(editedDishId, newDishName, description, price, photo_link);
+        menuService.editDish(editedDishId, newDishName, description, price, photoLink);
     }
 }

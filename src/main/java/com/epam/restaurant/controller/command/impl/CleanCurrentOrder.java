@@ -13,7 +13,6 @@ import java.io.IOException;
 
 public class CleanCurrentOrder implements Command {
     private static final Logger LOGGER = LogManager.getLogger(CleanCurrentOrder.class);
-    private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
     private static final String ORDER_ATTR = "order";
     private static final String QUANTITY_ATTR = "quantityOfDishes";

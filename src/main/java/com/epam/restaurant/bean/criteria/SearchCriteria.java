@@ -1,6 +1,9 @@
 package com.epam.restaurant.bean.criteria;
 
-public class SearchCriteria {
+public final class SearchCriteria {
+    private SearchCriteria() {
+    }
+
     public static enum Users{
         LOGIN, NAME, PHONE_NUMBER, EMAIL, ID
     }

@@ -10,7 +10,6 @@ import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.MenuDAO;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -112,12 +111,12 @@ class SQLMenuDAOTest {
         String newDishName = dishes.get(0).getName();
         BigDecimal newPrice = dishes.get(0). getPrice();
         String newDescription = dishes.get(0).getDescription();
-        String photo_link = dishes.get(0).getPhoto_link();
+        String photo_link = dishes.get(0).getPhotoLink();
 
         try {
             menuDAO.editDish(editedDishId, newDishName, newDescription, newPrice, photo_link);
         } catch (DAOException e) {
-            Assertions.assertTrue(e.getCause().getClass() == java.sql.SQLIntegrityConstraintViolationException.class);
+            Assertions.assertSame(e.getCause().getClass(), java.sql.SQLIntegrityConstraintViolationException.class);
         }
     }
 

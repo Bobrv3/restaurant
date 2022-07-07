@@ -6,7 +6,9 @@ import com.epam.restaurant.bean.criteria.SearchCriteria;
 import java.math.BigDecimal;
 import java.util.Map;
 
-public class DishValidator {
+public final class DishValidator {
+    private DishValidator() {
+    }
 
     public static void validate(BigDecimal price, String name, String description, Integer categoryForAdd, String photoLink) throws ValidationException {
         if (price == null || !price.toString().matches(ValidationType.PRICE.getRegex())) {
@@ -24,31 +26,29 @@ public class DishValidator {
 
     public static void validate(Criteria criteria) throws ValidationException {
         Map<String, Object> criterias = criteria.getCriteria();
-        for (String key : criterias.keySet()) {
-            if (key.equals(SearchCriteria.Dishes.DISHES_ID)) {
-                if (criterias.get(key) == null || !criterias.get(key).toString().matches(ValidationType.ID.getRegex())) {
+        for (Map.Entry<String, Object> entry : criterias.entrySet()) {
+            if (entry.getKey().equals(SearchCriteria.Dishes.DISHES_ID.name())) {
+                if (entry.getValue() == null || !entry.getValue().toString().matches(ValidationType.ID.getRegex())) {
                     throw new ValidationException(ValidationType.ID.getErrorMsg());
                 }
-            } else if (key.equals(SearchCriteria.Dishes.NAME)) {
-                if (criterias.get(key) == null || !criterias.get(key).toString().matches(ValidationType.NAME.getRegex())) {
+            } else if (entry.getKey().equals(SearchCriteria.Dishes.NAME.name())) {
+                if (entry.getValue() == null || !entry.getValue().toString().matches(ValidationType.NAME.getRegex())) {
                     throw new ValidationException(ValidationType.NAME.getErrorMsg());
                 }
-            } else if (key.equals(SearchCriteria.Dishes.PRICE)) {
-                if (criterias.get(key) == null || !criterias.get(key).toString().matches(ValidationType.PRICE.getRegex())) {
+            } else if (entry.getKey().equals(SearchCriteria.Dishes.PRICE.name())) {
+                if (entry.getValue() == null || !entry.getValue().toString().matches(ValidationType.PRICE.getRegex())) {
                     throw new ValidationException(ValidationType.PRICE.getErrorMsg());
                 }
-            } else if (key.equals(SearchCriteria.Dishes.STATUS)) {
-                if (criterias.get(key) == null || !criterias.get(key).toString().matches(ValidationType.STATUS.getRegex())) {
+            } else if (entry.getKey().equals(SearchCriteria.Dishes.STATUS.name())) {
+                if (entry.getValue() == null || !entry.getValue().toString().matches(ValidationType.STATUS.getRegex())) {
                     throw new ValidationException(ValidationType.STATUS.getErrorMsg());
                 }
-            } else if (key.equals(SearchCriteria.Dishes.CATEGORY_ID)) {
-                if (criterias.get(key) == null || !criterias.get(key).toString().matches(ValidationType.ID.getRegex())) {
+            } else if (entry.getKey().equals(SearchCriteria.Dishes.CATEGORY_ID.name())) {
+                if (entry.getValue() == null || !entry.getValue().toString().matches(ValidationType.ID.getRegex())) {
                     throw new ValidationException(ValidationType.ID.getErrorMsg());
                 }
-            } else if (key.equals(SearchCriteria.Dishes.DESCRIPTION)) {
-                if (criterias.get(key) == null) {
-                    throw new ValidationException("description shouldn't be null");
-                }
+            } else if (entry.getKey().equals(SearchCriteria.Dishes.DESCRIPTION.name()) && entry.getValue() == null) {
+                throw new ValidationException("description shouldn't be null");
             }
         }
     }

@@ -32,7 +32,7 @@
                     <input type="hidden" name="editedCategoryId" value="${category.id}">
 
                     <input type="text" name="categoryName" value="${category.name}" required style="font-size: 20px;">
-                    <input type="image" src="../../images/save.png" id="imgInEditCategory">
+                    <input type="image" src="../../images/save.png" alt="save" id="imgInEditCategory">
                 </form>
             </c:if>
             <c:if test="${param.editedCategory != category.id}">
@@ -46,7 +46,7 @@
                             <input type="hidden" name="command" value="remove_category">
                             <input type="hidden" name="categoryId" value="${category.id}">
 
-                            <input type="image" src="../../images/remove.png" class="imgInTd">
+                            <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd">
                         </form>
                     </c:if>
                 </h2>
@@ -55,7 +55,7 @@
 
             <table>
                 <c:forEach items="${menu.getDishes()}" var="dish">
-                    <c:if test="${dish.category_id == category.id}">
+                    <c:if test="${dish.categoryId == category.id}">
                         <tr>
                             <c:if test="${param.editedDishId == dish.id}">
                                 <form action="restaurant" method="post">
@@ -74,7 +74,7 @@
                                         <input type="text" name="price" value="${dish.price}" required id="editedPrice">
                                     </td>
                                     <td>
-                                        <img src="${dish.photo_link}" alt="photo of ${dish.name}" class="dishPhoto">
+                                        <img src="${dish.photoLink}" alt="photo of ${dish.name}" class="dishPhoto">
                                         <br>
                                         <input type="file" name="photoLink" accept="images/*" required>
                                     </td>
@@ -83,17 +83,17 @@
 
                             <c:if test="${param.editedDishId != dish.id}">
                                 <td class="col1">
-                                    <b style="font-size: 15px;">
+                                    <strong style="font-size: 15px;">
                                         <li />${dish.name}
-                                    </b>
+                                    </strong>
                                     (${dish.description}) <br>
 
                                 </td>
                                 <td class="col2">
-                                    <b>${dish.price}</b>
+                                    <strong>${dish.price}</strong>
                                 </td>
                                 <td>
-                                    <img src="${dish.photo_link}" alt="photo of ${dish.name}" class="dishPhoto">
+                                    <img src="${dish.photoLink}" alt="photo of ${dish.name}" class="dishPhoto">
                                 </td>
                             </c:if>
 

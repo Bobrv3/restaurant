@@ -1,13 +1,14 @@
 package com.epam.restaurant.bean;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Order {
+public class Order implements Serializable {
+    private static final long serialVersionUID = -2174330731093191175L;
     private long id = 0;
     private Map<Dish, Integer> orderList = new HashMap<>();
     private BigDecimal totalPrice;

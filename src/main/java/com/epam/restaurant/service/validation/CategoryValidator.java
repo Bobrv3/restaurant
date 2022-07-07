@@ -1,7 +1,7 @@
 package com.epam.restaurant.service.validation;
 
 public final class CategoryValidator {
-    private CategoryValidator() {};
+    private CategoryValidator() {}
 
     public static void validate(Integer editedCategoryId, String newCategoryName) throws ValidationException {
         if (editedCategoryId == null) {

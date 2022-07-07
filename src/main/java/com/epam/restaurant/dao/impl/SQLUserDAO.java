@@ -138,8 +138,8 @@ public class SQLUserDAO implements UserDAO {
             connection = connectionPool.takeConnection();
 
             StringBuilder queryBuilder = new StringBuilder(FIND_USER_BY_CRITERIA_QUERY);
-            for (String key : criterias.keySet()) {
-                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), AND));
+            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
+                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue(), AND));
             }
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
 

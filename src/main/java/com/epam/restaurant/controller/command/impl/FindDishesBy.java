@@ -2,7 +2,6 @@ package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.criteria.Criteria;
-import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
@@ -11,11 +10,9 @@ import com.epam.restaurant.service.validation.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;

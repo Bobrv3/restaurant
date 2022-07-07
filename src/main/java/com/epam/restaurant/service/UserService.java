@@ -1,9 +1,8 @@
 package com.epam.restaurant.service;
 
-import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.AuthorizedUser;
+import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
-import com.epam.restaurant.service.validation.ValidationType;
 
 import java.util.List;
 

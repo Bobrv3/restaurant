@@ -16,12 +16,12 @@
             <div>
                 <form action="restaurant" method="get">
                     <input type="hidden" name="command" value="change_locale">
-                    <input type="hidden" name="locale" value="en">
+                    <input type="hidden" name="local" value="en">
                     <input type="submit" value="${en_button}" class="localeBtn">
                 </form>
                 <form action="restaurant" method="get">
                     <input type="hidden" name="command" value="change_locale">
-                    <input type="hidden" name="locale" value="ru">
+                    <input type="hidden" name="local" value="ru">
                     <input type="submit" value="${ru_button}" class="localeBtn">
                 </form>
                 <a id="homeLink" href="/home" class="headLink">${menu_link}</a></li>
@@ -48,7 +48,7 @@
                     </div>
                 </c:if>
                 <a href="/showCurrentOrder" class="headLink">
-                    <img id="orderImg" src="../../images/orderHeader.png">${quantityOfDishes}
+                    <img id="orderImg" src="../../images/orderHeader.png" alt="Your order">${quantityOfDishes}
                 </a>
             </div>
 

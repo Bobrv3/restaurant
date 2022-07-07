@@ -40,18 +40,11 @@ public class PrintUserRegistrData implements Command {
 
         RegistrationUserData userData = registrationUserData.get(FOUND_USER);
 
-        PrintWriter writer = null;
         try {
             session.setAttribute(USER_DATA_ATTR, userData);
             request.getRequestDispatcher("/personalInfo").forward(request, response);
         } catch (IOException e) {
             LOGGER.error(e);
-        } finally {
-            if (writer != null) {
-                writer.flush();
-                writer.close();
-            }
         }
-
     }
 }

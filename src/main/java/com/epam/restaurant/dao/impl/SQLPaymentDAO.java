@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -77,7 +76,7 @@ public class SQLPaymentDAO implements PaymentDAO {
             resultSet = statement.executeQuery(GET_PAYMENT_METHODS_QUERY);
 
             if (!resultSet.isBeforeFirst()) {
-                return Collections.EMPTY_LIST;
+                return Collections.emptyList();
             }
 
             List<PaymentMethod> methods = new ArrayList<>();

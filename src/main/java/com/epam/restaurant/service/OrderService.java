@@ -12,8 +12,7 @@ public interface OrderService {
 
     int createOder(Order order, String userLogin) throws ServiceException;
 
-    // TODO переделать возвращаемый тип
-    void createOderDetail(int oderId, int menuId, Integer quantity, String methodOfReceiving) throws ServiceException;
+    boolean createOderDetail(int oderId, int menuId, Integer quantity, String methodOfReceiving) throws ServiceException;
 
     List<Order> getHistoryOfOrders(int userId) throws ServiceException;
 

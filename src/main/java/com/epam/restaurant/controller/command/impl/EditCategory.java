@@ -1,8 +1,6 @@
 package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.bean.Category;
-import com.epam.restaurant.bean.Dish;
-import com.epam.restaurant.bean.Menu;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;

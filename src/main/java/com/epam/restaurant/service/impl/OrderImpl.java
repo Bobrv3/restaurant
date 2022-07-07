@@ -18,6 +18,7 @@ import java.util.Map;
 public class OrderImpl implements OrderService {
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
     private static final UserDAO userDAO = daoProvider.getUserDAO();
+    private static final OrderDAO orderDAO = daoProvider.getOrderDAO();
 
     @Override
     public int createOder(Order order, String userLogin) throws ServiceException {
@@ -27,7 +28,6 @@ public class OrderImpl implements OrderService {
         try {
             List<RegistrationUserData> authorizedUsers = userDAO.find(criteria);
 
-            OrderDAO orderDAO = daoProvider.getOrderDAO();
             int orderId = orderDAO.createOrder(order, authorizedUsers.get(0).getId());
 
             return orderId;
@@ -37,10 +37,9 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
-    public void createOderDetail(int oderId, int menuId, Integer quantity, String methodOfReceiving) throws ServiceException {
-        OrderDAO orderDAO = daoProvider.getOrderDAO();
+    public boolean createOderDetail(int oderId, int menuId, Integer quantity, String methodOfReceiving) throws ServiceException {
         try {
-            orderDAO.createOrderDetails(oderId, menuId, quantity, methodOfReceiving);
+            return orderDAO.createOrderDetails(oderId, menuId, quantity, methodOfReceiving);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -49,10 +48,7 @@ public class OrderImpl implements OrderService {
     @Override
     public List<Order> getHistoryOfOrders(int userId) throws ServiceException {
         try {
-            OrderDAO orderDAO = daoProvider.getOrderDAO();
-            List<Order> orders = orderDAO.getHistoryOfOrders(userId);
-
-            return orders;
+            return orderDAO.getHistoryOfOrders(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -61,10 +57,7 @@ public class OrderImpl implements OrderService {
     @Override
     public Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws ServiceException {
         try {
-            OrderDAO orderDAO = daoProvider.getOrderDAO();
-            Map<Order, RegistrationUserData> orderUserMap = orderDAO.findOrdersWithUsersInfo(criteria);
-
-            return orderUserMap;
+            return orderDAO.findOrdersWithUsersInfo(criteria);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -73,8 +66,6 @@ public class OrderImpl implements OrderService {
     @Override
     public boolean updateOrderStatus(int orderID, String status) throws ServiceException {
         try {
-            OrderDAO orderDAO = daoProvider.getOrderDAO();
-
             return orderDAO.updateOrderStatus(orderID, status);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -84,8 +75,6 @@ public class OrderImpl implements OrderService {
     @Override
     public List<OrderForCooking> findOrdersWithDishInfo(Criteria criteria) throws ServiceException {
         try {
-            OrderDAO orderDAO = daoProvider.getOrderDAO();
-
             return orderDAO.findOrdersWithDishInfo(criteria);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -95,10 +84,7 @@ public class OrderImpl implements OrderService {
     @Override
     public List<Order> find(Criteria orderCriteria) throws ServiceException {
         try {
-            OrderDAO orderDAO = daoProvider.getOrderDAO();
-            List<Order> orders = orderDAO.find(orderCriteria);
-
-            return orders;
+            return orderDAO.find(orderCriteria);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

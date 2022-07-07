@@ -14,7 +14,6 @@ import java.io.IOException;
 public class QuitFromAccount implements Command {
     private static final Logger LOGGER = LogManager.getLogger(QuitFromAccount.class);
 
-    private static final String USER_DATA_ATTR = "userData";
     private static final String ORDERS_IN_PROCESSING_ATTR = "ordersInProcessing";
     private static final String ORDERS_HISTORY_ATTR = "ordersHistory";
     private static final String PAYMENT_ATTR = "paymentBy";

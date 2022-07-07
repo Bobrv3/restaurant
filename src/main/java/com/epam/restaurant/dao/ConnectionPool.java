@@ -27,7 +27,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
-// TODO закрывать соединение, если к нему долго никто не обращается
 public class ConnectionPool {
     private enum DBProperties {URL, USER, PASSWORD, DRIVER_NAME, CONNECTION_POOL_SIZE}
 

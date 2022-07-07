@@ -2,6 +2,8 @@ package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.ServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,19 +13,21 @@ import java.io.IOException;
 import java.text.MessageFormat;
 
 public class ChangeLocale implements Command {
-    @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-        HttpSession session = request.getSession(true);
-        session.setAttribute("local", (String) request.getParameter("locale"));
+    private static final Logger LOGGER = LogManager.getLogger(ChangeLocale.class);
 
-        String lastPage = (String) session.getAttribute("lastPage");
+    private static final String LOCAL = "local";
+    private static final String LAST_PAGE_ATTR = "lastPage";
+
+    @Override
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
+        HttpSession session = request.getSession(true);
+        session.setAttribute(LOCAL, request.getParameter(LOCAL));
+
+        String lastPage = (String) session.getAttribute(LAST_PAGE_ATTR);
         try {
-            request.getRequestDispatcher(MessageFormat.format("{0}", lastPage)).forward(request, response);
-        } catch (ServletException e) {
-            // TODO обработать
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            request.getRequestDispatcher(lastPage).forward(request, response);
+        } catch (IOException ex) {
+            LOGGER.error(MessageFormat.format("Invalid address to forward or redirect in the authorization command..", ex));
         }
 
     }

@@ -38,17 +38,14 @@ public class MoveToCookOrders implements Command {
 
         List<OrderForCooking> groupedOrders = new ArrayList<>();
         long previousOderId = 0;
-        StringBuilder dishiesName = null;
+        StringBuilder dishiesName = new StringBuilder("");
         int j = -1;
         for (OrderForCooking order : ordersForCooking) {
             if (previousOderId != order.getOrderId()) {
                 j++;
-                // TODO сделать невозможным создать пустой заказ и потом убрать эти условия
-                if (order.getDishName() != null) {
-                    dishiesName = new StringBuilder(order.getDishName()).append(" ( x").append(order.getQuantity()).append(")");
-                } else {
-                    dishiesName = new StringBuilder("");
-                }
+
+                dishiesName = new StringBuilder(order.getDishName()).append(" ( x").append(order.getQuantity()).append(")");
+
                 order.setDishName(dishiesName.toString());
                 groupedOrders.add(order);
                 previousOderId = order.getOrderId();

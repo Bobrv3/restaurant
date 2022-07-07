@@ -65,3 +65,9 @@ form#placingOrder {
     background: #ffc107;
     border-color: #ffc107;
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    height: auto;
+}

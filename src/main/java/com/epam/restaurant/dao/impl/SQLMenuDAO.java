@@ -140,9 +140,10 @@ public class SQLMenuDAO implements MenuDAO {
             connection = connectionPool.takeConnection();
 
             StringBuilder queryBuilder = new StringBuilder(FIND_DISH_BY_CRITERIA_QUERY);
-            for (String key : criterias.keySet()) {
-                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), AND));
+            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
+                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue(), AND));
             }
+
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
 
             statement = connection.createStatement();
@@ -159,7 +160,7 @@ public class SQLMenuDAO implements MenuDAO {
                 dish.setName(resultSet.getString(2));
                 dish.setDescription(resultSet.getString(3));
                 dish.setPrice(BigDecimal.valueOf(resultSet.getDouble(4)));
-                dish.setCategory_id(resultSet.getInt(5));
+                dish.setCategoryId(resultSet.getInt(5));
 
                 dishes.add(dish);
             }
@@ -191,8 +192,8 @@ public class SQLMenuDAO implements MenuDAO {
             connection = connectionPool.takeConnection();
 
             StringBuilder queryBuilder = new StringBuilder(REMOVE_DISH_BY_CRITERIA_QUERY);
-            for (String key : criterias.keySet()) {
-                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", key.toLowerCase(), criterias.get(key), AND));
+            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
+                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue(), AND));
             }
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
 
@@ -281,7 +282,7 @@ public class SQLMenuDAO implements MenuDAO {
     }
 
     @Override
-    public int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photo_link) throws DAOException {
+    public int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photoLink) throws DAOException {
         Connection connection = null;
         ResultSet resultSet = null;
         PreparedStatement statement = null;
@@ -301,7 +302,7 @@ public class SQLMenuDAO implements MenuDAO {
             int addedDishId = resultSet.getInt(GENERATED_KEYS_COLUMN_INDX);
 
             statement = connection.prepareStatement(ADD_PHOTO_QUERY);
-            statement.setString(1, photo_link);
+            statement.setString(1, photoLink);
             statement.setInt(2, addedDishId);
             statement.executeUpdate();
 

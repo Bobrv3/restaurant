@@ -32,13 +32,14 @@ import com.epam.restaurant.controller.command.impl.ConfirmOrder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 public final class CommandProvider {
     private static final Logger LOGGER = LogManager.getLogger(CommandProvider.class);
     private static final CommandProvider instance = new CommandProvider();
-    private final Map<CommandName, Command> repository = new HashMap<>();
+    private final Map<CommandName, Command> repository = new EnumMap<>(CommandName.class);
 
     private CommandProvider () {
         repository.put(CommandName.AUTHORIZATION, new Authorization());

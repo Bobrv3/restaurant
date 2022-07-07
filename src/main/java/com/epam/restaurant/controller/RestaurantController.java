@@ -28,19 +28,25 @@ public class RestaurantController extends HttpServlet {
         } catch (ServiceException | ServletException e) {
             LOGGER.error(e.getMessage(), e);
 
-            int lastIndx = e.getMessage().lastIndexOf(":");
-            if (lastIndx == -1) {
-                String errorMsg = e.getMessage();
-                resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
-            } else {
-                String errorMsg = e.getMessage().substring(lastIndx);
-                resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
+            try {
+                int lastIndx = e.getMessage().lastIndexOf(":");
+                if (lastIndx == -1) {
+                    String errorMsg = e.getMessage();
+
+                    resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
+
+                } else {
+                    String errorMsg = e.getMessage().substring(lastIndx);
+                    resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
+                }
+            } catch (IOException ex) {
+                LOGGER.error("Error: invalid address to redirect");
             }
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         Command command = commandProvider.getCommand(req.getParameter(PARAMETER_COMMAND).toUpperCase());
 
         try {
@@ -48,15 +54,20 @@ public class RestaurantController extends HttpServlet {
         } catch (ServiceException | ServletException e) {
             LOGGER.error(e.getMessage(), e);
 
-            int lastIndx = e.getMessage().lastIndexOf(":");
-            if (lastIndx == -1) {
-                String errorMsg = e.getMessage();
-                resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
-            } else {
-                String errorMsg = e.getMessage().substring(lastIndx);
-                resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
-            }
+            try {
+                int lastIndx = e.getMessage().lastIndexOf(":");
+                if (lastIndx == -1) {
+                    String errorMsg = e.getMessage();
 
+                    resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
+
+                } else {
+                    String errorMsg = e.getMessage().substring(lastIndx);
+                    resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
+                }
+            } catch (IOException ex) {
+                LOGGER.error("Error: invalid address to redirect");
+            }
         }
     }
 }

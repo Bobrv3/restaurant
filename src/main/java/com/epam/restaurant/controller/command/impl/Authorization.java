@@ -8,15 +8,11 @@ import com.epam.restaurant.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.MessageFormat;
-import java.util.Arrays;
 
 public class Authorization implements Command {
     private static final Logger LOGGER = LogManager.getLogger(Authorization.class);
@@ -31,12 +27,8 @@ public class Authorization implements Command {
     private static final String HOME_ADDRESS = "/home";
     private static final String AUTH_PAGE_ADDRESS = "/authorizationPage";
 
-    private static final String EX1 = "Error to forward in the authorization command..";
-    private static final String EX2 = "Invalid address to forward or redirect in the authorization command..";
-    private static final String EX3 = "Invalid username or password...";
-
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         UserService userService = serviceProvider.getUserService();
 
         String login = request.getParameter(LOGIN_PARAM);
@@ -45,7 +37,7 @@ public class Authorization implements Command {
         try {
             AuthorizedUser user = userService.signIn(login, password);
             if (user.getLogin() == null) {
-                LOGGER.info(EX3);
+                LOGGER.info("Invalid username or password...");
                 request.setAttribute(INVALID_SIGN_IN_ATTR, true);
                 request.getRequestDispatcher(AUTH_PAGE_ADDRESS).forward(request, response);
             } else {
@@ -53,10 +45,8 @@ public class Authorization implements Command {
 
                 response.sendRedirect(HOME_ADDRESS);
             }
-        } catch (ServletException ex) {
-            LOGGER.error(EX1, ex);
-        } catch (IOException ex) {
-            LOGGER.error(MessageFormat.format(EX2, ex));
+        }  catch (IOException ex) {
+            LOGGER.error(MessageFormat.format("Invalid address to forward or redirect in the authorization command..", ex));
         }
     }
 }

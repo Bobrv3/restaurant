@@ -53,9 +53,7 @@ public class ServletListner implements ServletRequestListener, ServletContextLis
     public void contextDestroyed(ServletContextEvent sce) {
         try {
             connectionPool.dispose();
-        } catch (SQLException e) {
-            LOGGER.error(e);
-        } catch (InterruptedException e) {
+        } catch (SQLException | InterruptedException e) {
             LOGGER.error(e);
         }
     }

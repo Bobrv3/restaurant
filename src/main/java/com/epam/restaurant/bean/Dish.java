@@ -10,8 +10,8 @@ public class Dish implements Serializable {
     private BigDecimal price;
     private String name;
     private String description;
-    private int category_id;
-    private String photo_link;
+    private int categoryId;
+    private String photoLink;
 
     public Dish() {
     }
@@ -21,16 +21,16 @@ public class Dish implements Serializable {
         this.price = price;
         this.name = name;
         this.description = description;
-        this.category_id = category_id;
-        this.photo_link = photo_link;
+        this.categoryId = category_id;
+        this.photoLink = photo_link;
     }
 
-    public String getPhoto_link() {
-        return photo_link;
+    public String getPhotoLink() {
+        return photoLink;
     }
 
-    public void setPhoto_link(String photo_link) {
-        this.photo_link = photo_link;
+    public void setPhotoLink(String photoLink) {
+        this.photoLink = photoLink;
     }
 
     public int getId() {
@@ -65,12 +65,12 @@ public class Dish implements Serializable {
         this.description = description;
     }
 
-    public int getCategory_id() {
-        return category_id;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override
@@ -78,12 +78,12 @@ public class Dish implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Dish dish = (Dish) o;
-        return id == dish.id && category_id == dish.category_id && Objects.equals(price, dish.price) && Objects.equals(name, dish.name) && Objects.equals(description, dish.description) && Objects.equals(photo_link, dish.photo_link);
+        return id == dish.id && categoryId == dish.categoryId && Objects.equals(price, dish.price) && Objects.equals(name, dish.name) && Objects.equals(description, dish.description) && Objects.equals(photoLink, dish.photoLink);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, price, name, description, category_id, photo_link);
+        return Objects.hash(id, price, name, description, categoryId, photoLink);
     }
 
     @Override
@@ -93,8 +93,8 @@ public class Dish implements Serializable {
                 ", price=" + price +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", category_id=" + category_id +
-                ", photo_link='" + photo_link + '\'' +
+                ", category_id=" + categoryId +
+                ", photo_link='" + photoLink + '\'' +
                 '}';
     }
 }
