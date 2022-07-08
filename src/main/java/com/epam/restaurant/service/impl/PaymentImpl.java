@@ -6,10 +6,13 @@ import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.PaymentDAO;
 import com.epam.restaurant.service.PaymentService;
 import com.epam.restaurant.service.ServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class PaymentImpl implements PaymentService {
+    private static final Logger LOGGER = LogManager.getLogger(OrderImpl.class);
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
     private static final PaymentDAO paymentDAO = daoProvider.getPaymentDAO();
 
@@ -17,6 +20,7 @@ public class PaymentImpl implements PaymentService {
     public int createInvoice(int orderId) throws ServiceException {
         try {
             int invoiceId = paymentDAO.createInvoice(orderId);
+
             return invoiceId;
         } catch (DAOException e) {
             throw new ServiceException(e);

@@ -12,6 +12,7 @@ public class DAOProvider {
     private final OrderDAO orderDAOImpl = new SQLOrderDAO();
     private final PaymentDAO paymentDAO = new SQLPaymentDAO();
 
+
     private DAOProvider() {
     }
 
@@ -34,4 +35,5 @@ public class DAOProvider {
     public PaymentDAO getPaymentDAO() {
         return paymentDAO;
     }
+
 }

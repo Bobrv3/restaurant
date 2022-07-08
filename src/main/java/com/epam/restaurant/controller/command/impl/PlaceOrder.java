@@ -32,7 +32,6 @@ public class PlaceOrder implements Command {
     private static final String ONLINE_PAY_ADDR = "/onlinePay";
     private static final String MENU_ADDR = "menu";
 
-    private static final String EX1 = "Invalid address to forward or redirect in the PlaceOrder command..";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
@@ -59,7 +58,7 @@ public class PlaceOrder implements Command {
             }
         }
         catch (IOException e) {
-            LOGGER.error(EX1, e);
+            LOGGER.error("Invalid address to forward or redirect in the PlaceOrder command..", e);
         }
     }
 

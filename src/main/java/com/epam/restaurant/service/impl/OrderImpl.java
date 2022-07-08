@@ -11,11 +11,15 @@ import com.epam.restaurant.dao.OrderDAO;
 import com.epam.restaurant.dao.UserDAO;
 import com.epam.restaurant.service.OrderService;
 import com.epam.restaurant.service.ServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
 
 public class OrderImpl implements OrderService {
+    private static final Logger LOGGER = LogManager.getLogger(OrderImpl.class);
+
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
     private static final UserDAO userDAO = daoProvider.getUserDAO();
     private static final OrderDAO orderDAO = daoProvider.getOrderDAO();
@@ -32,6 +36,7 @@ public class OrderImpl implements OrderService {
 
             return orderId;
         } catch (DAOException e) {
+
             throw new ServiceException(e);
         }
     }
