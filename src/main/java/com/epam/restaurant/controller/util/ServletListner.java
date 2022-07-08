@@ -1,4 +1,4 @@
-package com.epam.restaurant.controller;
+package com.epam.restaurant.controller.util;
 
 import com.epam.restaurant.dao.ConnectionPool;
 import org.apache.logging.log4j.LogManager;

@@ -1,6 +1,5 @@
-package com.epam.restaurant.controller;
+package com.epam.restaurant.controller.util;
 
-import com.epam.restaurant.controller.command.impl.ChangeLocale;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
