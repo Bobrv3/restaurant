@@ -25,7 +25,7 @@ public class ServletListner implements ServletRequestListener, ServletContextLis
     @Override
     public void requestDestroyed(ServletRequestEvent sre) {
         HttpServletRequest request = (HttpServletRequest) sre.getServletRequest();
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
 
         String lastPage = (String) session.getAttribute(LAST_PAGE_ATTR);
         if (lastPage == null) {

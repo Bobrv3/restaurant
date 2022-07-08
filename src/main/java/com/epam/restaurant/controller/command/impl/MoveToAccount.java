@@ -19,8 +19,6 @@ public class MoveToAccount implements Command {
     private static final String ORDERS_IN_PROCESSING_ATTR = "ordersInProcessing";
     private static final String ORDERS_HISTORY_ATTR = "ordersHistory";
 
-    private static final String EX1 = "Error invalid address to redirect";
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         HttpSession session = request.getSession();
@@ -31,7 +29,7 @@ public class MoveToAccount implements Command {
         try {
             response.sendRedirect(SHOW_ACCOUNT_ADDR);
         } catch (IOException e) {
-            LOGGER.error(EX1, e);
+            LOGGER.error("Error invalid address to redirect", e);
         }
     }
 }
