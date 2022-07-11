@@ -20,6 +20,9 @@ public class GetCategories implements Command {
     private static final Logger LOGGER = LogManager.getLogger(GetCategories.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
+    private static final String CATEGORIES_ATTR = "categories";
+    private static final String MAIN_PAGE_ADDR = "/home";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         MenuService menuService = serviceProvider.getMenuService();
@@ -27,13 +30,13 @@ public class GetCategories implements Command {
         List<Category> categories = menuService.getCategories();
 
         HttpSession session = request.getSession();
-        session.setAttribute("categories", categories);
+        session.setAttribute(CATEGORIES_ATTR, categories);
 
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/home");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(MAIN_PAGE_ADDR);
         try {
             requestDispatcher.forward(request, response);
         } catch (IOException e) {
-            LOGGER.error(e);
+            LOGGER.error("Error, invalid address to forward in get categories",  e);
         }
     }
 }

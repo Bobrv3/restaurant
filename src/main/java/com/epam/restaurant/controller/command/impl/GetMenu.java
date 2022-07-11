@@ -25,8 +25,6 @@ public class GetMenu implements Command {
     private static final String CATEGORIES_ATTR = "categories";
     private static final String MAIN_PAGE_ADDR = "/home";
 
-    private static final String EX1 = "Invalid address to redirect in online pay";
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         MenuService menuService = serviceProvider.getMenuService();
@@ -42,7 +40,7 @@ public class GetMenu implements Command {
         try {
             requestDispatcher.forward(request, response);
         } catch (IOException e) {
-            LOGGER.error(EX1, e);
+            LOGGER.error("Invalid address to redirect in online pay", e);
         }
     }
 }

@@ -26,9 +26,8 @@ public class GetOrdersInProcessing implements Command {
     private static final String USER_ATTR = "user";
     private static final String ORDERS_IN_PROCESSING_ATTR = "ordersInProcessing";
     private static final String ORDERS_IN_PROCESSING_ADDR = "/ordersInProcessing";
+    private static final String IN_PROCESSING = "in Processing";
     private static final int FOUND_USER = 0;
-    private static final String EX = "Error invalid address to forward";
-
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
@@ -44,7 +43,7 @@ public class GetOrdersInProcessing implements Command {
 
         Criteria orderCriteria = new Criteria();
         orderCriteria.add(SearchCriteria.Orders.USER_ID.toString(), registrationUserData.get(FOUND_USER).getId());
-        orderCriteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "in Processing");
+        orderCriteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), IN_PROCESSING);
 
         List<Order> ordersInProcessing = orderService.find(orderCriteria);
 
@@ -53,7 +52,7 @@ public class GetOrdersInProcessing implements Command {
         try {
             request.getRequestDispatcher(ORDERS_IN_PROCESSING_ADDR).forward(request, response);
         } catch (IOException e) {
-            LOGGER.error(EX, e);
+            LOGGER.error("Error invalid address to forward", e);
         }
     }
 }

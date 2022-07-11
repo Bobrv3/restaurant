@@ -23,8 +23,6 @@ public class MakeOrderCooked implements Command {
     private static final String KITCHEN_ADDR = "/kitchen";
     private static final String COOKED_STATUS = "cooked";
 
-    private static final String EX1 = "Error invalid address to redirect";
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         int cookedOrderId = Integer.parseInt(request.getParameter(COOKED_ORDER_ID_PARAM));
@@ -43,7 +41,7 @@ public class MakeOrderCooked implements Command {
         try {
             response.sendRedirect(KITCHEN_ADDR);
         } catch (IOException e) {
-            LOGGER.error(EX1, e);
+            LOGGER.error("Error invalid address to redirect", e);
         }
     }
 }

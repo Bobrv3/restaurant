@@ -28,7 +28,6 @@ public class RemoveDishFromMenu implements Command {
     private static final String MENU_ATTR = "menu";
     private static final String MAIN_PAGE_ADDR = "/home";
 
-    private static final String EX1 = "Error invalid address to redirect";
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         Integer idToRemove = Integer.parseInt(request.getParameter(DISH_ID_PARAM));
@@ -40,7 +39,7 @@ public class RemoveDishFromMenu implements Command {
 
             response.sendRedirect(MAIN_PAGE_ADDR);
         } catch (IOException e) {
-            LOGGER.error(EX1, e);
+            LOGGER.error("Error invalid address to redirect", e);
         } catch (ValidationException e) {
             try {
                 request.getRequestDispatcher(MessageFormat.format("/home?invalidDish=true&errMsgUpdDish={0}", e.getMessage())).forward(request, response);

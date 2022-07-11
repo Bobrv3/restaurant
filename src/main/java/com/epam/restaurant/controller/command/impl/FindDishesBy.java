@@ -22,6 +22,7 @@ public class FindDishesBy implements Command {
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
     private static final String CATEGORY_ID = "category_id";
+    private static final String DISHES_ATTR = "dishes";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
@@ -34,7 +35,7 @@ public class FindDishesBy implements Command {
 
         try {
             List<Dish> dishes = menuService.find(criteria);
-            request.getSession().setAttribute("dishes", dishes);
+            request.getSession().setAttribute(DISHES_ATTR, dishes);
         } catch (ValidationException e) {
             try {
                 request.getRequestDispatcher(MessageFormat.format("/home?invalidDish=true&errMsgUpdDish={0}", e.getMessage())).forward(request, response);

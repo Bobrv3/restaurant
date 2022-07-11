@@ -27,7 +27,6 @@ public class GetHistoryOfOrders implements Command {
     private static final String ORDERS_HISTORY_ATTR = "ordersHistory";
     private static final String HISTORY_OF_ORDERS_ADDR = "/historyOfOrders";
     private static final int FOUND_USER = 0;
-    private static final String EX = "Error invalid address to forward";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
@@ -47,7 +46,7 @@ public class GetHistoryOfOrders implements Command {
         try {
             request.getRequestDispatcher(HISTORY_OF_ORDERS_ADDR).forward(request, response);
         } catch (IOException e) {
-            LOGGER.error(EX, e);
+            LOGGER.error("Error invalid address to forward", e);
         }
 
     }

@@ -25,8 +25,6 @@ public class MoveToConfirmationOfOrders implements Command {
     private static final String ORDERS_FOR_CONFIRMATION_ATTR = "ordersForConfirmation";
     private static final String CONFIRMATION_OF_ORDERS_ADDR = "/confirmationOfOrders";
 
-    private static final String EX1 = "Error invalid address to redirect";
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         OrderService orderService = serviceProvider.getOrderService();
@@ -41,7 +39,7 @@ public class MoveToConfirmationOfOrders implements Command {
         try {
             response.sendRedirect(CONFIRMATION_OF_ORDERS_ADDR);
         } catch (IOException e) {
-            LOGGER.error(EX1, e);
+            LOGGER.error("Error invalid address to redirect", e);
         }
     }
 }

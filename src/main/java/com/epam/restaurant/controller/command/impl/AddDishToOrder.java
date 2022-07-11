@@ -25,22 +25,28 @@ public class AddDishToOrder implements Command {
     private static final Logger LOGGER = LogManager.getLogger(AddDishToOrder.class);
     private static final ServiceProvider serviceProvider =  ServiceProvider.getInstance();
 
+    private static final String ORDER_ATTR = "order";
+    private static final String QUANTITY_OF_DISHES_ATTR = "quantityOfDishes";
+    private static final String DISH_ID_PARAM = "dish_id";
+    private static final String QUANTITY_PARAM = "quantity";
+    private static final String MAIN_PAGE_ADDR = "/home";
+
     private static final int FOUND_DISH = 0;
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         HttpSession session = request.getSession();
-        Order order = (Order) session.getAttribute("order");
+        Order order = (Order) session.getAttribute(ORDER_ATTR);
 
         if (order == null) {
             order = new Order();
-            session.setAttribute("order", order);
+            session.setAttribute(ORDER_ATTR, order);
 
             Integer quantityOfDishes = 0;
-            session.setAttribute("quantityOfDishes", quantityOfDishes);
+            session.setAttribute(QUANTITY_OF_DISHES_ATTR, quantityOfDishes);
         }
 
-        String dishId = request.getParameter("dish_id");
+        String dishId = request.getParameter(DISH_ID_PARAM);
 
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), dishId);
@@ -52,7 +58,7 @@ public class AddDishToOrder implements Command {
             List<Dish> dishes = menuService.find(criteria);
 
             Dish dish = dishes.get(FOUND_DISH);
-            Integer newQuantity = Integer.parseInt(request.getParameter("quantity"));
+            Integer newQuantity = Integer.parseInt(request.getParameter(QUANTITY_PARAM));
 
             if (order.getOrderList().containsKey(dish)) {
                 Integer currentQuantity = order.getOrderList().get(dish);
@@ -65,7 +71,7 @@ public class AddDishToOrder implements Command {
 
             setQuantityOfDishesToSession(order.getOrderList(), session);
 
-            request.getRequestDispatcher("/home").forward(request, response);
+            request.getRequestDispatcher(MAIN_PAGE_ADDR).forward(request, response);
         }  catch (IOException e) {
             e.printStackTrace();
         } catch (ValidationException e) {
@@ -83,6 +89,6 @@ public class AddDishToOrder implements Command {
         for (Integer quantity : orderList.values()) {
             count += quantity;
         }
-        session.setAttribute("quantityOfDishes", count);
+        session.setAttribute(QUANTITY_OF_DISHES_ATTR, count);
     }
 }

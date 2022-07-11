@@ -24,6 +24,7 @@ public class PrintUserRegistrData implements Command {
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
     private static final String USER_ATTR = "user";
     private static final String USER_DATA_ATTR = "userData";
+    private static final String PERSONAL_INFO_ADDR = "/personalInfo";
     private static final int FOUND_USER = 0;
 
     @Override
@@ -42,9 +43,9 @@ public class PrintUserRegistrData implements Command {
 
         try {
             session.setAttribute(USER_DATA_ATTR, userData);
-            request.getRequestDispatcher("/personalInfo").forward(request, response);
+            request.getRequestDispatcher(PERSONAL_INFO_ADDR).forward(request, response);
         } catch (IOException e) {
-            LOGGER.error(e);
+            LOGGER.error("Error invalid address to forward during print user data",e);
         }
     }
 }

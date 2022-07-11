@@ -20,15 +20,21 @@ public class EditUser implements Command {
     private static final Logger LOGGER = LogManager.getLogger(EditUser.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
+    private static final String USER_NAME_PARAM = "userName";
+    private static final String PHONE_NUMBER_PARAM = "phoneNumber";
+    private static final String EMAIL_PARAM = "email";
+    private static final String USER_ATTR = "user";
+    private static final String USER_DATA_ATTR = "userData";
+
     private static final String PERSINAL_INFO_PAGE_ADDR = "/personalInfo";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
-        String userName = request.getParameter("userName");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String email = request.getParameter("email");
-        AuthorizedUser sessionAuthUser = (AuthorizedUser) request.getSession().getAttribute("user");
-        RegistrationUserData sessionUserData = (RegistrationUserData) request.getSession().getAttribute("userData");
+        String userName = request.getParameter(USER_NAME_PARAM);
+        String phoneNumber = request.getParameter(PHONE_NUMBER_PARAM);
+        String email = request.getParameter(EMAIL_PARAM);
+        AuthorizedUser sessionAuthUser = (AuthorizedUser) request.getSession().getAttribute(USER_ATTR);
+        RegistrationUserData sessionUserData = (RegistrationUserData) request.getSession().getAttribute(USER_DATA_ATTR);
 
         RegistrationUserData newUserData = new RegistrationUserData();
         newUserData.setName(sessionUserData.getName());
@@ -51,7 +57,7 @@ public class EditUser implements Command {
             UserService userService = serviceProvider.getUserService();
             userService.updateUser(sessionAuthUser.getLogin(), newUserData);
 
-            request.getSession().setAttribute("userData", newUserData);
+            request.getSession().setAttribute(USER_DATA_ATTR, newUserData);
 
             response.sendRedirect(PERSINAL_INFO_PAGE_ADDR);
         } catch (IOException e) {

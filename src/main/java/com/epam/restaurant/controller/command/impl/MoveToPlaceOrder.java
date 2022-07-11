@@ -31,7 +31,6 @@ public class MoveToPlaceOrder implements Command {
     private static final String PAYMENT_METHODS_ATTR = "paymentMethods";
     private static final String PLACE_ODER_ADDR = "/showPlaceOrder";
     private static final String COMMAND_NAME = MoveToPlaceOrder.class.getSimpleName();
-    private static final String EX1 = "Invalid address - {0}: getRequestDispatcher({0}) in the {1} command..";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
@@ -42,7 +41,7 @@ public class MoveToPlaceOrder implements Command {
         try {
             response.sendRedirect(PLACE_ODER_ADDR);
         } catch (IOException e) {
-            LOGGER.error(MessageFormat.format(EX1, PLACE_ODER_ADDR, COMMAND_NAME));
+            LOGGER.error(MessageFormat.format("Invalid address - {0}: getRequestDispatcher({0}) in the {1} command..", PLACE_ODER_ADDR, COMMAND_NAME));
         }
     }
 
