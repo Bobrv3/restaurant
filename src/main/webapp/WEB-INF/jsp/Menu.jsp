@@ -9,6 +9,7 @@
         <fmt:message bundle="${loc}" key="local.button.add" var="btn_add" />
         <fmt:message bundle="${loc}" key="local.button.save" var="saveFmt" />
         <fmt:message bundle="${loc}" key="local.link.addCategory" var="addCategoryFmt" />
+        <fmt:message bundle="${loc}" key="local.txt.dishAddedMsg" var="dishAddedMsgFmt" />
 
         <link rel="stylesheet" href="css/Menu.css">
 
@@ -108,6 +109,9 @@
 
                                     <input type="submit" value="${btn_add}" class="yellow_button" id="addToOrderBtn">
                                 </form>
+                                <c:if test="${param.addedToOrder == true && dish.id == param.addedDishId}">
+                                    <div style="color: rgb(27, 167, 27);">${dishAddedMsgFmt} &#10004</div>
+                                </c:if>
                             </td>
 
                             <c:if test="${user.roleId == 1}">

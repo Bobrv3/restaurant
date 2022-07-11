@@ -29,7 +29,8 @@ public class AddDishToOrder implements Command {
     private static final String QUANTITY_OF_DISHES_ATTR = "quantityOfDishes";
     private static final String DISH_ID_PARAM = "dish_id";
     private static final String QUANTITY_PARAM = "quantity";
-    private static final String MAIN_PAGE_ADDR = "/home";
+    private static final String MAIN_PAGE_ADDR = "/home?addedDishId={0}&addedToOrder=true";
+    private static final String MAIN_PAGE_WITH_VALIDATION_ERROR = "/home?invalidDish=true&errMsgUpdDish={0}";
 
     private static final int FOUND_DISH = 0;
 
@@ -71,12 +72,12 @@ public class AddDishToOrder implements Command {
 
             setQuantityOfDishesToSession(order.getOrderList(), session);
 
-            request.getRequestDispatcher(MAIN_PAGE_ADDR).forward(request, response);
+            request.getRequestDispatcher(MessageFormat.format(MAIN_PAGE_ADDR, dishId)).forward(request, response);
         }  catch (IOException e) {
             e.printStackTrace();
         } catch (ValidationException e) {
             try {
-                request.getRequestDispatcher(MessageFormat.format("/home?invalidDish=true&errMsgUpdDish={0}", e.getMessage())).forward(request, response);
+                request.getRequestDispatcher(MessageFormat.format(MAIN_PAGE_WITH_VALIDATION_ERROR, e.getMessage())).forward(request, response);
             } catch (IOException ex) {
                 LOGGER.error("Error invalid address to forward when Add Dish To Order", e);
             }
