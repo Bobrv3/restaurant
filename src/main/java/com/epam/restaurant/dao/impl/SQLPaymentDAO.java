@@ -3,6 +3,7 @@ package com.epam.restaurant.dao.impl;
 import com.epam.restaurant.bean.PaymentMethod;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
+import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.PaymentDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +21,7 @@ import java.util.List;
 public class SQLPaymentDAO implements PaymentDAO {
     private static final Logger LOGGER = LogManager.getLogger(SQLPaymentDAO.class);
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static final DAOProvider daoProvider = DAOProvider.getInstance();
 
     private static final String INSERT_INVOICE_QUERY = "INSERT INTO invoice(date, status, orders_id) VALUES(?,?,?)";
     private static final String INSERT_PAYMENT_QUERY = "INSERT INTO payments(date, status, invoice_id, payment_methods_id) VALUES(?,?,?,?)";
@@ -36,7 +38,10 @@ public class SQLPaymentDAO implements PaymentDAO {
         Connection connection = null;
 
         try {
-            connection = connectionPool.takeConnection();
+            connection = DAOProvider.getInstance().getTransactionDAO().getConnectionHolder().get();
+            if (connection == null) {
+                connection = connectionPool.takeConnection();
+            }
 
             preparedStatement = connection.prepareStatement(INSERT_INVOICE_QUERY, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setTimestamp (1, new Timestamp(System.currentTimeMillis()));
@@ -111,7 +116,10 @@ public class SQLPaymentDAO implements PaymentDAO {
         Connection connection = null;
 
         try {
-            connection = connectionPool.takeConnection();
+            connection = DAOProvider.getInstance().getTransactionDAO().getConnectionHolder().get();
+            if (connection == null) {
+                connection = connectionPool.takeConnection();
+            }
 
             preparedStatement = connection.prepareStatement(INSERT_PAYMENT_QUERY);
             preparedStatement.setTimestamp (1, new Timestamp(System.currentTimeMillis()));

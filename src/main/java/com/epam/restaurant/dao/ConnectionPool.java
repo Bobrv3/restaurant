@@ -91,7 +91,7 @@ public class ConnectionPool {
             ps.close();
         }
 
-        if (con != null) {
+        if (con != null && DAOProvider.getInstance().getTransactionDAO().getConnectionHolder().get() == null) {
             con.close();
         }
     }
@@ -105,7 +105,7 @@ public class ConnectionPool {
             st.close();
         }
 
-        if (con != null) {
+        if (con != null && DAOProvider.getInstance().getTransactionDAO().getConnectionHolder().get() == null) {
             con.close();
         }
     }
@@ -145,7 +145,7 @@ public class ConnectionPool {
          * Instead of closing the connection, returns it to the connections array
          */
         @Override
-        public void close() {
+        public void close() throws SQLException {
             try {
                 putConnection(this);
             } catch (InterruptedException e) {

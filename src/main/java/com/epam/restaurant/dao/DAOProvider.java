@@ -4,6 +4,8 @@ import com.epam.restaurant.dao.impl.SQLMenuDAO;
 import com.epam.restaurant.dao.impl.SQLOrderDAO;
 import com.epam.restaurant.dao.impl.SQLPaymentDAO;
 import com.epam.restaurant.dao.impl.SQLUserDAO;
+import com.epam.restaurant.dao.util.TransactionDAO;
+import com.epam.restaurant.dao.util.TransactionImpl;
 
 public class DAOProvider {
     private static final DAOProvider instance = new DAOProvider();
@@ -11,6 +13,7 @@ public class DAOProvider {
     private final MenuDAO menuDAOImpl = new SQLMenuDAO();
     private final OrderDAO orderDAOImpl = new SQLOrderDAO();
     private final PaymentDAO paymentDAO = new SQLPaymentDAO();
+    private final TransactionDAO transactionDAO = new TransactionImpl();
 
 
     private DAOProvider() {
@@ -36,4 +39,7 @@ public class DAOProvider {
         return paymentDAO;
     }
 
+    public TransactionDAO getTransactionDAO() {
+        return transactionDAO;
+    }
 }

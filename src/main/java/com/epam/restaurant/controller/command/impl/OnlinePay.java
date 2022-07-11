@@ -1,6 +1,8 @@
 package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.controller.command.Command;
+import com.epam.restaurant.dao.DAOException;
+import com.epam.restaurant.dao.util.TransactionImpl;
 import com.epam.restaurant.service.PaymentService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
@@ -22,27 +24,32 @@ public class OnlinePay implements Command {
     private static final String ORDER_ATTR = "order";
     private static final String FINISHING_THE_ORDER_ADDR = "/finishingTheOrder";
 
-    private static final String EX1 = "Invalid address to redirect in online pay";
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
-        int invoiceId = PlaceOrder.setInvoice(request);
-
-        HttpSession session = request.getSession();
-        int paymentMethodId = (Integer) session.getAttribute(PAYMENT_ATTR);
-
-        PaymentService paymentService = serviceProvider.getPaymentService();
-        paymentService.createPayment(invoiceId, paymentMethodId);
-
-        session.removeAttribute(ORDER_ATTR);
-        session.removeAttribute(PAYMENT_ATTR);
-        session.removeAttribute(RECEIVING_ATTR);
-        session.removeAttribute(QUANTITY_OF_DISHES_ATTR);
-
         try {
+            serviceProvider.getTransaction().startTransaction();
+
+            int invoiceId = PlaceOrder.setInvoice(request);
+
+            HttpSession session = request.getSession();
+            int paymentMethodId = (Integer) session.getAttribute(PAYMENT_ATTR);
+
+            PaymentService paymentService = serviceProvider.getPaymentService();
+            paymentService.createPayment(invoiceId, paymentMethodId);
+
+            session.removeAttribute(ORDER_ATTR);
+            session.removeAttribute(PAYMENT_ATTR);
+            session.removeAttribute(RECEIVING_ATTR);
+            session.removeAttribute(QUANTITY_OF_DISHES_ATTR);
+
+            serviceProvider.getTransaction().commit();
+
             response.sendRedirect(FINISHING_THE_ORDER_ADDR);
+        } catch (ServiceException e) {
+            LOGGER.info("Rollback transaction during online pay..");
+            serviceProvider.getTransaction().rollback();
         } catch (IOException e) {
-            LOGGER.error(EX1, e);
+            LOGGER.error("Invalid address to redirect in online pay", e);
         }
     }
 }

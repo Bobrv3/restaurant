@@ -7,6 +7,7 @@ import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.OrderDAO;
+import com.epam.restaurant.dao.util.TransactionImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,11 +31,34 @@ class SQLOrderDAOTest {
     }
 
     @Test
-    void createOrder_equalsNextGeneratedId_True() throws DAOException {
-        int nextId = 44;
-        int actualId = orderDAO.createOrder(new Order(), 9);
+    void createOrder_equalsNextGeneratedId_True() throws DAOException, InterruptedException {
+        MyThread thread1 = new MyThread();
+        MyThread thread2 = new MyThread();
 
-        Assertions.assertEquals(nextId, actualId);
+        thread1.start();
+        thread2.start();
+
+        thread1.join();
+        thread2.join();
+    }
+
+    class MyThread extends Thread {
+        @Override
+        public void run() {
+            try {
+                int nextId = 44;
+                DAOProvider.getInstance().getTransactionDAO().startTransaction();
+                int actualId = orderDAO.createOrder(new Order(), 9);
+                DAOProvider.getInstance().getTransactionDAO().commit();
+                Assertions.assertEquals(nextId, actualId);
+            } catch (DAOException e) {
+                try {
+                    DAOProvider.getInstance().getTransactionDAO().rollback();
+                } catch (DAOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
     @Test

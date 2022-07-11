@@ -2,9 +2,10 @@ package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.bean.Dish;
-import com.epam.restaurant.bean.Menu;
 import com.epam.restaurant.bean.Order;
 import com.epam.restaurant.controller.command.Command;
+import com.epam.restaurant.dao.DAOException;
+import com.epam.restaurant.dao.util.TransactionImpl;
 import com.epam.restaurant.service.OrderService;
 import com.epam.restaurant.service.PaymentService;
 import com.epam.restaurant.service.ServiceException;
@@ -45,9 +46,12 @@ public class PlaceOrder implements Command {
         try {
             if (CARD_ONLINE_ID == paymentMethodId) {
                 response.sendRedirect(ONLINE_PAY_ADDR);
-            }
-            else {
+            } else {
+                serviceProvider.getTransaction().startTransaction();
+
                 setInvoice(request);
+
+                serviceProvider.getTransaction().commit();
 
                 session.removeAttribute(ORDER_ATTR);
                 session.removeAttribute(PAYMENT_BY_PARAM);
@@ -56,8 +60,10 @@ public class PlaceOrder implements Command {
 
                 response.sendRedirect(FINISHING_THE_ORDER_ADDR);
             }
-        }
-        catch (IOException e) {
+        } catch (ServiceException e) {
+            serviceProvider.getTransaction().rollback();
+            throw new ServiceException(e);
+        } catch (IOException e) {
             LOGGER.error("Invalid address to forward or redirect in the PlaceOrder command..", e);
         }
     }

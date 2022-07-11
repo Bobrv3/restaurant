@@ -6,6 +6,7 @@ import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
+import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.OrderDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,10 +48,13 @@ public class SQLOrderDAO implements OrderDAO {
         Connection connection = null;
 
         try {
-            connection = connectionPool.takeConnection();
+            connection = DAOProvider.getInstance().getTransactionDAO().getConnectionHolder().get();
+            if (connection == null) {
+                connection = connectionPool.takeConnection();
+            }
 
             preparedStatement = connection.prepareStatement(INSERT_ORDER_QUERY, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setTimestamp (1, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(2, IN_PROCESSING);
             preparedStatement.setInt(3, userId);
             preparedStatement.executeUpdate();
@@ -81,7 +85,10 @@ public class SQLOrderDAO implements OrderDAO {
         Connection connection = null;
 
         try {
-            connection = connectionPool.takeConnection();
+            connection = DAOProvider.getInstance().getTransactionDAO().getConnectionHolder().get();
+            if (connection == null) {
+                connection = connectionPool.takeConnection();
+            }
 
             preparedStatement = connection.prepareStatement(INSERT_ORDER_DETAIL_QUERY);
             preparedStatement.setInt(1, oderId);
