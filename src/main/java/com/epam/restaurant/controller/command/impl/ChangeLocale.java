@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 public class ChangeLocale implements Command {
     private static final Logger LOGGER = LogManager.getLogger(ChangeLocale.class);
@@ -27,7 +26,7 @@ public class ChangeLocale implements Command {
         try {
             request.getRequestDispatcher(lastPage).forward(request, response);
         } catch (IOException ex) {
-            LOGGER.error(MessageFormat.format("Invalid address to forward or redirect in the authorization command..", ex));
+            LOGGER.error("Invalid address to forward or redirect in the authorization command..", ex);
         }
 
     }

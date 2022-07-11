@@ -2,7 +2,6 @@ package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.ServiceException;
-import com.epam.restaurant.service.ServiceProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

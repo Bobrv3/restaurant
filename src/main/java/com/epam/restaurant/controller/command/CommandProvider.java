@@ -1,26 +1,27 @@
 package com.epam.restaurant.controller.command;
 
+import com.epam.restaurant.controller.command.impl.AddDishToOrder;
 import com.epam.restaurant.controller.command.impl.AddNewCategoryToMenu;
 import com.epam.restaurant.controller.command.impl.AddNewDishToMenu;
-import com.epam.restaurant.controller.command.impl.AddDishToOrder;
 import com.epam.restaurant.controller.command.impl.Authorization;
 import com.epam.restaurant.controller.command.impl.ChangeLocale;
 import com.epam.restaurant.controller.command.impl.CleanCurrentOrder;
-import com.epam.restaurant.controller.command.impl.EditUser;
-import com.epam.restaurant.controller.command.impl.MakeOrderCooked;
+import com.epam.restaurant.controller.command.impl.ConfirmOrder;
 import com.epam.restaurant.controller.command.impl.EditCategory;
 import com.epam.restaurant.controller.command.impl.EditDish;
+import com.epam.restaurant.controller.command.impl.EditUser;
 import com.epam.restaurant.controller.command.impl.FindDishesBy;
 import com.epam.restaurant.controller.command.impl.GetCategories;
 import com.epam.restaurant.controller.command.impl.GetHistoryOfOrders;
 import com.epam.restaurant.controller.command.impl.GetMenu;
 import com.epam.restaurant.controller.command.impl.GetOrdersInProcessing;
+import com.epam.restaurant.controller.command.impl.MakeOrderCooked;
 import com.epam.restaurant.controller.command.impl.MoveToAccount;
-import com.epam.restaurant.controller.command.impl.MoveToCookOrders;
-import com.epam.restaurant.controller.command.impl.NoNameCommand;
-import com.epam.restaurant.controller.command.impl.MoveToPlaceOrder;
-import com.epam.restaurant.controller.command.impl.OnlinePay;
 import com.epam.restaurant.controller.command.impl.MoveToConfirmationOfOrders;
+import com.epam.restaurant.controller.command.impl.MoveToCookOrders;
+import com.epam.restaurant.controller.command.impl.MoveToPlaceOrder;
+import com.epam.restaurant.controller.command.impl.NoNameCommand;
+import com.epam.restaurant.controller.command.impl.OnlinePay;
 import com.epam.restaurant.controller.command.impl.PlaceOrder;
 import com.epam.restaurant.controller.command.impl.PrintUserRegistrData;
 import com.epam.restaurant.controller.command.impl.QuitFromAccount;
@@ -28,12 +29,10 @@ import com.epam.restaurant.controller.command.impl.Registration;
 import com.epam.restaurant.controller.command.impl.RemoveCategory;
 import com.epam.restaurant.controller.command.impl.RemoveDishFromMenu;
 import com.epam.restaurant.controller.command.impl.RemoveDishFromOrder;
-import com.epam.restaurant.controller.command.impl.ConfirmOrder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 public final class CommandProvider {

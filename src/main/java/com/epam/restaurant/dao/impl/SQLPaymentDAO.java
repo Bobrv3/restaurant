@@ -21,7 +21,6 @@ import java.util.List;
 public class SQLPaymentDAO implements PaymentDAO {
     private static final Logger LOGGER = LogManager.getLogger(SQLPaymentDAO.class);
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private static final DAOProvider daoProvider = DAOProvider.getInstance();
 
     private static final String INSERT_INVOICE_QUERY = "INSERT INTO invoice(date, status, orders_id) VALUES(?,?,?)";
     private static final String INSERT_PAYMENT_QUERY = "INSERT INTO payments(date, status, invoice_id, payment_methods_id) VALUES(?,?,?,?)";

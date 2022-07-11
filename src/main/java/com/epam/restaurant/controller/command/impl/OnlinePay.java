@@ -1,8 +1,6 @@
 package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.controller.command.Command;
-import com.epam.restaurant.dao.DAOException;
-import com.epam.restaurant.dao.util.TransactionImpl;
 import com.epam.restaurant.service.PaymentService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;

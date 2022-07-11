@@ -4,8 +4,6 @@ import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Order;
 import com.epam.restaurant.controller.command.Command;
-import com.epam.restaurant.dao.DAOException;
-import com.epam.restaurant.dao.util.TransactionImpl;
 import com.epam.restaurant.service.OrderService;
 import com.epam.restaurant.service.PaymentService;
 import com.epam.restaurant.service.ServiceException;
@@ -31,8 +29,6 @@ public class PlaceOrder implements Command {
     private static final int CARD_ONLINE_ID = 2;
     private static final String FINISHING_THE_ORDER_ADDR = "/finishingTheOrder";
     private static final String ONLINE_PAY_ADDR = "/onlinePay";
-    private static final String MENU_ADDR = "menu";
-
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {

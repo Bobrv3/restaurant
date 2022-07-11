@@ -12,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 public class Authorization implements Command {
     private static final Logger LOGGER = LogManager.getLogger(Authorization.class);
@@ -46,7 +45,7 @@ public class Authorization implements Command {
                 response.sendRedirect(HOME_ADDRESS);
             }
         }  catch (IOException ex) {
-            LOGGER.error(MessageFormat.format("Invalid address to forward or redirect in the authorization command..", ex));
+            LOGGER.error("Invalid address to forward or redirect in the authorization command..", ex);
         }
     }
 }
