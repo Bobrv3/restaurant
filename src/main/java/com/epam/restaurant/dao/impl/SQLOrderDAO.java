@@ -125,7 +125,7 @@ public class SQLOrderDAO implements OrderDAO {
 
             StringBuilder where = new StringBuilder("");
             for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue(), AND));
+                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
             }
             where = new StringBuilder(where.substring(0, where.length() - AND.length()));
 
@@ -212,7 +212,7 @@ public class SQLOrderDAO implements OrderDAO {
 
             StringBuilder where = new StringBuilder("");
             for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue(), AND));
+                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
             }
             where = new StringBuilder(where.substring(0, where.length() - AND.length()));
 
@@ -293,7 +293,7 @@ public class SQLOrderDAO implements OrderDAO {
 
             StringBuilder where = new StringBuilder("");
             for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue(), AND));
+                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
             }
             where = new StringBuilder(where.substring(0, where.length() - AND.length()));
 
