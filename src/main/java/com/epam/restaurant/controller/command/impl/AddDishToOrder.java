@@ -52,8 +52,6 @@ public class AddDishToOrder implements Command {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), dishId);
 
-        // TODO вывести сообщение о том, что блюдо добавлено в корзину
-
         try {
             MenuService menuService = serviceProvider.getMenuService();
             List<Dish> dishes = menuService.find(criteria);
