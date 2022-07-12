@@ -25,6 +25,11 @@ public class UserImpl implements UserService {
 
     @Override
     public AuthorizedUser signIn(String login, char[] password) throws ServiceException {
+        if (login == null || password == null) {
+            LOGGER.info("login or password is null in UserImpl.find()");
+            return new AuthorizedUser();
+        }
+
         try {
             AuthorizedUser user = userDAO.signIn(login, password);
             return user;
@@ -52,10 +57,7 @@ public class UserImpl implements UserService {
 
     @Override
     public List<RegistrationUserData> find(Criteria criteria) throws ServiceException {
-        if (criteria == null) {
-            LOGGER.info("criteria is null in UserImpl.find()");
-            return Collections.emptyList();
-        }
+        UserValidator.validate(criteria);
 
         try {
             return userDAO.find(criteria);
