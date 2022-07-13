@@ -14,13 +14,13 @@ import java.io.IOException;
 import java.text.MessageFormat;
 
 
-public class RestaurantController extends HttpServlet {
-    private static final Logger LOGGER = LogManager.getLogger(RestaurantController.class);
+public class Controller extends HttpServlet {
+    private static final Logger LOGGER = LogManager.getLogger(Controller.class);
     private static final CommandProvider commandProvider = CommandProvider.getInstance();
     private static final String PARAMETER_COMMAND = "command";
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         Command command = commandProvider.getCommand(req.getParameter(PARAMETER_COMMAND).toUpperCase());
 
         try {
@@ -47,27 +47,6 @@ public class RestaurantController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        Command command = commandProvider.getCommand(req.getParameter(PARAMETER_COMMAND).toUpperCase());
-
-        try {
-            command.execute(req, resp);
-        } catch (ServiceException | ServletException e) {
-            LOGGER.error(e.getMessage(), e);
-
-            try {
-                int lastIndx = e.getMessage().lastIndexOf(":");
-                if (lastIndx == -1) {
-                    String errorMsg = e.getMessage();
-
-                    resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
-
-                } else {
-                    String errorMsg = e.getMessage().substring(lastIndx);
-                    resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
-                }
-            } catch (IOException ex) {
-                LOGGER.error("Error: invalid address to redirect");
-            }
-        }
+        doGet(req, resp);
     }
 }

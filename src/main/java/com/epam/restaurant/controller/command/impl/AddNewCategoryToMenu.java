@@ -6,6 +6,7 @@ import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
 import com.epam.restaurant.service.validation.ValidationException;
+import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.MessageFormat;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class AddNewCategoryToMenu implements Command {
@@ -22,28 +23,38 @@ public class AddNewCategoryToMenu implements Command {
 
     private static final String CATEGORY_NAME = "categoryName";
     private static final String CATEGORIES_ATTR = "categories";
-    private static final String MAIN_PAGE_ADDR = "/home";
+    private static final String JSON_UTF8_TYPE = "application/json; charset=UTF-8";
+    private static final String JSON_ARRAY_OF_OBJECT = "[%s]";
+    private static final String ERROR_MSG_JSON = "[{\"validationError\": \"true\", \"message\": \"%s\"}]";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         String categoryName = request.getParameter(CATEGORY_NAME);
+        PrintWriter writer = null;
 
         try {
+            writer = response.getWriter();
+
             MenuService menuService = serviceProvider.getMenuService();
             int categoryId = menuService.addCategory(categoryName);
 
             List<Category> categories = (List<Category>) request.getSession().getAttribute(CATEGORIES_ATTR);
-            categories.add(new Category(categoryId, categoryName));
+            Category createdCategory = new Category(categoryId, categoryName);
+            categories.add(createdCategory);
 
-            response.sendRedirect(MAIN_PAGE_ADDR);
+            response.setContentType(JSON_UTF8_TYPE);
+            writer.println(String.format(JSON_ARRAY_OF_OBJECT, new Gson().toJson(createdCategory)));
         } catch (IOException e) {
-            LOGGER.error("Error invalid address to redirect", e);
-        } catch (ValidationException e) {
             try {
-                request.getRequestDispatcher(MessageFormat.format("/home?invalidCategory=true&errMsgUpdCategory={0}", e.getMessage())).forward(request, response);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             } catch (IOException ex) {
-                LOGGER.error("Error invalid address to forward in edit category", e);
+                ex.printStackTrace();
             }
+            LOGGER.error("Error to get writer when try to add new category", e);
+            throw new ServletException(e);
+        } catch (ValidationException e) {
+            response.setContentType(JSON_UTF8_TYPE);
+            writer.println(String.format(ERROR_MSG_JSON, e.getMessage()));
         }
     }
 }

@@ -22,22 +22,23 @@
         </c:if>
 
         <c:if test="${param.invalidCategory || param.invalidDish}">
-            <h3 style="color: red; text-align: center;">${param.errMsgUpdCategory}</h3>
-            <h3 style="color: red; text-align: center;">${param.errMsgUpdDish}</h3>
+            <h3 id="errorMsg">${param.errMsgUpdCategory}</h3>
+            <h3 id="errorMsg">${param.errMsgUpdDish}</h3>
         </c:if>
 
         <c:forEach items="${categories}" var="category">
             <c:if test="${param.editedCategory == category.id}">
-                <form action="restaurant" method="post" style="width: 84%;" class="CategoryName">
+                <form action="restaurant" method="post" class="CategoryName">
                     <input type="hidden" name="command" value="edit_category">
                     <input type="hidden" name="editedCategoryId" value="${category.id}">
 
-                    <input type="text" name="categoryName" value="${category.name}" required style="font-size: 20px;">
+                    <input type="text" name="categoryName" value="${category.name}" required>
                     <input type="image" src="../../images/save.png" alt="save" id="imgInEditCategory">
                 </form>
             </c:if>
             <c:if test="${param.editedCategory != category.id}">
-                <h2 class="CategoryName">${category.name}
+                <h2 class="CategoryName">
+                    ${category.name}
                     <c:if test="${user.roleId == 1}">
                         <a href="/home?editedCategory=${category.id}">
                             <img src="../../images/edit.png" alt="edit" class="imgInTd">
@@ -169,25 +170,16 @@
             </table>
         </c:forEach>
 
-        <c:if test="${user.roleId == 1 && !param.createCategory}">
-            <h2 class="CategoryName">
+        <c:if test="${user.roleId == 1}">
+            <h2 id="create-category-txtbtn" class="CategoryName">
                 ${addCategoryFmt}
-                <a href="/home?createCategory=true">
-                    <img src="../../images/addContent.png" alt="add category" id="imgAddContent">
-                </a>
+                <input id="add-category-btn" type="image" src="../../images/addContent.png">
             </h2>
         </c:if>
 
-        <c:if test="${param.createCategory}">
-            <h2 class="CategoryName">
-                <form action="restaurant" method="post">
-                    <input type="hidden" name="command" value="add_category">
-
-                    <input type="text" name="categoryName" value="" required style="width: 150px;">
-                    <input type="submit" value="${addCategoryFmt}">
-                </form>
-            </h2>
-        </c:if>
-
+        <script src="https://code.jquery.com/jquery-2.2.4.js"
+            integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 
         <script src="../../js/Menu.js"></script>
+
+        <script src="../../js/MenuAjax.js"></script>

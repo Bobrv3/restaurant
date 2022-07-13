@@ -16,7 +16,7 @@
         <jsp:include page="/WEB-INF/jsp/Header.jsp" />
 
         <div class="wrapper">
-            <main class="main">
+            <main id="main-block" class="main">
                 <jsp:include page="/WEB-INF/jsp/Menu.jsp" />
             </main>
         </div>
