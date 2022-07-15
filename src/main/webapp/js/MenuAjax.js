@@ -41,7 +41,7 @@ function addNewCategory(event) {
 
     const textInp = this.parentElement.txtInput;
     const hiddenInp = this.parentElement.hiddenInp;
-    const promise = $.post("http://localhost:8888/restaurant", {
+    const promise = $.post("http://localhost:8888/ajaxController", {
         command: hiddenInp.value,
         categoryName: textInp.value
     }).fail(() => {
@@ -53,56 +53,54 @@ function addNewCategory(event) {
 
 var errorMsg;
 
-function onDataReceived(data) {
-    data.forEach(element => {
-        if (element.validationError) {
-            if (document.querySelector('#editCategoryForm').lastChild == errorMsg) {
-                document.querySelector('#editCategoryForm').removeChild(errorMsg);
-            }
-            errorMsg = document.createElement('h3');
-            errorMsg.id = "errorMsg";
-            errorMsg.innerHTML = element.message;
-
-            document.querySelector('#editCategoryForm').appendChild(errorMsg);
-        } else {
-            if (document.querySelector('#editCategoryForm').lastChild == errorMsg) {
-                document.querySelector('#editCategoryForm').removeChild(errorMsg);
-            }
-
-            var categoryId = element.id;
-            var categoryName = element.name;
-
-            const createdCategory = document.createElement('h2');
-            createdCategory.className = 'CategoryName';
-            createdCategory.innerHTML =
-                `${categoryName} 
-                <a href="/home?editedCategory=${categoryId}">
-                    <img src="../../images/edit.png" alt="edit" class="imgInTd">
-                </a>
-                <form action="restaurant" method="post">
-                    <input type="hidden" name="command" value="remove_category">
-                    <input type="hidden" name="categoryId" value=${categoryId}>
-
-                    <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd">
-                </form>`;
-
-            const main = document.querySelector('#main-block');
-            const createCategoryForm = document.querySelector('#create-category-txtbtn');
-            main.insertBefore(createdCategory, createCategoryForm);
-
-            const table = document.createElement('table');
-            table.innerHTML =
-                `<tr>
-                    <td colspan="5">
-                        <a href="/home?createDish=true&categoryForAdd=${categoryId}">
-                            <img src="../../images/addContent.png" alt="add dish" id="imgAddContent">
-                        </a>
-                    </td>
-                </tr>`;
-            main.insertBefore(table, createCategoryForm);
-
-            createCategoryForm.hidden = false;
-            document.querySelector('#editCategoryForm').remove();
+function onDataReceived(response) {
+    if (response[0].validationError) {
+        if (document.querySelector('#editCategoryForm').lastChild == errorMsg) {
+            document.querySelector('#editCategoryForm').removeChild(errorMsg);
         }
-    });
+        errorMsg = document.createElement('h3');
+        errorMsg.id = "errorMsg";
+        errorMsg.innerHTML = response[0].message;
+
+        document.querySelector('#editCategoryForm').appendChild(errorMsg);
+    } else {
+        if (document.querySelector('#editCategoryForm').lastChild == errorMsg) {
+            document.querySelector('#editCategoryForm').removeChild(errorMsg);
+        }
+
+        var categoryId = response[0].id;
+        var categoryName = response[0].name;
+
+        const createdCategory = document.createElement('h2');
+        createdCategory.className = 'CategoryName';
+        createdCategory.innerHTML =
+            `${categoryName} 
+            <a href="/home?editedCategory=${categoryId}">
+                <img src="../../images/edit.png" alt="edit" class="imgInTd">
+            </a>
+            <form action="restaurant" method="post">
+                <input type="hidden" name="command" value="remove_category">
+                <input type="hidden" name="categoryId" value=${categoryId}>
+
+                <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd">
+            </form>`;
+
+        const main = document.querySelector('#main-block');
+        const createCategoryForm = document.querySelector('#create-category-txtbtn');
+        main.insertBefore(createdCategory, createCategoryForm);
+
+        const table = document.createElement('table');
+        table.innerHTML =
+            `<tr>
+                <td colspan="5">
+                    <a href="/home?createDish=true&categoryForAdd=${categoryId}">
+                        <img src="../../images/addContent.png" alt="add dish" id="imgAddContent">
+                    </a>
+                </td>
+            </tr>`;
+        main.insertBefore(table, createCategoryForm);
+
+        createCategoryForm.hidden = false;
+        document.querySelector('#editCategoryForm').remove();
+    }
 }

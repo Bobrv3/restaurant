@@ -24,7 +24,6 @@ public class AddNewCategoryToMenu implements Command {
     private static final String CATEGORY_NAME = "categoryName";
     private static final String CATEGORIES_ATTR = "categories";
     private static final String JSON_UTF8_TYPE = "application/json; charset=UTF-8";
-    private static final String JSON_ARRAY_OF_OBJECT = "[%s]";
     private static final String ERROR_MSG_JSON = "[{\"validationError\": \"true\", \"message\": \"%s\"}]";
 
     @Override
@@ -43,7 +42,7 @@ public class AddNewCategoryToMenu implements Command {
             categories.add(createdCategory);
 
             response.setContentType(JSON_UTF8_TYPE);
-            writer.println(String.format(JSON_ARRAY_OF_OBJECT, new Gson().toJson(createdCategory)));
+            writer.println(new Gson().toJson(createdCategory));
         } catch (IOException e) {
             try {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
