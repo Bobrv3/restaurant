@@ -24,7 +24,7 @@ public class AddNewCategoryToMenu implements Command {
     private static final String CATEGORY_NAME = "categoryName";
     private static final String CATEGORIES_ATTR = "categories";
     private static final String JSON_UTF8_TYPE = "application/json; charset=UTF-8";
-    private static final String ERROR_MSG_JSON = "[{\"validationError\": \"true\", \"message\": \"%s\"}]";
+    private static final String ERROR_MSG_JSON = "{\"validationError\": \"true\", \"message\": \"%s\"}";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {

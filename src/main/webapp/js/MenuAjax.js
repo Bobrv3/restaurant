@@ -41,26 +41,28 @@ function addNewCategory(event) {
 
     const textInp = this.parentElement.txtInput;
     const hiddenInp = this.parentElement.hiddenInp;
-    const promise = $.post("http://localhost:8888/ajaxController", {
-        command: hiddenInp.value,
-        categoryName: textInp.value
-    }).fail(() => {
-        window.location = "http://localhost:8888/errorPage";
-    });
 
-    promise.then(onDataReceived);
+    const url = "http://localhost:8888/ajaxController"
+    const body = `command=${hiddenInp.value}&categoryName=${textInp.value}`
+
+    const promise = sendRequest(url, 'POST', body)
+    promise.then(onDataReceived)
+        .catch((response) => {
+            var error = response.statusText
+            window.location = `http://localhost:8888/errorPage?errorMsg=${error}`
+        })
 }
 
 var errorMsg;
 
 function onDataReceived(response) {
-    if (response[0].validationError) {
+    if (response.validationError) {
         if (document.querySelector('#editCategoryForm').lastChild == errorMsg) {
             document.querySelector('#editCategoryForm').removeChild(errorMsg);
         }
         errorMsg = document.createElement('h3');
         errorMsg.id = "errorMsg";
-        errorMsg.innerHTML = response[0].message;
+        errorMsg.innerHTML = response.message;
 
         document.querySelector('#editCategoryForm').appendChild(errorMsg);
     } else {
@@ -68,8 +70,8 @@ function onDataReceived(response) {
             document.querySelector('#editCategoryForm').removeChild(errorMsg);
         }
 
-        var categoryId = response[0].id;
-        var categoryName = response[0].name;
+        var categoryId = response.id;
+        var categoryName = response.name;
 
         const createdCategory = document.createElement('h2');
         createdCategory.className = 'CategoryName';
