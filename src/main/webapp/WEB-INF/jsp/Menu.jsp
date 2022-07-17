@@ -37,7 +37,7 @@
                 </form>
             </c:if>
             <c:if test="${param.editedCategory != category.id}">
-                <h2 class="CategoryName">
+                <h2 id="category${category.id}" class="CategoryName">
                     <label>${category.name}</label>
                     <c:if test="${user.roleId == 1}">
                         <input type="image" src="../../images/edit.png" alt="edit" class="imgInTd"
@@ -52,7 +52,7 @@
             <table>
                 <c:forEach items="${menu.getDishes()}" var="dish">
                     <c:if test="${dish.categoryId == category.id}">
-                        <tr>
+                        <tr id="dish${dish.id}row">
                             <c:if test="${param.editedDishId == dish.id}">
                                 <form action="restaurant" method="post">
                                     <input type="hidden" name="command" value="edit_dish">
@@ -111,9 +111,8 @@
 
                             <c:if test="${user.roleId == 1}">
                                 <td style="padding-right: 30px;">
-                                    <a href="/restaurant?command=remove_from_menu&&dishId=${dish.id}">
-                                        <img src="../../images/remove.png" alt="remove" class="imgInTd">
-                                    </a>
+                                    <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd"
+                                        onclick="removeDishFromMenu(`${dish.id}`, event)">
 
                                     <a href="/home?editedDishId=${dish.id}">
                                         <img src="../../images/edit.png" alt="edit" class="imgInTd">
@@ -176,4 +175,5 @@
         <script src="../../js/Menu/AddNewCategory.js"></script>
         <script src="../../js/Menu/EditCategory.js"></script>
         <script src="../../js/Menu/RemoveCategory.js"></script>
+        <script src="../../js/Menu/RemoveDishFromMenu.js"></script>
         <script src="../../js/Menu/AddReduceBtn.js"></script>

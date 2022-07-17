@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.text.MessageFormat;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class RemoveDishFromMenu implements Command {
@@ -26,26 +26,35 @@ public class RemoveDishFromMenu implements Command {
 
     private static final String DISH_ID_PARAM = "dishId";
     private static final String MENU_ATTR = "menu";
-    private static final String MAIN_PAGE_ADDR = "/home";
+    private static final String JSON_UTF8_TYPE = "application/json; charset=UTF-8";
+    private static final String ERROR_MSG_JSON = "{\"validationError\": \"true\", \"message\": \"%s\"}";
+    private static final String RESULT_SUCCESS_JSON = "{\"result\": \"success\"}";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
-        Integer idToRemove = Integer.parseInt(request.getParameter(DISH_ID_PARAM));
+        int idToRemove = Integer.parseInt(request.getParameter(DISH_ID_PARAM));
+        PrintWriter writer = null;
 
         try {
+            writer = response.getWriter();
+
             removeFromDB(idToRemove);
 
             removeDishFromSessionMenu(request, idToRemove);
 
-            response.sendRedirect(MAIN_PAGE_ADDR);
+            writer.println(RESULT_SUCCESS_JSON);
         } catch (IOException e) {
-            LOGGER.error("Error invalid address to redirect", e);
-        } catch (ValidationException e) {
             try {
-                request.getRequestDispatcher(MessageFormat.format("/home?invalidDish=true&errMsgUpdDish={0}", e.getMessage())).forward(request, response);
+                LOGGER.error("Error to get writer when try to remove dish from menu", e);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+                throw new ServletException(e);
             } catch (IOException ex) {
-                LOGGER.error("Error invalid address to forward when Remove Dish From Menu", e);
+                LOGGER.error("Error to send error writer when try to remove dish from menu", e);
+                throw new ServletException(e);
             }
+        } catch (ValidationException e) {
+            response.setContentType(JSON_UTF8_TYPE);
+            writer.println(String.format(ERROR_MSG_JSON, e.getMessage()));
         }
     }
 
