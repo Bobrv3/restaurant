@@ -42,13 +42,8 @@
                     <c:if test="${user.roleId == 1}">
                         <input type="image" src="../../images/edit.png" alt="edit" class="imgInTd"
                             onclick="showEditCategory(`${category.id}`, event)">
-
-                        <form action="restaurant" method="post">
-                            <input type="hidden" name="command" value="remove_category">
-                            <input type="hidden" name="categoryId" value="${category.id}">
-
-                            <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd">
-                        </form>
+                        <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd"
+                            onclick="removeCategory(`${category.id}`, event)">
                     </c:if>
                 </h2>
             </c:if>
@@ -180,4 +175,5 @@
         <script src="../../js/xhr.js"></script>
         <script src="../../js/Menu/AddNewCategory.js"></script>
         <script src="../../js/Menu/EditCategory.js"></script>
+        <script src="../../js/Menu/RemoveCategory.js"></script>
         <script src="../../js/Menu/AddReduceBtn.js"></script>

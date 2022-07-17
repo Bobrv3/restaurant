@@ -13,7 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.MessageFormat;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class RemoveCategory implements Command {
@@ -22,15 +22,18 @@ public class RemoveCategory implements Command {
 
     private static final String CATEGORY_ID_PARAM = "categoryId";
     private static final String CATEGORIES_ATTR = "categories";
-    private static final String MAIN_PAGE_ADDR = "/home";
-
-    private static final String EX1 = "Error invalid address to redirect";
+    private static final String JSON_UTF8_TYPE = "application/json; charset=UTF-8";
+    private static final String ERROR_MSG_JSON = "{\"validationError\": \"true\", \"message\": \"%s\"}";
+    private static final String RESULT_SUCCESS_JSON = "{\"result\": \"success\"}";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
-        Integer categoryId = Integer.parseInt(request.getParameter(CATEGORY_ID_PARAM));
+        int categoryId = Integer.parseInt(request.getParameter(CATEGORY_ID_PARAM));
+        PrintWriter writer = null;
 
         try {
+            writer = response.getWriter();
+
             MenuService menuService = serviceProvider.getMenuService();
             menuService.removeCategory(categoryId);
 
@@ -42,15 +45,19 @@ public class RemoveCategory implements Command {
                 }
             }
 
-            response.sendRedirect(MAIN_PAGE_ADDR);
+            writer.println(RESULT_SUCCESS_JSON);
         } catch (IOException e) {
-            LOGGER.error(EX1, e);
-        } catch (ValidationException e) {
             try {
-                request.getRequestDispatcher(MessageFormat.format("/home?invalidCategory=true&errMsgUpdCategory={0}", e.getMessage())).forward(request, response);
+                LOGGER.error("Error to get writer when try to remove category", e);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+                throw new ServletException(e);
             } catch (IOException ex) {
-                LOGGER.error("Error invalid address to forward in edit category", e);
+                LOGGER.error("Error to send error writer when try to remove category", e);
+                throw new ServletException(e);
             }
+        } catch (ValidationException e) {
+            response.setContentType(JSON_UTF8_TYPE);
+            writer.println(String.format(ERROR_MSG_JSON, e.getMessage()));
         }
     }
 }
