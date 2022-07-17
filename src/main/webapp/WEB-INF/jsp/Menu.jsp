@@ -38,11 +38,10 @@
             </c:if>
             <c:if test="${param.editedCategory != category.id}">
                 <h2 class="CategoryName">
-                    ${category.name}
+                    <label>${category.name}</label>
                     <c:if test="${user.roleId == 1}">
-                        <a href="/home?editedCategory=${category.id}">
-                            <img src="../../images/edit.png" alt="edit" class="imgInTd">
-                        </a>
+                        <input type="image" src="../../images/edit.png" alt="edit" class="imgInTd"
+                            onclick="showEditCategory(`${category.id}`, event)">
 
                         <form action="restaurant" method="post">
                             <input type="hidden" name="command" value="remove_category">
@@ -179,6 +178,6 @@
 
 
         <script src="../../js/xhr.js"></script>
-        <script src="../../js/Menu.js"></script>
-
-        <script src="../../js/MenuAjax.js"></script>
+        <script src="../../js/Menu/AddNewCategory.js"></script>
+        <script src="../../js/Menu/EditCategory.js"></script>
+        <script src="../../js/Menu/AddReduceBtn.js"></script>

@@ -18,7 +18,6 @@ public class AJAXcontroller extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(AJAXcontroller.class);
     private static final CommandProvider commandProvider = CommandProvider.getInstance();
     private static final String PARAMETER_COMMAND = "command";
-    private static final String ERROR_MSG_JSON = "[{\"error\": \"true\", \"message\": \"%s\"}]";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {

@@ -47,7 +47,8 @@ public class AddNewCategoryToMenu implements Command {
             try {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             } catch (IOException ex) {
-                ex.printStackTrace();
+                LOGGER.error("Error to send error writer when try to add new category", e);
+                throw new ServletException(e);
             }
             LOGGER.error("Error to get writer when try to add new category", e);
             throw new ServletException(e);

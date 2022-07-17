@@ -1,7 +1,7 @@
 const addCategoryBtn = document.querySelector("#add-category-btn");
-addCategoryBtn.addEventListener("click", showCategoryEditForm);
+addCategoryBtn.addEventListener("click", showCategoryEditFormForAdd);
 
-function showCategoryEditForm() {
+function showCategoryEditFormForAdd() {
     document.querySelector('#create-category-txtbtn').hidden = true;
 
     const hiddenInp = document.createElement('input');
@@ -23,8 +23,6 @@ function showCategoryEditForm() {
     submitInp.addEventListener("click", addNewCategory);
 
     const editCategoryForm = document.createElement('form');
-    editCategoryForm.action = "restaurant";
-    editCategoryForm.method = 'post';
     editCategoryForm.id = "editCategoryForm";
     editCategoryForm.className = "CategoryName";
 
