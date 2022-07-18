@@ -11,6 +11,9 @@ import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.validation.CategoryValidator;
 import com.epam.restaurant.service.validation.DishValidator;
+import com.epam.restaurant.service.validation.ValidationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.List;
 public class MenuImpl implements MenuService {
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
     private static final MenuDAO menuDAO = daoProvider.getMenuDAO();
+    private static final Logger LOGGER = LogManager.getLogger(MenuImpl.class);
 
     @Override
     public Menu getMenu() throws ServiceException {
@@ -85,12 +89,26 @@ public class MenuImpl implements MenuService {
     @Override
     public int addDish(BigDecimal price, String name, String description, Integer categoryForAdd, String photoLink) throws ServiceException {
         DishValidator.validate(price, name, description, categoryForAdd, photoLink);
+        int id = 0;
 
         try {
-            return menuDAO.addDish(price, name, description, categoryForAdd, photoLink);
+            daoProvider.getTransactionDAO().startTransaction();
+            id = menuDAO.addDish(price, name, description, categoryForAdd, photoLink);
+            daoProvider.getTransactionDAO().commit();
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            try {
+                daoProvider.getTransactionDAO().rollback();
+
+                if (e.getCause().getClass() == java.sql.SQLIntegrityConstraintViolationException.class) {
+                    throw new ValidationException("Dish with such photo has already exist");
+                }
+                throw new ServiceException(e);
+            } catch (DAOException ex) {
+                LOGGER.error("error to rollback when adding dish to menu", ex);
+                throw new ServiceException(ex);
+            }
         }
+        return id;
     }
 
     @Override

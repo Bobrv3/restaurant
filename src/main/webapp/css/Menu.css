@@ -93,8 +93,12 @@ button {
     width: 9%;
 }
 
-.col3 {
+.col4 {
     width: 22%;
+}
+
+.col5 {
+    padding-right: 30px;
 }
 
 .dishPhoto {
@@ -124,7 +128,7 @@ form.CategoryName>input[type=text] {
     min-width: 100px;
 }
 
-#errorMsg {
+#errorMsgH {
     color: red;
     text-align: center;
 }

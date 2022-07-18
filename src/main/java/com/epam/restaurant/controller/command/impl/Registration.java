@@ -34,7 +34,6 @@ public class Registration implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-        // TODO через билдер
         RegistrationUserData userData =
                 new RegistrationUserData(
                         request.getParameter(LOGIN_PARAM),

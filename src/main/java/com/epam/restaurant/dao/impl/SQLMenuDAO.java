@@ -6,7 +6,9 @@ import com.epam.restaurant.bean.Menu;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
+import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.MenuDAO;
+import com.epam.restaurant.dao.util.TransactionDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -288,7 +290,10 @@ public class SQLMenuDAO implements MenuDAO {
         PreparedStatement statement = null;
 
         try {
-            connection = connectionPool.takeConnection();
+            connection = DAOProvider.getInstance().getTransactionDAO().getConnectionHolder().get();
+            if (connection == null){
+                connection = connectionPool.takeConnection();
+            }
 
             statement = connection.prepareStatement(ADD_DISH_QUERY, Statement.RETURN_GENERATED_KEYS);
             statement.setBigDecimal(1, price);

@@ -6,7 +6,7 @@
 
 
         <fmt:message bundle="${loc}" key="local.link.Menu" var="menu_link" />
-        <fmt:message bundle="${loc}" key="local.button.add" var="btn_add" />
+        <fmt:message bundle="${loc}" key="local.button.add" var="btnAddFmt" />
         <fmt:message bundle="${loc}" key="local.button.save" var="saveFmt" />
         <fmt:message bundle="${loc}" key="local.link.addCategory" var="addCategoryFmt" />
         <fmt:message bundle="${loc}" key="local.txt.dishAddedMsg" var="dishAddedMsgFmt" />
@@ -88,75 +88,51 @@
                                 <td class="col2">
                                     <strong>${dish.price}</strong>
                                 </td>
-                                <td>
+                                <td class="col3">
                                     <img src="${dish.photoLink}" alt="photo of ${dish.name}" class="dishPhoto">
                                 </td>
-                            </c:if>
 
-                            <td class="col3">
-                                <form action="restaurant" method="post">
-                                    <input type="hidden" name="command" value="add_to_order">
-                                    <input type="hidden" name="dish_id" value="${dish.id}">
 
-                                    <button onclick="reduceOne(event)">-</button>
-                                    <input type="text" name="quantity" value="1" required>
-                                    <button onclick="addOne(event)">+</button> <br>
+                                <td class="col4">
+                                    <form action="restaurant" method="post">
+                                        <input type="hidden" name="command" value="add_to_order">
+                                        <input type="hidden" name="dish_id" value="${dish.id}">
 
-                                    <input type="submit" value="${btn_add}" class="yellow_button" id="addToOrderBtn">
-                                </form>
-                                <c:if test="${param.addedToOrder == true && dish.id == param.addedDishId}">
-                                    <div style="color: rgb(27, 167, 27);">${dishAddedMsgFmt} &#10004</div>
-                                </c:if>
-                            </td>
+                                        <button onclick="reduceOne(event)">-</button>
+                                        <input type="text" name="quantity" value="1" onkeypress='validate(event)'
+                                            required>
+                                        <button onclick="addOne(event)">+</button> <br>
 
-                            <c:if test="${user.roleId == 1}">
-                                <td style="padding-right: 30px;">
-                                    <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd"
-                                        onclick="removeDishFromMenu(`${dish.id}`, event)">
-
-                                    <a href="/home?editedDishId=${dish.id}">
-                                        <img src="../../images/edit.png" alt="edit" class="imgInTd">
-                                    </a>
+                                        <input type="submit" value="${btnAddFmt}" class="yellow_button"
+                                            id="addToOrderBtn">
+                                    </form>
+                                    <c:if test="${param.addedToOrder == true && dish.id == param.addedDishId}">
+                                        <div style="color: rgb(27, 167, 27);">${dishAddedMsgFmt} &#10004</div>
+                                    </c:if>
                                 </td>
-                            </c:if>
 
+                                <c:if test="${user.roleId == 1}">
+                                    <td class="col5">
+                                        <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd"
+                                            onclick="removeDishFromMenu(`${dish.id}`, event)">
+
+                                        <a href="/home?editedDishId=${dish.id}">
+                                            <img src="../../images/edit.png" alt="edit" class="imgInTd">
+                                        </a>
+                                    </td>
+                                </c:if>
+                            </c:if>
                         </tr>
                     </c:if>
                 </c:forEach>
 
                 <c:if test="${user.roleId == 1}">
-
                     <c:if test="${!param.createDish || (param.createDish && param.categoryForAdd != category.id)}">
                         <tr>
                             <td colspan="5">
-                                <a href="/home?createDish=true&categoryForAdd=${category.id}">
-                                    <img src="../../images/addContent.png" alt="add dish" id="imgAddContent">
-                                </a>
+                                <input type="image" src="../../images/addContent.png" alt="add dish" id="imgAddContent"
+                                    onclick="showCreateDishFrom(`${category.id}`, event, `${saveFmt}`, `${btnAddFmt}`)">
                             </td>
-                        </tr>
-                    </c:if>
-                    <c:if test="${param.createDish && (param.categoryForAdd == category.id)}">
-                        <tr>
-                            <form action="restaurant" method="post">
-                                <input type="hidden" name="command" value="add_dish">
-                                <input type="hidden" name="categoryForAdd" value="${category.id}">
-                                <td>
-                                    <h3 class="DishName">
-                                        <li /><input type="text" name="dishName" value="" placeholder="Dish name"
-                                            required>
-                                    </h3>
-                                    <textarea name="description" cols="60" rows="3" placeholder="Description..."
-                                        required></textarea>
-                                    <input type="submit" value="${btn_add}">
-                                </td>
-                                <td>
-                                    <input type="text" name="price" value="" placeholder="Price" required
-                                        id="editedPrice">
-                                </td>
-                                <td>
-                                    <input type="file" name="photoLink" accept="images/*" required>
-                                </td>
-                            </form>
                         </tr>
                     </c:if>
                 </c:if>
@@ -176,4 +152,5 @@
         <script src="../../js/Menu/EditCategory.js"></script>
         <script src="../../js/Menu/RemoveCategory.js"></script>
         <script src="../../js/Menu/RemoveDishFromMenu.js"></script>
+        <script src="../../js/Menu/AddDish.js"></script>
         <script src="../../js/Menu/AddReduceBtn.js"></script>
