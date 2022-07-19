@@ -65,9 +65,9 @@ public class MenuImpl implements MenuService {
 
     @Override
     public boolean editCategory(Integer editedCategoryId, String newCategoryName) throws ServiceException {
-        CategoryValidator.validate(editedCategoryId, newCategoryName);
-
         try {
+            CategoryValidator.validate(editedCategoryId, newCategoryName);
+
             return menuDAO.editCategory(editedCategoryId, newCategoryName);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -110,9 +110,9 @@ public class MenuImpl implements MenuService {
 
     @Override
     public int addCategory(String categoryName) throws ServiceException {
-        CategoryValidator.validate(categoryName);
-
         try {
+            CategoryValidator.validate(categoryName);
+
             return menuDAO.addCategory(categoryName);
         } catch (DAOException e) {
             throw new ServiceException(e);

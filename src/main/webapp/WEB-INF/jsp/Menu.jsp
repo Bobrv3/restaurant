@@ -23,7 +23,7 @@
 
         <c:forEach items="${categories}" var="category">
             <h2 id="category${category.id}" class="CategoryName">
-                <span>${category.name}</span>
+                <span id="categoryName${category.id}">${category.name}</span>
                 <c:if test="${user.roleId == 1}">
                     <input type="image" src="../../images/edit.png" alt="edit" class="imgInTd"
                         onclick="showEditCategory(`${category.id}`, event)">
@@ -93,7 +93,8 @@
         <c:if test="${user.roleId == 1}">
             <h2 id="create-category-txtbtn" class="CategoryName">
                 ${addCategoryFmt}
-                <input id="add-category-btn" type="image" src="../../images/addContent.png">
+                <input id="add-category-btn" type="image" src="../../images/addContent.png"
+                    onclick="showCategoryEditFormForAdd()">
             </h2>
         </c:if>
 

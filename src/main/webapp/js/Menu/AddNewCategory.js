@@ -1,26 +1,20 @@
-const addCategoryBtn = document.querySelector("#add-category-btn");
-addCategoryBtn.addEventListener("click", showCategoryEditFormForAdd);
-
 function showCategoryEditFormForAdd() {
     document.querySelector('#create-category-txtbtn').hidden = true;
 
-    const hiddenInp = document.createElement('input');
-    hiddenInp.type = "hidden";
-    hiddenInp.id = "hiddenInp";
-    hiddenInp.name = "command";
-    hiddenInp.value = "add_category";
-
     const textInp = document.createElement('input');
     textInp.type = "text";
-    textInp.name = "categoryName";
-    textInp.id = "txtInput";
-    textInp.required = true;
+    textInp.id = "categoryNameInput";
 
     const submitInp = document.createElement('input');
     submitInp.type = "image";
     submitInp.src = "../../images/save.png"
     submitInp.id = "imgInEditCategory";
-    submitInp.addEventListener("click", addNewCategory);
+    submitInp.addEventListener("click", (event) =>
+        checkInputCategory(event)
+            .then(addNewCategory)
+            .catch((msg) => {
+                alert(msg);
+            }));
 
     const editCategoryForm = document.createElement('form');
     editCategoryForm.id = "editCategoryForm";
@@ -29,22 +23,18 @@ function showCategoryEditFormForAdd() {
     const main = document.querySelector('#main-block');
     main.appendChild(editCategoryForm);
 
-    document.querySelector('#editCategoryForm').appendChild(hiddenInp);
     document.querySelector('#editCategoryForm').appendChild(textInp);
     document.querySelector('#editCategoryForm').appendChild(submitInp);
 }
 
-function addNewCategory(event) {
-    event.preventDefault();
-
-    const textInp = this.parentElement.txtInput;
-    const hiddenInp = this.parentElement.hiddenInp;
+function addNewCategory() {
+    const textInp = document.querySelector('#categoryNameInput');
 
     const url = "http://localhost:8888/ajaxController"
-    const body = `command=${hiddenInp.value}&categoryName=${textInp.value}`
+    const body = `command=add_category&categoryName=${textInp.value}`
 
     const promise = sendRequest(url, 'POST', body)
-    promise.then(onDataReceived)
+    promise.then(onCategoryCreated)
         .catch((response) => {
             var error = response.statusText
             window.location = `http://localhost:8888/errorPage?errorMsg=${error}`
@@ -53,13 +43,13 @@ function addNewCategory(event) {
 
 var errorMsg;
 
-function onDataReceived(response) {
+function onCategoryCreated(response) {
     if (response.validationError) {
         if (document.querySelector('#editCategoryForm').lastChild == errorMsg) {
             document.querySelector('#editCategoryForm').removeChild(errorMsg);
         }
         errorMsg = document.createElement('h3');
-        errorMsg.id = "errorMsg";
+        errorMsg.id = "errorMsgH";
         errorMsg.innerHTML = response.message;
 
         document.querySelector('#editCategoryForm').appendChild(errorMsg);
@@ -72,18 +62,14 @@ function onDataReceived(response) {
         var categoryName = response.name;
 
         const createdCategory = document.createElement('h2');
+        createdCategory.id = `category${categoryId}`
         createdCategory.className = 'CategoryName';
         createdCategory.innerHTML =
-            `${categoryName} 
-            <a href="/home?editedCategory=${categoryId}">
-                <img src="../../images/edit.png" alt="edit" class="imgInTd">
-            </a>
-            <form action="restaurant" method="post">
-                <input type="hidden" name="command" value="remove_category">
-                <input type="hidden" name="categoryId" value=${categoryId}>
-
-                <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd">
-            </form>`;
+            `<span id="categoryName${categoryId}">${categoryName}</span>
+                    <input type="image" src="../../images/edit.png" alt="edit" class="imgInTd"
+                        onclick="showEditCategory(${categoryId}, event)">
+                    <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd"
+                        onclick="removeCategory(${categoryId}, event)">`;
 
         const main = document.querySelector('#main-block');
         const createCategoryForm = document.querySelector('#create-category-txtbtn');
@@ -103,4 +89,16 @@ function onDataReceived(response) {
         createCategoryForm.hidden = false;
         document.querySelector('#editCategoryForm').remove();
     }
+}
+
+function checkInputCategory(event) {
+    event.preventDefault()
+    categoryInp = document.querySelector('#categoryNameInput');
+
+    return new Promise((resolve, reject) => {
+        if (categoryInp.value.trim().length == 0) {
+            reject("you should enter the NAME of the category!");
+        }
+        resolve();
+    })
 }

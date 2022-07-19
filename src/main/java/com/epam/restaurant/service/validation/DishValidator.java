@@ -80,7 +80,7 @@ public final class DishValidator {
     }
 
     /**
-     * Check if the name or link to the photo is not used in the database, because these fields are unique
+     * Check if the name or link to the photo is not used in the database, because these fields should be unique in menu
      *
      * @param name      of dish
      * @param photoLink of dish

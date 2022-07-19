@@ -12,6 +12,10 @@ public final class SearchCriteria {
         DISHES_ID, PRICE, NAME, DESCRIPTION, STATUS, CATEGORY_ID, URL
     }
 
+    public static enum Categories{
+        ID, NAME, STATUS
+    }
+
     public static enum Orders{
         ORDER_STATUS, USER_ID
     }

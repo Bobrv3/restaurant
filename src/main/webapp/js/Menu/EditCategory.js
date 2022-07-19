@@ -11,24 +11,18 @@ function showEditCategory(categoryID, event) {
     categoryNameH = event.target.parentElement
     categoryNameH.hidden = true
 
-    const hiddenInp = document.createElement('input');
-    hiddenInp.type = "hidden";
-    hiddenInp.id = "hiddenInp";
-    hiddenInp.name = "command";
-    hiddenInp.value = "edit_category";
-
     const textInp = document.createElement('input');
     textInp.type = "text";
     textInp.name = "categoryName";
     textInp.id = "txtInput";
-    textInp.value = categoryNameH.firstChild.nextSibling.textContent
+    textInp.value = document.querySelector(`#categoryName${categoryID}`).innerHTML
     textInp.required = true;
 
     const submitInp = document.createElement('input');
     submitInp.type = "image";
     submitInp.src = "../../images/save.png"
     submitInp.id = "imgInEditCategory";
-    submitInp.addEventListener("click", () => editCategory(categoryID));
+    submitInp.addEventListener("click", () => editCategory(categoryID))
 
     const editCategoryForm = document.createElement('form');
     let id = "editCategoryForm" + categoryID
@@ -38,7 +32,6 @@ function showEditCategory(categoryID, event) {
     const main = document.querySelector('#main-block');
     main.insertBefore(editCategoryForm, categoryNameH)
 
-    document.querySelector(`#${id}`).appendChild(hiddenInp);
     document.querySelector(`#${id}`).appendChild(textInp);
     document.querySelector(`#${id}`).appendChild(submitInp);
 }
@@ -47,10 +40,9 @@ function editCategory(categoryID) {
     event.preventDefault();
 
     const textInp = document.querySelector('#txtInput')
-    const hiddenInp = document.querySelector('#hiddenInp')
 
     let url = 'http://localhost:8888/ajaxController'
-    let body = `command=${hiddenInp.value}&categoryName=${textInp.value}&editedCategoryId=${categoryID}`
+    let body = `command=edit_category&categoryName=${textInp.value}&editedCategoryId=${categoryID}`
 
     const promise = sendRequest(url, 'POST', body)
     promise.then((response) => onDataReceived(response, categoryID))
@@ -78,8 +70,8 @@ function onDataReceived(response, categoryID) {
             document.querySelector(editCategoryForm).removeChild(errorMsgElement);
         }
 
-        let categoryNameSpan = categoryNameH.firstChild.nextSibling
-        categoryNameSpan.textContent = response.newCategoryName
+        let categoryNameSpan = document.querySelector(`#categoryName${categoryID}`)
+        categoryNameSpan.innerHTML = response.newCategoryName
         categoryNameH.hidden = false;
         document.querySelector(editCategoryForm).remove();
     }

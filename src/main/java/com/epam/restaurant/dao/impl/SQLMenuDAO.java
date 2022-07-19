@@ -8,7 +8,6 @@ import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.MenuDAO;
-import com.epam.restaurant.dao.util.TransactionDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +30,7 @@ public class SQLMenuDAO implements MenuDAO {
     private static final String GET_ALL_CATEGORIES_QUERY = "SELECT * FROM categories WHERE status=0 ORDER BY id";
     private static final String GET_MENU_QUERY = "SELECT dishes_id, name, description, price, category_id, url FROM menu LEFT JOIN dish_photos ON menu_dishes_id = dishes_id where status=0;";
     private static final String FIND_DISH_BY_CRITERIA_QUERY = "SELECT dishes_id, name, description, price, category_id, ph.url FROM menu LEFT JOIN dish_photos ph ON(dishes_id = menu_dishes_id) WHERE ";
+    private static final String FIND_CATEGORY_BY_CRITERIA_QUERY = "SELECT id, name, status FROM restaurant.categories WHERE ";
     private static final String REMOVE_DISH_BY_CRITERIA_QUERY = "UPDATE menu SET status=1 where ";
     private static final String REMOVE_CATEGORY_QUERY = "UPDATE categories SET status=1 where id=?";
     private static final String EDIT_CATEGORY_QUERY = "UPDATE categories SET name=? where id=?";
@@ -111,8 +111,9 @@ public class SQLMenuDAO implements MenuDAO {
             while (resultSet.next()) {
                 int id = resultSet.getInt(1);
                 String name = resultSet.getString(2);
+                int status = resultSet.getInt(3);
 
-                categories.add(new Category(id, name));
+                categories.add(new Category(id, name, status));
             }
         } catch (SQLException e) {
             throw new DAOException("Error when trying to get categories", e);
@@ -171,6 +172,57 @@ public class SQLMenuDAO implements MenuDAO {
 
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a statement dish find query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
+    }
+
+    @Override
+    public List<Category> findCategory(Criteria criteria) throws DAOException {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        Map<String, Object> criterias = criteria.getCriteria();
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            StringBuilder queryBuilder = new StringBuilder(FIND_CATEGORY_BY_CRITERIA_QUERY);
+            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
+                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
+            }
+
+            queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(queryBuilder.toString());
+
+            if (!resultSet.isBeforeFirst()) {
+                return Collections.emptyList();
+            }
+
+            List<Category> categories = new ArrayList<>();
+            while (resultSet.next()) {
+                Category category = new Category();
+                category.setId(resultSet.getInt(1));
+                category.setName(resultSet.getString(2));
+                category.setStatus(resultSet.getInt(3));
+
+                categories.add(category);
+            }
+
+            return categories;
+
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to create a statement category find query", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);

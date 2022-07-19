@@ -23,6 +23,7 @@ public class AddNewCategoryToMenu implements Command {
 
     private static final String CATEGORY_NAME = "categoryName";
     private static final String CATEGORIES_ATTR = "categories";
+    private static final int OK_STATUS = 0;
     private static final String JSON_UTF8_TYPE = "application/json; charset=UTF-8";
     private static final String ERROR_MSG_JSON = "{\"validationError\": \"true\", \"message\": \"%s\"}";
 
@@ -38,7 +39,7 @@ public class AddNewCategoryToMenu implements Command {
             int categoryId = menuService.addCategory(categoryName);
 
             List<Category> categories = (List<Category>) request.getSession().getAttribute(CATEGORIES_ATTR);
-            Category createdCategory = new Category(categoryId, categoryName);
+            Category createdCategory = new Category(categoryId, categoryName, OK_STATUS);
             categories.add(createdCategory);
 
             response.setContentType(JSON_UTF8_TYPE);
