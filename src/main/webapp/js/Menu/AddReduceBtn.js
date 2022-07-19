@@ -1,25 +1,19 @@
-let inputQuantity;
 let count;
 
-
-function addOne(event) {
+function addOne(event, categoryID, dishID) {
     event.preventDefault();
 
-    let currentBtn = event.target;
-    inputQuantity = currentBtn.parentElement.quantity;
+    let inputQuantity = document.querySelector(`#quantityOf${dishID}_${categoryID}`);
 
     count = +inputQuantity.value;
 
     inputQuantity.value = ++count;
-
-
 }
 
-function reduceOne(event) {
+function reduceOne(event, categoryID, dishID) {
     event.preventDefault();
 
-    let currentBtn = event.target;
-    inputQuantity = currentBtn.parentElement.quantity;
+    let inputQuantity = document.querySelector(`#quantityOf${dishID}_${categoryID}`);
 
     count = +inputQuantity.value;
 

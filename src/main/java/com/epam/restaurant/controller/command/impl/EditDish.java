@@ -24,7 +24,6 @@ public class EditDish implements Command {
     private static final Logger LOGGER = LogManager.getLogger(EditDish.class);
     private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
 
-    private static final String MAIN_PAGE_ADDR = "/home";
     private static final String DISH_NAME_PARAM = "dishName";
     private static final String EDITED_DISH_ID_PARAM = "editedDishId";
     private static final String DESCRIPTION_PARAM = "description";
@@ -42,6 +41,7 @@ public class EditDish implements Command {
 
         try {
             writer = response.getWriter();
+
             int editedDishId = Integer.parseInt(request.getParameter(EDITED_DISH_ID_PARAM));
             String newDishName = request.getParameter(DISH_NAME_PARAM);
             String description = request.getParameter(DESCRIPTION_PARAM);

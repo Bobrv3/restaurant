@@ -31,10 +31,10 @@ public class AJAXcontroller extends HttpServlet {
             try {
                 int lastIndx = e.getMessage().lastIndexOf(":");
                 if (lastIndx == -1) {
-                    resp.sendError(520, e.getMessage());
+                    resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
                 } else {
                     String errorMsg = e.getMessage().substring(lastIndx);
-                    resp.sendError(520, errorMsg);
+                    resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMsg);
                 }
             } catch (IOException ex) {
                 LOGGER.error("IOError when trying to send error..");
@@ -43,7 +43,7 @@ public class AJAXcontroller extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         doGet(req, resp);
     }
 }

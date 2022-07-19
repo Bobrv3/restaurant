@@ -51,19 +51,14 @@
                                     alt="photo of ${dish.name}" class="dishPhoto">
                             </td>
                             <td class="col4">
-                                <form action="restaurant" method="post">
-                                    <input type="hidden" name="command" value="add_to_order">
-                                    <input type="hidden" name="dish_id" value="${dish.id}">
+                                <button onclick="reduceOne(event, `${category.id}`, `${dish.id}`)">-</button>
+                                <input id="quantityOf${dish.id}_${category.id}" type="text" name="quantity" value="1"
+                                    onkeypress='validate(event)' required>
+                                <button onclick="addOne(event, `${category.id}`, `${dish.id}`)">+</button> <br>
 
-                                    <button onclick="reduceOne(event)">-</button>
-                                    <input type="text" name="quantity" value="1" onkeypress='validate(event)' required>
-                                    <button onclick="addOne(event)">+</button> <br>
-
-                                    <input type="submit" value="${btnAddFmt}" class="yellow_button" id="addToOrderBtn">
-                                </form>
-                                <c:if test="${param.addedToOrder == true && dish.id == param.addedDishId}">
-                                    <div style="color: rgb(27, 167, 27);">${dishAddedMsgFmt} &#10004</div>
-                                </c:if>
+                                <input type="submit" value="${btnAddFmt}" class="addToOrderBtn"
+                                    id="addToOrder${dish.id}_${category.id}"
+                                    onclick="addToOrder(this, `${category.id}`, `${dish.id}`)">
                             </td>
                             <c:if test="${user.roleId == 1}">
                                 <td class="col5">
@@ -100,6 +95,7 @@
 
 
         <script src="../../js/xhr.js"></script>
+        <script src="../../js/Menu/AddToOrder.js"></script>
         <script src="../../js/Menu/AddNewCategory.js"></script>
         <script src="../../js/Menu/EditCategory.js"></script>
         <script src="../../js/Menu/RemoveCategory.js"></script>

@@ -48,7 +48,8 @@
                     </div>
                 </c:if>
                 <a href="/showCurrentOrder" class="headLink">
-                    <img id="orderImg" src="../../images/orderHeader.png" alt="Your order">${quantityOfDishes}
+                    <img id="orderImg" src="../../images/orderHeader.png" alt="Your order">
+                    <span style="margin-left: -15px;" id="quantityOfDishes">${quantityOfDishes}</span>
                 </a>
             </div>
 

@@ -139,10 +139,10 @@ function onSavedChanges(dish, saveFmt, addFmt) {
                         </li>`
         td2.innerHTML = `<strong id="price${dish.id}_${dish.categoryId}">${dish.price.toFixed(1)}</strong>`
         td3.innerHTML = `<img id="photoLink${dish.id}_${dish.categoryId}" src="${dish.photoLink}" alt="photo of ${dish.name}" class="dishPhoto">`
-        td4.innerHTML = `<button onclick="reduceOne(event)">-</button>
-                         <input type="text" name="quantity" value="1" required>
-                         <button onclick="addOne(event)">+</button> <br>
-                         <input type="button" value="${addFmt}" class="yellow_button" id="addToOrderBtn">`
+        td4.innerHTML = `<button onclick="reduceOne(event, ${dish.categoryId}, ${dish.id})">-</button> 
+                         <input id="quantityOf${dish.id}_${dish.categoryId}" type="text" name="quantity" value="1" onkeypress='validate(event)' required>
+                         <button onclick="addOne(event, ${dish.categoryId}, ${dish.id})">+</button> <br> 
+                         <input type="submit" value="${addFmt}" class="addToOrderBtn" id="addToOrder${dish.id}_${dish.categoryId}" onclick="addToOrder(this, ${dish.categoryId}, ${dish.id})">`
         td5.innerHTML = `<input type="image" src="../../images/remove.png" alt="remove" class="imgInTd" onclick="removeDishFromMenu(${dish.id}, event)">
                          <input type="image" src="../../images/edit.png" alt="edit" class="imgInTd" onclick="editDish(${dish.id}, ${dish.categoryId}, \`${saveFmt}\`)">`
 
