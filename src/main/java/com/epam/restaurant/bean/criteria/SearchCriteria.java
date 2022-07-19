@@ -9,7 +9,7 @@ public final class SearchCriteria {
     }
 
     public static enum Dishes{
-        DISHES_ID, PRICE, NAME, DESCRIPTION, STATUS, CATEGORY_ID
+        DISHES_ID, PRICE, NAME, DESCRIPTION, STATUS, CATEGORY_ID, URL
     }
 
     public static enum Orders{

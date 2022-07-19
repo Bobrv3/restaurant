@@ -13,6 +13,10 @@ public class Criteria {
         criteria.put(searchCriteria, value);
     }
 
+    public void remove(String searchCriteria) {
+        criteria.remove(searchCriteria);
+    }
+
     public Map<String, Object> getCriteria() {
         return criteria;
     }

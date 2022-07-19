@@ -1,27 +1,10 @@
-let addDishTr
-let dishNameInp
-let descriptionInp
-let priceInp
-let photoLinkInp
+let addDishTr;
+let dishNameInp;
+let descriptionInp;
+let priceInp;
+let photoLinkInp;
 
-function checkInput() {
-    dishNameInp = document.querySelector('#dishNameInp')
-    descriptionInp = document.querySelector('#descriptionInp')
-    priceInp = document.querySelector('#editedPrice')
-    photoLinkInp = document.querySelector('#photoLinkInp')
-
-    return new Promise((resolve, reject) => {
-        if (dishNameInp.value.trim().length == 0
-            || descriptionInp.value.trim().length == 0
-            || priceInp.value.trim().length == 0
-            || photoLinkInp.value.trim().length == 0) {
-            reject("all fields must be entered!")
-        }
-        resolve()
-    })
-}
-
-function showCreateDishFrom(categoryID, event, saveFmt, btnAddFmt) {
+function showCreateDishFrom(categoryID, saveFmt, addFmt) {
     // close previos one if it was open
     Array.prototype.slice.call(document.querySelectorAll("tr.CreateDishRow")).forEach(el => {
         el.nextElementSibling.hidden = false;
@@ -69,7 +52,7 @@ function showCreateDishFrom(categoryID, event, saveFmt, btnAddFmt) {
     saveDishBtn.value = saveFmt
     saveDishBtn.addEventListener("click", () =>
         checkInput()
-            .then(() => { saveDishChanges(categoryID, btnAddFmt) })
+            .then(() => { saveDishChanges(categoryID, saveFmt, addFmt) })
             .catch((message) => { alert(message) }))
     td1.appendChild(saveDishBtn)
 
@@ -100,19 +83,19 @@ function showCreateDishFrom(categoryID, event, saveFmt, btnAddFmt) {
     table.insertBefore(createDishTr, addDishTr)
 }
 
-function saveDishChanges(categoryID, btnAddFmt) {
+function saveDishChanges(categoryID, saveFmt, addFmt) {
     let url = 'http://localhost:8888/ajaxController'
     let body = `command=add_dish&categoryForAdd=${categoryID}&dishName=${dishNameInp.value}&description=${descriptionInp.value}&price=${priceInp.value}&photoLink=${photoLinkInp.files[0].name}`
 
     const promise = sendRequest(url, 'POST', body)
-    promise.then((response) => onSavedChanges(response, btnAddFmt))
+    promise.then((response) => onSavedChanges(response, saveFmt, addFmt))
         .catch((response) => {
             var error = response.statusText
             window.location = `http://localhost:8888/errorPage?errorMsg=${error}`
         })
 }
 
-function onSavedChanges(dish, btnAddFmt) {
+function onSavedChanges(dish, saveFmt, addFmt) {
     let errorMsgTr = document.querySelector('#errorMsg');
     let dishesTable = document.querySelector(".CreateDishRow").parentElement
 
@@ -159,9 +142,9 @@ function onSavedChanges(dish, btnAddFmt) {
         td4.innerHTML = `<button onclick="reduceOne(event)">-</button>
                          <input type="text" name="quantity" value="1" required>
                          <button onclick="addOne(event)">+</button> <br>
-                         <input type="button" value="${btnAddFmt}" class="yellow_button" id="addToOrderBtn">`
+                         <input type="button" value="${addFmt}" class="yellow_button" id="addToOrderBtn">`
         td5.innerHTML = `<input type="image" src="../../images/remove.png" alt="remove" class="imgInTd" onclick="removeDishFromMenu(${dish.id}, event)">
-                         <input type="image" src="../../images/edit.png" alt="edit" class="imgInTd" onclick="editDish(${dish.id}, event)">`
+                         <input type="image" src="../../images/edit.png" alt="edit" class="imgInTd" onclick="editDish(${dish.id}, ${dish.categoryId}, \`${saveFmt}\`)">`
 
         let dishTr = document.createElement('tr')
         dishTr.id = `dish${dish.id}row`

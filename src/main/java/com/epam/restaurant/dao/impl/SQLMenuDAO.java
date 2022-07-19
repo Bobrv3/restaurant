@@ -29,8 +29,8 @@ public class SQLMenuDAO implements MenuDAO {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     private static final String GET_ALL_CATEGORIES_QUERY = "SELECT * FROM categories WHERE status=0 ORDER BY id";
-    private static final String GET_MENU_QUERY = "SELECT dishes_id, name, description, price, category_id, url FROM menu LEFT JOIN dish_photos on menu_dishes_id = dishes_id where status=0;";
-    private static final String FIND_DISH_BY_CRITERIA_QUERY = "Select dishes_id, name, description, price, category_id FROM menu where ";
+    private static final String GET_MENU_QUERY = "SELECT dishes_id, name, description, price, category_id, url FROM menu LEFT JOIN dish_photos ON menu_dishes_id = dishes_id where status=0;";
+    private static final String FIND_DISH_BY_CRITERIA_QUERY = "SELECT dishes_id, name, description, price, category_id, ph.url FROM menu LEFT JOIN dish_photos ph ON(dishes_id = menu_dishes_id) WHERE ";
     private static final String REMOVE_DISH_BY_CRITERIA_QUERY = "UPDATE menu SET status=1 where ";
     private static final String REMOVE_CATEGORY_QUERY = "UPDATE categories SET status=1 where id=?";
     private static final String EDIT_CATEGORY_QUERY = "UPDATE categories SET name=? where id=?";

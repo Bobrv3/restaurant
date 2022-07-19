@@ -76,9 +76,9 @@ public class MenuImpl implements MenuService {
 
     @Override
     public boolean editDish(Integer editedDishId, String newDishName, String description, BigDecimal price, String photoLink) throws ServiceException {
-        DishValidator.validate(editedDishId, newDishName, description, price, photoLink);
-
         try {
+            DishValidator.validate(editedDishId, newDishName, description, price, photoLink);
+
             return menuDAO.editDish(editedDishId, newDishName, description, price, photoLink);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -88,27 +88,24 @@ public class MenuImpl implements MenuService {
 
     @Override
     public int addDish(BigDecimal price, String name, String description, Integer categoryForAdd, String photoLink) throws ServiceException {
-        DishValidator.validate(price, name, description, categoryForAdd, photoLink);
-        int id = 0;
-
         try {
+            DishValidator.validate(price, name, description, categoryForAdd, photoLink);
+            int id = 0;
+
             daoProvider.getTransactionDAO().startTransaction();
             id = menuDAO.addDish(price, name, description, categoryForAdd, photoLink);
             daoProvider.getTransactionDAO().commit();
+
+            return id;
         } catch (DAOException e) {
             try {
                 daoProvider.getTransactionDAO().rollback();
-
-                if (e.getCause().getClass() == java.sql.SQLIntegrityConstraintViolationException.class) {
-                    throw new ValidationException("Dish with such photo has already exist");
-                }
                 throw new ServiceException(e);
             } catch (DAOException ex) {
                 LOGGER.error("error to rollback when adding dish to menu", ex);
                 throw new ServiceException(ex);
             }
         }
-        return id;
     }
 
     @Override

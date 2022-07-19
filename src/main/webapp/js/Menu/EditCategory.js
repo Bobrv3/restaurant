@@ -61,7 +61,7 @@ function editCategory(categoryID) {
 }
 
 function onDataReceived(response, categoryID) {
-    let errorMsgElement = document.querySelector('#errorMsg');
+    let errorMsgElement = document.querySelector('#errorMsgH');
     let editCategoryForm = '#editCategoryForm' + categoryID
 
     if (response.validationError) {
@@ -69,7 +69,7 @@ function onDataReceived(response, categoryID) {
             document.querySelector(editCategoryForm).removeChild(errorMsgElement);
         }
         errorMsgElement = document.createElement('h3');
-        errorMsgElement.id = "errorMsg";
+        errorMsgElement.id = "errorMsgH";
         errorMsgElement.innerHTML = response.message;
 
         document.querySelector(editCategoryForm).appendChild(errorMsgElement);
@@ -78,8 +78,8 @@ function onDataReceived(response, categoryID) {
             document.querySelector(editCategoryForm).removeChild(errorMsgElement);
         }
 
-        let categoryNameLbl = categoryNameH.firstChild.nextSibling
-        categoryNameLbl.textContent = response.newCategoryName
+        let categoryNameSpan = categoryNameH.firstChild.nextSibling
+        categoryNameSpan.textContent = response.newCategoryName
         categoryNameH.hidden = false;
         document.querySelector(editCategoryForm).remove();
     }

@@ -1,20 +1,23 @@
-let createDishTr
-let dishNameEl
-let dishDescriptionEl
-let dishPriceEl
+let createDishTr;
+let dishNameEl;
+let dishDescriptionEl;
+let dishPriceEl;
 
 function checkInput() {
-    dishNameInp = document.querySelector('#dishNameInp')
-    descriptionInp = document.querySelector('#descriptionInp')
-    priceInp = document.querySelector('#editedPrice')
-    photoLinkInp = document.querySelector('#photoLinkInp')
+    dishNameInp = document.querySelector('#dishNameInp');
+    descriptionInp = document.querySelector('#descriptionInp');
+    priceInp = document.querySelector('#editedPrice');
+    photoLinkInp = document.querySelector('#photoLinkInp');
 
     return new Promise((resolve, reject) => {
-        if (dishNameInp.value.trim().length == 0
-            || descriptionInp.value.trim().length == 0
-            || priceInp.value.trim().length == 0
-            || photoLinkInp.value.trim().length == 0) {
-            reject("all fields must be entered!")
+        if (dishNameInp.value.trim().length == 0) {
+            reject("Enter the NAME of the dish!")
+        } else if (descriptionInp.value.trim().length == 0) {
+            reject("Enter the DESCRIPTION of the dish!")
+        } else if (priceInp.value.trim().length == 0) {
+            reject("Enter the PRICE of the dish!")
+        } else if (photoLinkInp.value.trim().length == 0) {
+            reject("Choose the PHOTO of the dish!")
         }
         resolve()
     })

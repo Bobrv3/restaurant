@@ -21,33 +21,16 @@
             </jsp:forward>
         </c:if>
 
-        <c:if test="${param.invalidCategory || param.invalidDish}">
-            <h3 id="errorMsg">${param.errMsgUpdCategory}</h3>
-            <h3 id="errorMsg">${param.errMsgUpdDish}</h3>
-        </c:if>
-
         <c:forEach items="${categories}" var="category">
-            <c:if test="${param.editedCategory == category.id}">
-                <form action="restaurant" method="post" class="CategoryName">
-                    <input type="hidden" name="command" value="edit_category">
-                    <input type="hidden" name="editedCategoryId" value="${category.id}">
-
-                    <input type="text" name="categoryName" value="${category.name}" required>
-                    <input type="image" src="../../images/save.png" alt="save" id="imgInEditCategory">
-                </form>
-            </c:if>
-            <c:if test="${param.editedCategory != category.id}">
-                <h2 id="category${category.id}" class="CategoryName">
-                    <label>${category.name}</label>
-                    <c:if test="${user.roleId == 1}">
-                        <input type="image" src="../../images/edit.png" alt="edit" class="imgInTd"
-                            onclick="showEditCategory(`${category.id}`, event)">
-                        <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd"
-                            onclick="removeCategory(`${category.id}`, event)">
-                    </c:if>
-                </h2>
-            </c:if>
-
+            <h2 id="category${category.id}" class="CategoryName">
+                <span>${category.name}</span>
+                <c:if test="${user.roleId == 1}">
+                    <input type="image" src="../../images/edit.png" alt="edit" class="imgInTd"
+                        onclick="showEditCategory(`${category.id}`, event)">
+                    <input type="image" src="../../images/remove.png" alt="remove" class="imgInTd"
+                        onclick="removeCategory(`${category.id}`, event)">
+                </c:if>
+            </h2>
 
             <table>
                 <c:forEach items="${menu.getDishes()}" var="dish">
@@ -99,7 +82,7 @@
                         <tr id="addNewDishTr${category.id}">
                             <td colspan="5">
                                 <input type="image" src="../../images/addContent.png" alt="add dish" id="imgAddContent"
-                                    onclick="showCreateDishFrom(`${category.id}`, event, `${saveFmt}`, `${btnAddFmt}`)">
+                                    onclick="showCreateDishFrom(`${category.id}`, `${saveFmt}`, `${btnAddFmt}`)">
                             </td>
                         </tr>
                     </c:if>
