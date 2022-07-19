@@ -20,7 +20,7 @@ public class ServletListner implements ServletRequestListener, ServletContextLis
 
     private static final String LAST_PAGE_ATTR = "lastPage";
     private static final String MAIN_PAGE_ADDR = "/home";
-    private static final String NOT_LAST_PAGE_REGEX = "(/restaurant).*|(/images).*|(/css).*|(/js).*";
+    private static final String NOT_LAST_PAGE_REGEX = "(/restaurant).*|(/images).*|(/css).*|(/js).*|(/ajaxController)";
 
     @Override
     public void requestDestroyed(ServletRequestEvent sre) {
