@@ -88,6 +88,15 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>FindUsers</servlet-name>
+    <jsp-file>/WEB-INF/jsp/FindUsers.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FindUsers</servlet-name>
+    <url-pattern>/showFindUsers</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>FinishingTheOrder</servlet-name>
     <jsp-file>/WEB-INF/jsp/FinishingTheOrder.jsp</jsp-file>
   </servlet>

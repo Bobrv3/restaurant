@@ -67,6 +67,19 @@ public class UserImpl implements UserService {
     }
 
     @Override
+    public List<RegistrationUserData> findByLoginPattern(String loginPattern) throws ServiceException {
+        if (loginPattern == null) {
+            return Collections.emptyList();
+        }
+
+        try {
+            return userDAO.findByLoginPattern(loginPattern);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public boolean updateUser(String login, RegistrationUserData userData) throws ServiceException {
         UserValidator.validateUserData(userData);
 

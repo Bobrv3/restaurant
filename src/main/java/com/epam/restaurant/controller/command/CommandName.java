@@ -29,5 +29,7 @@ public enum CommandName {
     ORDER_COOKED,
     CLEAN_CURRENT_ORDER,
     REMOVE_CATEGORY,
+    EDIT_PERSONAL_INFO,
+    FIND_USER,
     EDIT_USER
 }

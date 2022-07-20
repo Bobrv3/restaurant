@@ -65,7 +65,7 @@ public class RegistrationUserData implements Serializable {
         this.email = email;
     }
 
-    public int getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 

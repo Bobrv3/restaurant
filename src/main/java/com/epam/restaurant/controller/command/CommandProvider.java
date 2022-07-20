@@ -9,8 +9,10 @@ import com.epam.restaurant.controller.command.impl.CleanCurrentOrder;
 import com.epam.restaurant.controller.command.impl.ConfirmOrder;
 import com.epam.restaurant.controller.command.impl.EditCategory;
 import com.epam.restaurant.controller.command.impl.EditDish;
+import com.epam.restaurant.controller.command.impl.EditPersonalInfo;
 import com.epam.restaurant.controller.command.impl.EditUser;
 import com.epam.restaurant.controller.command.impl.FindDishesBy;
+import com.epam.restaurant.controller.command.impl.FindUser;
 import com.epam.restaurant.controller.command.impl.GetCategories;
 import com.epam.restaurant.controller.command.impl.GetHistoryOfOrders;
 import com.epam.restaurant.controller.command.impl.GetMenu;
@@ -69,6 +71,8 @@ public final class CommandProvider {
         repository.put(CommandName.ORDER_COOKED, new MakeOrderCooked());
         repository.put(CommandName.CLEAN_CURRENT_ORDER, new CleanCurrentOrder());
         repository.put(CommandName.REMOVE_CATEGORY, new RemoveCategory());
+        repository.put(CommandName.EDIT_PERSONAL_INFO, new EditPersonalInfo());
+        repository.put(CommandName.FIND_USER, new FindUser());
         repository.put(CommandName.EDIT_USER, new EditUser());
     }
 

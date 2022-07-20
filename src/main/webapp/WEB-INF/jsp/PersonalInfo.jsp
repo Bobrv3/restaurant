@@ -50,7 +50,7 @@
                         <div class="grid-container">
                             <div>${nameFmt}</div>
                             <form action="restaurant" method="post" id="editName" style="display: none;">
-                                <input type="hidden" name="command" value="edit_user">
+                                <input type="hidden" name="command" value="edit_personal_info">
                             </form>
                             <div>
                                 <c:if test="${!param.editName}">
@@ -68,15 +68,15 @@
                                     </a>
                                 </c:if>
                                 <c:if test="${param.editName}">
-                                    <input form="editName" type="image" src="../../images/save.png" alt="save" class="editImg"
-                                        id="name">
+                                    <input form="editName" type="image" src="../../images/save.png" alt="save"
+                                        class="editImg" id="name">
                                 </c:if>
                             </div>
 
 
                             <div>${phoneNumberFmt}</div>
                             <form action="restaurant" method="post" id="editPhone" style="display: none;">
-                                <input type="hidden" name="command" value="edit_user">
+                                <input type="hidden" name="command" value="edit_personal_info">
                             </form>
                             <div>
                                 <c:if test="${!param.editPhone}">
@@ -94,15 +94,15 @@
                                     </a>
                                 </c:if>
                                 <c:if test="${param.editPhone}">
-                                    <input form="editPhone" type="image" src="../../images/save.png" alt="save" class="editImg"
-                                        id="phone">
+                                    <input form="editPhone" type="image" src="../../images/save.png" alt="save"
+                                        class="editImg" id="phone">
                                 </c:if>
                             </div>
 
 
                             <div>${emailFmt}</div>
                             <form action="restaurant" method="post" id="editEmail" style="display: none;">
-                                <input type="hidden" name="command" value="edit_user">
+                                <input type="hidden" name="command" value="edit_personal_info">
                             </form>
                             <div>
                                 <c:if test="${!param.editEmail}">
@@ -119,8 +119,8 @@
                                     </a>
                                 </c:if>
                                 <c:if test="${param.editEmail}">
-                                    <input form="editEmail" type="image" src="../../images/save.png" alt="save" class="editImg"
-                                        id="email">
+                                    <input form="editEmail" type="image" src="../../images/save.png" alt="save"
+                                        class="editImg" id="email">
                                 </c:if>
                             </div>
 

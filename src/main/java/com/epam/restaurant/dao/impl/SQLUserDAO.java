@@ -29,11 +29,13 @@ public class SQLUserDAO implements UserDAO {
     private static final String USER_AUTHORIZATION_QUERY = "SELECT login, name, role_id, password FROM users WHERE login=?";
     private static final String CHECK_USER_EXISTENCE_QUERY = "SELECT id FROM users WHERE login=?";
     private static final String REGISTER_USER_QUERY = "INSERT INTO users(login, password, name, phone_number, email, role_id) VALUES(?,?,?,?,?,?)";
-    private static final String FIND_USER_BY_CRITERIA_QUERY = "Select login, name, role_id, id, phone_number, email from users where ";
+    private static final String FIND_USER_BY_CRITERIA_QUERY = "Select * from users where ";
+    private static final String FIND_USER_BY_LOGIN_PATTERN_QUERY = "SELECT * FROM users WHERE login LIKE ? LIMIT 5";
     private static final String UPDATE_USER_BY_CRITERIA_QUERY = "UPDATE users SET ";
 
     private static final String AND = "AND ";
     private static final String COMMA = ", ";
+    private static final String LOGIN_PATTERN = "{0}%";
 
     @Override
     public AuthorizedUser signIn(String login, char[] password) throws DAOException {
@@ -153,12 +155,57 @@ public class SQLUserDAO implements UserDAO {
             List<RegistrationUserData> users = new ArrayList<>();
             while (resultSet.next()) {
                 RegistrationUserData user = new RegistrationUserData();
-                user.setLogin(resultSet.getString(1));
-                user.setName(resultSet.getString(2));
-                user.setRoleId(resultSet.getInt(3));
-                user.setId(resultSet.getInt(4));
+                user.setId(resultSet.getInt(1));
+                user.setLogin(resultSet.getString(2));
+                user.setName(resultSet.getString(4));
                 user.setPhoneNumber(resultSet.getString(5));
                 user.setEmail(resultSet.getString(6));
+                user.setRoleId(resultSet.getInt(7));
+                users.add(user);
+            }
+
+            return users;
+
+        } catch (SQLException e) {
+            throw new DAOException("Error when trying to create a statement user find query", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DAOException("Error when trying to take connection", e);
+        } finally {
+            try {
+                connectionPool.closeConnection(connection, statement, resultSet);
+            } catch (SQLException e) {
+                LOGGER.error("Error to close connection...", e);
+            }
+        }
+    }
+
+    @Override
+    public List<RegistrationUserData> findByLoginPattern(String login) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+
+            statement = connection.prepareStatement(FIND_USER_BY_LOGIN_PATTERN_QUERY);
+            statement.setString(1, MessageFormat.format(LOGIN_PATTERN, login));
+            resultSet = statement.executeQuery();
+
+            if (!resultSet.isBeforeFirst()) {
+                return Collections.emptyList();
+            }
+
+            List<RegistrationUserData> users = new ArrayList<>();
+            while (resultSet.next()) {
+                RegistrationUserData user = new RegistrationUserData();
+                user.setId(resultSet.getInt(1));
+                user.setLogin(resultSet.getString(2));
+                user.setName(resultSet.getString(4));
+                user.setPhoneNumber(resultSet.getString(5));
+                user.setEmail(resultSet.getString(6));
+                user.setRoleId(resultSet.getInt(7));
                 users.add(user);
             }
 
@@ -195,6 +242,9 @@ public class SQLUserDAO implements UserDAO {
             }
             if (userData.getEmail() != null) {
                 queryBuilder.append(MessageFormat.format("email=''{0}'' {1}", userData.getEmail(), COMMA));
+            }
+            if (userData.getRoleId() != null) {
+                queryBuilder.append(MessageFormat.format("role_id=''{0}'' {1}", userData.getRoleId(), COMMA));
             }
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - COMMA.length()));
             queryBuilder.append(MessageFormat.format(" where login=''{0}''", login));

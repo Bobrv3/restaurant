@@ -11,6 +11,7 @@
             <fmt:message bundle="${loc}" key="local.txt.quitFromAccount" var="quitFromAccountFmt" />
             <fmt:message bundle="${loc}" key="local.txt.confirmationOfOrders" var="confirmationOfOrdersFmt" />
             <fmt:message bundle="${loc}" key="local.txt.orders" var="ordersFmt" />
+            <fmt:message bundle="${loc}" key="local.txt.findUser" var="findUsersFmt" />
             <!DOCTYPE html>
             <html>
 
@@ -61,10 +62,15 @@
                             </div>
                             <c:if test="${user.roleId == 1}">
                                 <div>
-
                                     <a href="/restaurant?command=move_to_confirmation_of_orders">
                                         <img src="../../images/communicate.png" alt="${confirmationOfOrdersFmt}"><br>
                                         ${confirmationOfOrdersFmt}
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="/showFindUsers">
+                                        <img src="../../images/find.png" alt="${findUsersFmt}"><br>
+                                        ${findUsersFmt}
                                     </a>
                                 </div>
                             </c:if>
