@@ -35,7 +35,7 @@ function onUsersReceived(users) {
             let userDiv = document.createElement('div');
             userDiv.id = user.login;
             userDiv.className = 'UserDiv';
-            userDiv.innerHTML = user.login;
+            userDiv.innerHTML = user.login + "<hr>";
             userDiv.onclick = () => { showUserInfo(user) };
 
             foundUsers.appendChild(userDiv);
@@ -61,29 +61,26 @@ function showUserInfo(user) {
 
     let role;
     let roleDiv = document.querySelector('#roleDiv');
+    roleDiv.children.role.id = 'role';
     switch (user.roleId) {
         case 1: {
             role = "admin";
             roleDiv.children.role.innerHTML = role;
-            roleDiv.children.role.id = 'role_' + 1;
             break;
         }
         case 2: {
             role = "client";
             roleDiv.children.role.innerHTML = role;
-            roleDiv.children.role.id = 'role_' + 2;
             break;
         }
         case 3: {
             role = "cook";
             roleDiv.children.role.innerHTML = role;
-            roleDiv.children.role.value = 'role_' + 3;
             break;
         }
         default: {
             role = "ask admin";
             roleDiv.children.role.innerHTML = role;
-            roleDiv.children.role.value = 'role_' + 3;
             break;
         }
     }

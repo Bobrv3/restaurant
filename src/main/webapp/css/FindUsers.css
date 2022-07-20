@@ -85,8 +85,17 @@ input[type="text"] {
     align-items: center;
 }
 
+.UserDiv {
+    font-size: 25px;
+    border: 2px black;
+}
+
 .UserDiv:hover {
     cursor: pointer;
     background: #e8edff;
     border: 1px black;
+}
+
+#foundUsers {
+    background-color: #f7ec86;
 }

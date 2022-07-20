@@ -43,103 +43,42 @@
                             </label>
                         </div>
 
-                        <div id="foundUsers" hidden="true" style="background-color: red;">
-
-                        </div>
-
-
-
-
+                        <div id="foundUsers" hidden="true"></div>
 
                         <div class="grid-container">
                             <div>${nameFmt}</div>
                             <div id="nameDiv">
                                 <span id="name"></span>
-                                <!-- <c:if test="${param.editName}">
-                                    <input form="editName" type="text" name="userName" value="${userData.name}"
-                                        required>
-                                </c:if> -->
                             </div>
                             <div>
                                 <img src="../../images/edit.png" alt="edit name" class="editImg">
-                                <!-- <c:if test="${!param.editName}">
-                                    <a href="/personalInfo?editName=true">
-
-                                    </a>
-                                </c:if> -->
-                                <!-- <c:if test="${param.editName}">
-                                    <input form="editName" type="image" src="../../images/save.png" alt="save"
-                                        class="editImg" id="name">
-                                </c:if> -->
                             </div>
 
 
                             <div>${phoneNumberFmt}</div>
-                            <!-- <form action="restaurant" method="post" id="editPhone" style="display: none;">
-                                <input type="hidden" name="command" value="edit_user">
-                            </form> -->
                             <div id="phoneNumberDiv">
                                 <span id="phoneNumber"></span>
-                                <!-- <c:if test="${!param.editPhone}">
-                                    ${userData.phoneNumber}
-                                </c:if>
-                                <c:if test="${param.editPhone}">
-                                    <input form="editPhone" type="text" name="phoneNumber"
-                                        value="${userData.phoneNumber}" required>
-                                </c:if> -->
                             </div>
                             <div>
                                 <img src="../../images/edit.png" alt="edit phoneNumber" class="editImg">
-                                <!-- <c:if test="${!param.editPhone}">
-                                    <a href="/personalInfo?editPhone=true">
-
-                                    </a>
-                                </c:if> -->
-                                <!-- <c:if test="${param.editPhone}">
-                                    <input form="editPhone" type="image" src="../../images/save.png" alt="save"
-                                        class="editImg" id="phone">
-                                </c:if> -->
                             </div>
 
 
                             <div>${emailFmt}</div>
                             <div id="emailDiv">
                                 <span id="email"></span>
-                                <!-- <c:if test="${param.editEmail}">
-                                    <input form="editEmail" type="text" name="email" value="${userData.email}" required>
-                                </c:if> -->
                             </div>
                             <div>
                                 <img src="../../images/edit.png" alt="edit email" class="editImg">
-                                <!-- <c:if test="${!param.editEmail}">
-                                    <a href="/personalInfo?editEmail=true">
-
-                                    </a>
-                                </c:if> -->
-                                <!-- <c:if test="${param.editEmail}">
-                                    <input form="editEmail" type="image" src="../../images/save.png" alt="save"
-                                        class="editImg" id="email">
-                                </c:if> -->
                             </div>
+
 
                             <div>${roleFmt}</div>
                             <div id="roleDiv">
                                 <span id="role"></span>
-                                <!-- <c:if test="${param.editEmail}">
-                                    <input form="editEmail" type="text" name="email" value="${userData.email}" required>
-                                </c:if> -->
                             </div>
                             <div>
                                 <img src="../../images/edit.png" alt="edit email" class="editImg">
-                                <!-- <c:if test="${!param.editEmail}">
-                                    <a href="/personalInfo?editEmail=true">
-
-                                    </a>
-                                </c:if> -->
-                                <!-- <c:if test="${param.editEmail}">
-                                    <input form="editEmail" type="image" src="../../images/save.png" alt="save"
-                                        class="editImg" id="email">
-                                </c:if> -->
                             </div>
 
                         </div>
