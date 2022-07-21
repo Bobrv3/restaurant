@@ -73,7 +73,7 @@ public class RegistrationUserData implements Serializable {
         this.roleId = roleId;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

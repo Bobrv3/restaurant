@@ -17,7 +17,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -78,7 +77,7 @@ public class SQLMenuDAO implements MenuDAO {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);
-        }finally {
+        } finally {
             try {
                 connectionPool.closeConnection(connection, statement, resultSet);
             } catch (SQLException e) {
@@ -120,7 +119,7 @@ public class SQLMenuDAO implements MenuDAO {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);
-        }finally {
+        } finally {
             try {
                 connectionPool.closeConnection(connection, statement, resultSet);
             } catch (SQLException e) {
@@ -134,7 +133,7 @@ public class SQLMenuDAO implements MenuDAO {
     @Override
     public List<Dish> find(Criteria criteria) throws DAOException {
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         Map<String, Object> criterias = criteria.getCriteria();
@@ -143,14 +142,18 @@ public class SQLMenuDAO implements MenuDAO {
             connection = connectionPool.takeConnection();
 
             StringBuilder queryBuilder = new StringBuilder(FIND_DISH_BY_CRITERIA_QUERY);
-            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
+            for (String criteriaName : criterias.keySet()) {
+                queryBuilder.append(String.format("%s=? %s", criteriaName.toLowerCase(), AND));
             }
-
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
 
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(queryBuilder.toString());
+            statement = connection.prepareStatement(queryBuilder.toString());
+            int i = 1;
+            for (Object value : criterias.values()) {
+                statement.setString(i, value.toString());
+                i++;
+            }
+            resultSet = statement.executeQuery();
 
             if (!resultSet.isBeforeFirst()) {
                 return Collections.emptyList();
@@ -187,7 +190,7 @@ public class SQLMenuDAO implements MenuDAO {
     @Override
     public List<Category> findCategory(Criteria criteria) throws DAOException {
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         Map<String, Object> criterias = criteria.getCriteria();
@@ -196,14 +199,19 @@ public class SQLMenuDAO implements MenuDAO {
             connection = connectionPool.takeConnection();
 
             StringBuilder queryBuilder = new StringBuilder(FIND_CATEGORY_BY_CRITERIA_QUERY);
-            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
+            for (String criteriaName : criterias.keySet()) {
+                queryBuilder.append(String.format("%s=? %s", criteriaName.toLowerCase(), AND));
             }
-
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
 
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(queryBuilder.toString());
+            statement = connection.prepareStatement(queryBuilder.toString());
+            int i = 1;
+            for (Object value : criterias.values()) {
+                statement.setString(i, value.toString());
+                i++;
+            }
+
+            resultSet = statement.executeQuery();
 
             if (!resultSet.isBeforeFirst()) {
                 return Collections.emptyList();
@@ -238,7 +246,7 @@ public class SQLMenuDAO implements MenuDAO {
     @Override
     public int removeDish(Criteria criteria) throws DAOException {
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
 
         Map<String, Object> criterias = criteria.getCriteria();
 
@@ -246,14 +254,19 @@ public class SQLMenuDAO implements MenuDAO {
             connection = connectionPool.takeConnection();
 
             StringBuilder queryBuilder = new StringBuilder(REMOVE_DISH_BY_CRITERIA_QUERY);
-            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
+            for (String criteriaName : criterias.keySet()) {
+                queryBuilder.append(String.format("%s=? %s", criteriaName.toLowerCase(), AND));
             }
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
 
-            statement = connection.createStatement();
+            statement = connection.prepareStatement(queryBuilder.toString());
+            int i = 1;
+            for (Object value : criterias.values()) {
+                statement.setString(i, value.toString());
+                i++;
+            }
 
-            return statement.executeUpdate(queryBuilder.toString());
+            return statement.executeUpdate();
 
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a statement dish find query", e);
@@ -277,9 +290,9 @@ public class SQLMenuDAO implements MenuDAO {
         try {
             connection = connectionPool.takeConnection();
 
-             statement = connection.prepareStatement(EDIT_CATEGORY_QUERY);
-             statement.setString(1, newCategoryName);
-             statement.setInt(2, editedCategoryId);
+            statement = connection.prepareStatement(EDIT_CATEGORY_QUERY);
+            statement.setString(1, newCategoryName);
+            statement.setInt(2, editedCategoryId);
 
             return statement.executeUpdate() == 1;
 
@@ -319,7 +332,7 @@ public class SQLMenuDAO implements MenuDAO {
             return statement.executeUpdate() == 1;
 
         } catch (SQLException e) {
-            if (e.getClass() == java.sql.SQLIntegrityConstraintViolationException.class){
+            if (e.getClass() == java.sql.SQLIntegrityConstraintViolationException.class) {
                 throw new DAOException("A dish with such photo already exists. ", e);
             }
             throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
@@ -343,7 +356,7 @@ public class SQLMenuDAO implements MenuDAO {
 
         try {
             connection = DAOProvider.getInstance().getTransactionDAO().getConnectionHolder().get();
-            if (connection == null){
+            if (connection == null) {
                 connection = connectionPool.takeConnection();
             }
 

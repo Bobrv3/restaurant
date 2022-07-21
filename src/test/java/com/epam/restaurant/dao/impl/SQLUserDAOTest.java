@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,7 @@ class SQLUserDAOTest {
     private Criteria criteria = new Criteria();
 
     public SQLUserDAOTest() {
-        criteria.add(SearchCriteria.Users.LOGIN.name(), "testUs4");
+        criteria.add(SearchCriteria.Users.LOGIN.name(), "student80");
     }
 
     @BeforeAll

@@ -17,7 +17,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,10 +28,10 @@ public class SQLOrderDAO implements OrderDAO {
 
     private static final String INSERT_ORDER_QUERY = "INSERT INTO orders (date, order_status, user_id) VALUES (?, ?, ?)";
     private static final String INSERT_ORDER_DETAIL_QUERY = "INSERT INTO order_details (orders_id, menu_dishes_id, quantity, methodOfReceiving) VALUES (?, ?, ?, ?)";
-    private static final String FIND_ORDER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, order_status FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where {0} group by ord.id;";
+    private static final String FIND_ORDER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, order_status FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where %s group by ord.id;";
     private static final String GET_ORDERS_WITHOUT_STATUS_INPROCESSING_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, order_status FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where user_id=? AND order_status!='in processing' group by ord.id;";
-    private static final String FIND_ORDER_WITH_USER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, u.name, phone_number, email FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id LEFT JOIN users u on user_id=u.id where {0} group by ord.id;";
-    private static final String FIND_ORDER_WITH_DISH_BY_CRITERIA_QUERY = "SELECT ord.id,  m.name, methodOfReceiving, quantity FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where {0};";
+    private static final String FIND_ORDER_WITH_USER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, u.name, phone_number, email FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id LEFT JOIN users u on user_id=u.id where %s group by ord.id;";
+    private static final String FIND_ORDER_WITH_DISH_BY_CRITERIA_QUERY = "SELECT ord.id,  m.name, methodOfReceiving, quantity FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where %s;";
     private static final String UPDATE_ORDER_STATUS_QUERY = "UPDATE orders SET order_status=? where id=?;";
 
     private static final String AND = "AND ";
@@ -115,7 +114,7 @@ public class SQLOrderDAO implements OrderDAO {
     @Override
     public List<Order> find(Criteria criteria) throws DAOException {
         ResultSet resultSet = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         Connection connection = null;
 
         try {
@@ -123,16 +122,20 @@ public class SQLOrderDAO implements OrderDAO {
 
             Map<String, Object> criterias = criteria.getCriteria();
 
-            StringBuilder where = new StringBuilder("");
-            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
+            StringBuilder whereBuilder = new StringBuilder("");
+            for (String criteriaName : criterias.keySet()) {
+                whereBuilder.append(String.format("%s=? %s", criteriaName.toLowerCase(), AND));
             }
-            where = new StringBuilder(where.substring(0, where.length() - AND.length()));
+            whereBuilder = new StringBuilder(whereBuilder.substring(0, whereBuilder.length() - AND.length()));
+            String queryBuilder = String.format(FIND_ORDER_BY_CRITERIA_QUERY, whereBuilder);
 
-            String query = MessageFormat.format(FIND_ORDER_BY_CRITERIA_QUERY, where);
-
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
+            statement = connection.prepareStatement(queryBuilder);
+            int i = 1;
+            for (Object value : criterias.values()) {
+                statement.setString(i, value.toString());
+                i++;
+            }
+            resultSet = statement.executeQuery();
 
             List<Order> orders = new ArrayList<>();
             while (resultSet.next()) {
@@ -150,7 +153,7 @@ public class SQLOrderDAO implements OrderDAO {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);
         } catch (SQLException e) {
-            throw new DAOException("Error when trying to find", e);
+            throw new DAOException("Error when trying to find order", e);
         } finally {
             try {
                 connectionPool.closeConnection(connection, statement, resultSet);
@@ -202,7 +205,7 @@ public class SQLOrderDAO implements OrderDAO {
     @Override
     public Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws DAOException {
         ResultSet resultSet = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         Connection connection = null;
 
         try {
@@ -210,16 +213,20 @@ public class SQLOrderDAO implements OrderDAO {
 
             Map<String, Object> criterias = criteria.getCriteria();
 
-            StringBuilder where = new StringBuilder("");
-            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
+            StringBuilder whereBuilder = new StringBuilder("");
+            for (String criteriaName : criterias.keySet()) {
+                whereBuilder.append(String.format("%s=? %s", criteriaName.toLowerCase(), AND));
             }
-            where = new StringBuilder(where.substring(0, where.length() - AND.length()));
+            whereBuilder = new StringBuilder(whereBuilder.substring(0, whereBuilder.length() - AND.length()));
+            String queryBuilder = String.format(FIND_ORDER_WITH_USER_BY_CRITERIA_QUERY, whereBuilder);
 
-            String query = MessageFormat.format(FIND_ORDER_WITH_USER_BY_CRITERIA_QUERY, where);
-
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
+            statement = connection.prepareStatement(queryBuilder);
+            int i = 1;
+            for (Object value : criterias.values()) {
+                statement.setString(i, value.toString());
+                i++;
+            }
+            resultSet = statement.executeQuery();
 
             Map<Order, RegistrationUserData> orderUserDataMap = new LinkedHashMap<>();
             while (resultSet.next()) {
@@ -283,7 +290,7 @@ public class SQLOrderDAO implements OrderDAO {
     @Override
     public List<OrderForCooking> findOrdersWithDishInfo(Criteria criteria) throws DAOException {
         ResultSet resultSet = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         Connection connection = null;
 
         try {
@@ -291,16 +298,20 @@ public class SQLOrderDAO implements OrderDAO {
 
             Map<String, Object> criterias = criteria.getCriteria();
 
-            StringBuilder where = new StringBuilder("");
-            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-                where.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
+            StringBuilder whereBuilder = new StringBuilder("");
+            for (String criteriaName : criterias.keySet()) {
+                whereBuilder.append(String.format("%s=? %s", criteriaName.toLowerCase(), AND));
             }
-            where = new StringBuilder(where.substring(0, where.length() - AND.length()));
+            whereBuilder = new StringBuilder(whereBuilder.substring(0, whereBuilder.length() - AND.length()));
+            String queryBuilder = String.format(FIND_ORDER_WITH_DISH_BY_CRITERIA_QUERY, whereBuilder);
 
-            String query = MessageFormat.format(FIND_ORDER_WITH_DISH_BY_CRITERIA_QUERY, where);
-
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(query);
+            statement = connection.prepareStatement(queryBuilder);
+            int i = 1;
+            for (Object value : criterias.values()) {
+                statement.setString(i, value.toString());
+                i++;
+            }
+            resultSet = statement.executeQuery();
 
             List<OrderForCooking> orderForCookingList = new ArrayList<>();
             while (resultSet.next()) {

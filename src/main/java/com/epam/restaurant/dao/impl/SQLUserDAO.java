@@ -10,11 +10,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ public class SQLUserDAO implements UserDAO {
 
     private static final String AND = "AND ";
     private static final String COMMA = ", ";
+    private static final String GET_METHOD_REGEX = "get.*";
     private static final String LOGIN_PATTERN = "{0}%";
 
     @Override
@@ -127,11 +129,10 @@ public class SQLUserDAO implements UserDAO {
         }
     }
 
-    // TODO сделать для prepared statement: придумать как избавиться от '' после вставки на место ?
     @Override
     public List<RegistrationUserData> find(Criteria criteria) throws DAOException {
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         Map<String, Object> criterias = criteria.getCriteria();
@@ -140,13 +141,19 @@ public class SQLUserDAO implements UserDAO {
             connection = connectionPool.takeConnection();
 
             StringBuilder queryBuilder = new StringBuilder(FIND_USER_BY_CRITERIA_QUERY);
-            for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-                queryBuilder.append(MessageFormat.format("{0}=''{1}'' {2}", entry.getKey().toLowerCase(), entry.getValue().toString(), AND));
+            for (String criteriaName : criterias.keySet()) {
+                queryBuilder.append(String.format("%s=? %s", criteriaName.toLowerCase(), AND));
             }
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - AND.length()));
 
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(queryBuilder.toString());
+            statement = connection.prepareStatement(queryBuilder.toString());
+            int i = 1;
+            for (Object value : criterias.values()) {
+                statement.setString(i, value.toString());
+                i++;
+            }
+
+            resultSet = statement.executeQuery();
 
             if (!resultSet.isBeforeFirst()) {
                 return Collections.emptyList();
@@ -228,30 +235,41 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public boolean updateUser(String login, RegistrationUserData userData) throws DAOException {
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
 
         try {
             connection = connectionPool.takeConnection();
 
             StringBuilder queryBuilder = new StringBuilder(UPDATE_USER_BY_CRITERIA_QUERY);
             if (userData.getName() != null) {
-                queryBuilder.append(MessageFormat.format("name=''{0}'' {1}", userData.getName(), COMMA));
+                queryBuilder.append("name=?, ");
             }
             if (userData.getPhoneNumber() != null) {
-                queryBuilder.append(MessageFormat.format("phone_number=''{0}'' {1}", userData.getPhoneNumber(), COMMA));
+                queryBuilder.append("phone_number=?, ");
             }
             if (userData.getEmail() != null) {
-                queryBuilder.append(MessageFormat.format("email=''{0}'' {1}", userData.getEmail(), COMMA));
+                queryBuilder.append("email=?, ");
             }
             if (userData.getRoleId() != null) {
-                queryBuilder.append(MessageFormat.format("role_id=''{0}'' {1}", userData.getRoleId(), COMMA));
+                queryBuilder.append("role_id=?, ");
             }
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - COMMA.length()));
-            queryBuilder.append(MessageFormat.format(" where login=''{0}''", login));
+            queryBuilder.append(String.format(" where login='%s'", login));
 
-            statement = connection.createStatement();
+            statement = connection.prepareStatement(queryBuilder.toString());
 
-            return statement.executeUpdate(queryBuilder.toString()) == 1;
+            int i=1;
+            for (Method method : userData.getClass().getMethods()) {
+                if (method.getName().matches(GET_METHOD_REGEX) && !method.getName().equals("getClass")){
+                    Object value = method.invoke(userData);
+                    if (value != null) {
+                        statement.setString(i, value.toString());
+                        i++;
+                    }
+                }
+            }
+
+            return statement.executeUpdate() == 1;
 
         } catch (SQLException e) {
             if (e.getClass() == com.mysql.cj.jdbc.exceptions.MysqlDataTruncation.class) {
@@ -261,6 +279,9 @@ public class SQLUserDAO implements UserDAO {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            LOGGER.error("Eror when try to update user info", e);
+            throw new DAOException("Eror when try to update user info");
         } finally {
             try {
                 connectionPool.closeConnection(connection, statement, null);

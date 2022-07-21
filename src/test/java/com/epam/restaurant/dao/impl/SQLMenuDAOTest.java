@@ -50,7 +50,11 @@ class SQLMenuDAOTest {
     @Test
     void getCategories_NumOfCategoriesEquals5_true() throws DAOException {
         List<Category> categories = menuDAO.getCategories();
-        int NumOfCategories = 5;
+
+        Criteria criteria = new Criteria();
+        criteria.add(SearchCriteria.Categories.ID.name(), 1);
+
+        int NumOfCategories = menuDAO.findCategory(criteria).size();
 
         Assertions.assertEquals(NumOfCategories, categories.size());
     }
