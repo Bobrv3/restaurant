@@ -3,7 +3,6 @@ package com.epam.restaurant.service.validation;
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
 
-import java.util.Collections;
 import java.util.Map;
 
 public final class UserValidator {
@@ -31,19 +30,19 @@ public final class UserValidator {
 
         Map<String, Object> criterias = criteria.getCriteria();
         for (Map.Entry<String, Object> entry : criterias.entrySet()) {
-            if (entry.getKey() == ValidationType.LOGIN.name()) {
+            if (entry.getKey().equals(ValidationType.LOGIN.name())) {
                 if (entry.getValue() != null && !entry.getValue().toString().matches(ValidationType.LOGIN.getRegex())) {
                     throw new ValidationException(ValidationType.LOGIN.getErrorMsg());
                 }
-            } else if (entry.getKey() == ValidationType.NAME.name()) {
+            } else if (entry.getKey().equals(ValidationType.NAME.name())) {
                 if (entry.getValue() != null && !entry.getValue().toString().matches(ValidationType.NAME.getRegex())) {
                     throw new ValidationException(ValidationType.NAME.getErrorMsg());
                 }
-            } else if (entry.getKey() == ValidationType.EMAIL.name()) {
+            } else if (entry.getKey().equals(ValidationType.EMAIL.name())) {
                 if (entry.getValue() != null && !entry.getValue().toString().matches(ValidationType.EMAIL.getRegex())) {
                     throw new ValidationException(ValidationType.EMAIL.getErrorMsg());
                 }
-            } else if (entry.getKey() == ValidationType.PHONE_NUMBER.name()) {
+            } else if (entry.getKey().equals(ValidationType.PHONE_NUMBER.name())) {
                 if (entry.getValue() != null && !entry.getValue().toString().matches(ValidationType.PHONE_NUMBER.getRegex())) {
                     throw new ValidationException(ValidationType.PHONE_NUMBER.getErrorMsg());
                 }

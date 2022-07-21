@@ -1,7 +1,6 @@
 package com.epam.restaurant.service.validation;
 
 import com.epam.restaurant.bean.Category;
-import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.dao.DAOException;
@@ -50,10 +49,13 @@ public final class CategoryValidator {
     }
 
     /**
-     * Check if the name of category is not used in the database, because these fields are unique in DB
+     * Check if the name of category is not used in the database, because these fields must be unique in menu
+     * Firstly, check if there is already category with such name in the menu.
+     * If YES Then check if the category is null(that's mean it's a new category) OR the id of the found category doesn't
+     * match the id of the category being modified - Category cannot be added to the database, because such category already exists
      *
-     * @param name of dish
-     * @param id   of dish
+     * @param name of category
+     * @param id   of category
      * @throws DAOException        if problems with method find(criteria)
      * @throws ValidationException if the name or photo is already in use
      */
@@ -64,9 +66,8 @@ public final class CategoryValidator {
 
         List<Category> foundDishes = DAOProvider.getInstance().getMenuDAO().findCategory(criteria);
 
-        if (!foundDishes.isEmpty() && id == null) {  // when  add new dish to menu
-            throw new ValidationException("Category with such NAME has already exist");
-        } else if (!foundDishes.isEmpty() && foundDishes.get(FOUND_DISH_INDX).getId() != id) {  // when edit exist dish in menu
+        if (!foundDishes.isEmpty() &&
+                (id == null || foundDishes.get(FOUND_DISH_INDX).getId() != id)) {
             throw new ValidationException("Category with such NAME has already exist");
         }
     }
