@@ -1,8 +1,6 @@
 package com.epam.restaurant.dao.impl;
 
-import com.epam.restaurant.bean.Category;
 import com.epam.restaurant.bean.Dish;
-import com.epam.restaurant.bean.Menu;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.dao.ConnectionPool;
@@ -10,17 +8,37 @@ import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 import com.epam.restaurant.dao.MenuDAO;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collections;
 import java.util.List;
 
 class SQLMenuDAOTest {
     private static ConnectionPool connectionPool;
     private static final MenuDAO menuDAO = DAOProvider.getInstance().getMenuDAO();
+
+    private static final String UPDATE_DISH_STATUS_TO_OK_QUERY = "UPDATE menu SET status=0 where dishes_id=%s";
+    private static final String UPDATE_CATEGORY_STATUS_TO_OK_QUERY = "UPDATE categories SET status=0 where id=%s";
+    private static final String SELECT_DISH_STATUS_QUERY = "SELECT status FROM menu WHERE dishes_id=%S";
+    private static final String SELECT_CATEGORY_STATUS_QUERY = "SELECT status FROM categories WHERE id=%S";
+    private static final String GET_NUM_OF_OK_STATUS_CATEGORIES_QUERY = "SELECT count(id) FROM categories WHERE status=0";
+    private static final String GET_NUM_OF_OK_STATUS_DISHES_QUERY = "SELECT count(dishes_id) FROM menu WHERE status=0";
+    private static final String DELETE_CATEGORY_QUERY = "DELETE FROM categories WHERE id=%s";
+    private static final String DELETE_DISH_QUERY = "DELETE FROM menu WHERE dishes_id=%s";
+    private static final String DELETE_DISH_PHOTO_QUERY = "DELETE FROM dish_photos WHERE menu_dishes_id=%s";
+    private static Connection connection;
+    private static Statement statement;
+    private static ResultSet resultSet;
+
 
     @BeforeAll
     static void beforeAll() throws SQLException, ClassNotFoundException, InterruptedException {
@@ -33,69 +51,92 @@ class SQLMenuDAOTest {
         connectionPool.dispose();
     }
 
+    @BeforeEach
+    void setUp() throws SQLException, InterruptedException {
+        connection = connectionPool.takeConnection();
+        statement = connection.createStatement();
+    }
+
+    @AfterEach
+    void tearDown() throws SQLException {
+        if (resultSet != null) {
+            resultSet.close();
+        }
+        if (statement != null) {
+            statement.close();
+        }
+        if (connection != null){
+            connection.close();
+        }
+    }
+
     @Test
-    void getMenu_SecondIdBelongsToSchi_true() throws DAOException {
+    void getMenu_Success_true() throws DAOException {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), 2);
 
-        List<Dish> dishes = menuDAO.find(criteria);
-        Dish dishWithSecondId = dishes.get(0);
+        Dish dishWithSecondId = menuDAO.find(criteria).get(0);
 
-        Menu menu = menuDAO.getMenu();
-        int secondId = 1;
-
-        Assertions.assertEquals(dishWithSecondId.getName(), menu.getDishes().get(secondId).getName());
+        int secondDishIdInArray = 1;
+        Assertions.assertEquals(dishWithSecondId.getName(), menuDAO.getMenu().getDishes().get(secondDishIdInArray).getName());
     }
 
     @Test
-    void getCategories_NumOfCategoriesEquals5_true() throws DAOException {
-        List<Category> categories = menuDAO.getCategories();
+    void getCategories_NumOfCategoriesEquals5_true() throws DAOException, SQLException, InterruptedException {
+        ResultSet resultSet = statement.executeQuery(GET_NUM_OF_OK_STATUS_CATEGORIES_QUERY);
+        resultSet.next();
+        int NumOfCategories = resultSet.getInt(1);
 
+        Assertions.assertEquals(NumOfCategories, menuDAO.getCategories().size());
+    }
+
+    @Test
+    void find_DishWithCriteriaNoExist_emptyList_true() throws DAOException {
         Criteria criteria = new Criteria();
-        criteria.add(SearchCriteria.Categories.ID.name(), 1);
 
-        int NumOfCategories = menuDAO.findCategory(criteria).size();
+        String noExistDishName = "sfsdfsdfsgs";
+        criteria.add(SearchCriteria.Dishes.NAME.toString(), noExistDishName);
 
-        Assertions.assertEquals(NumOfCategories, categories.size());
+        Assertions.assertEquals(Collections.emptyList(), menuDAO.find(criteria));
     }
 
     @Test
-    void find_DishWithCriteriaNoExist_null() throws DAOException {
-        Criteria criteria = new Criteria();
-        criteria.add(SearchCriteria.Dishes.NAME.toString(), "fgfdsgdsfg");
-
-        List<Dish> actual = menuDAO.find(criteria);
-
-        Assertions.assertNull(actual);
-    }
-
-    @Test
-    void find_DishWithCriteriaExist_shchi() throws DAOException {
+    void find_DishWithCriteriaExist_true() throws DAOException, SQLException, InterruptedException {
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.STATUS.toString(), "0");
 
-        int currentSizeOfMenu = 3;
+        ResultSet resultSet = statement.executeQuery(GET_NUM_OF_OK_STATUS_DISHES_QUERY);
+        resultSet.next();
+        int currentSizeOfMenu = resultSet.getInt(1);
 
-        List<Dish> actual = menuDAO.find(criteria);
-
-        Assertions.assertEquals(currentSizeOfMenu, actual.size());
+        Assertions.assertEquals(currentSizeOfMenu, menuDAO.find(criteria).size());
     }
 
     @Test
-    void remove_DishWithId3_equal_1() throws DAOException {
+    void remove_DishWithId3_numOfRemovedDishes_equal_1_true() throws DAOException, SQLException, InterruptedException {
+        int dishToRemove = 3;
+        
+        ResultSet resultSet = statement.executeQuery(String.format(SELECT_DISH_STATUS_QUERY, dishToRemove));
+
+        resultSet.next();
+        int currentStatus = resultSet.getInt(1);
+
         Criteria criteria = new Criteria();
-        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), 3);
+        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), dishToRemove);
 
-        int numOdRemovedDishes = menuDAO.removeDish(criteria);
+        int numOfRemovedDishes = 1;
+        Assertions.assertEquals(numOfRemovedDishes, menuDAO.removeDish(criteria));
 
-        Assertions.assertEquals(1, numOdRemovedDishes);
+        if (currentStatus == 0) {
+            statement.executeUpdate(String.format(UPDATE_DISH_STATUS_TO_OK_QUERY, dishToRemove));
+        }
     }
 
     @Test
     void editCategory_ResultOfUpdateMoreThan0_true() throws DAOException {
-        int editedCategoryId = 2;
-
         Criteria criteria = new Criteria();
+
+        int editedCategoryId = 2;
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), editedCategoryId);
 
         List<Dish> dishes = menuDAO.find(criteria);
@@ -105,37 +146,36 @@ class SQLMenuDAOTest {
     }
 
     @Test
-    void editDish_ThrowEx_true() throws DAOException {
-        int editedDishId = 2;
+    void removeCategory_withExistId_true() throws DAOException, SQLException, InterruptedException {
+        int categoryForRemove = 1;
 
-        Criteria criteria = new Criteria();
-        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), editedDishId);
+        ResultSet resultSet = statement.executeQuery(String.format(SELECT_CATEGORY_STATUS_QUERY, categoryForRemove));
 
-        List<Dish> dishes = menuDAO.find(criteria);
-        String newDishName = dishes.get(0).getName();
-        BigDecimal newPrice = dishes.get(0). getPrice();
-        String newDescription = dishes.get(0).getDescription();
-        String photo_link = dishes.get(0).getPhotoLink();
+        resultSet.next();
+        int currentStatus = resultSet.getInt(1);
 
-        try {
-            menuDAO.editDish(editedDishId, newDishName, newDescription, newPrice, photo_link);
-        } catch (DAOException e) {
-            Assertions.assertSame(e.getCause().getClass(), java.sql.SQLIntegrityConstraintViolationException.class);
+        Assertions.assertTrue(menuDAO.removeCategory(categoryForRemove));
+
+        if (currentStatus == 0) {
+            statement.executeUpdate(String.format(UPDATE_CATEGORY_STATUS_TO_OK_QUERY, categoryForRemove));
         }
+
     }
 
     @Test
-    void removeCategory() throws DAOException {
-        Assertions.assertTrue(menuDAO.removeCategory(7));
+    void addCategory_Success_true() throws DAOException, SQLException, InterruptedException {
+        int idOfAddedCategory = menuDAO.addCategory("New category");
+        Assertions.assertTrue(idOfAddedCategory > 0);
+
+        statement.execute(String.format(DELETE_CATEGORY_QUERY, idOfAddedCategory));
     }
 
-    //    @Test
-//    void addCategory_ReturnedIndxMoreThan0_true() throws DAOException {
-//        Assertions.assertTrue(menuDAO.addCategory("Vines") > 0);
-//    }
+    @Test
+    void addDish_Success_true() throws DAOException, SQLException, InterruptedException {
+        int idOfAddedDish = menuDAO.addDish(new BigDecimal("14.50"), "New", "description", 2, "../../images/dishes/1.jpg");
+        Assertions.assertTrue(idOfAddedDish > 0);
 
-//    @Test
-//    void addDish_ReturnedIndxMoreThan0_true() throws DAOException {
-//        Assertions.assertTrue(menuDAO.addDish(new BigDecimal("14.50"), "Kharcho", "Georgian national beef soup with rice, walnuts and tklapi or sour tkemali sauce.", 2) > 0);
-//    }
+        statement.execute(String.format(DELETE_DISH_PHOTO_QUERY, idOfAddedDish));
+        statement.execute(String.format(DELETE_DISH_QUERY, idOfAddedDish));
+    }
 }

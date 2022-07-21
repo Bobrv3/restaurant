@@ -22,6 +22,7 @@ public interface MenuDAO {
 
     boolean editCategory(int editedCategoryId, String newCategoryName) throws DAOException;
 
+    //TODO refactor
     boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price, String photoLink) throws DAOException;
 
     int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photoLink) throws DAOException;

@@ -332,9 +332,6 @@ public class SQLMenuDAO implements MenuDAO {
             return statement.executeUpdate() == 1;
 
         } catch (SQLException e) {
-            if (e.getClass() == java.sql.SQLIntegrityConstraintViolationException.class) {
-                throw new DAOException("A dish with such photo already exists. ", e);
-            }
             throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
