@@ -69,7 +69,7 @@ function showUserInfo(user) {
             break;
         }
         case 2: {
-            role = "client";
+            role = "user";
             roleDiv.children.role.innerHTML = role;
             break;
         }

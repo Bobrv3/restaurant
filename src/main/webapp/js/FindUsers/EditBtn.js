@@ -37,7 +37,7 @@ function editUserInfo(event) {
         input.appendChild(firstOption);
 
         let i = 0;
-        let roles = ["admin", "client", "cook"];
+        let roles = ["admin", "user", "cook"];
         roles.forEach(role => {
             let option = document.createElement('option')
             option.value = i + 1; // in DB role starts from 1
