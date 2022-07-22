@@ -28,12 +28,12 @@
 
                 <jsp:include page="/WEB-INF/jsp/Header.jsp" />
 
-                <a href="/showAccount">
-                    <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
-                </a>
-
                 <div class="wrapper">
                     <main id="main-block" class="main">
+                        <a href="/showAccount">
+                            <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                        </a>
+
                         <h2>${findUsersFmt}</h2>
 
                         <div class="AlignItemsCenter">

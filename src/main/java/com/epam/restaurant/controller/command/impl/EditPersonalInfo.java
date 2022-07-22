@@ -2,8 +2,6 @@ package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.bean.RegistrationUserData;
-import com.epam.restaurant.bean.criteria.Criteria;
-import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.ServiceProvider;
@@ -36,33 +34,29 @@ public class EditPersonalInfo implements Command {
         String phoneNumber = request.getParameter(PHONE_NUMBER_PARAM);
         String email = request.getParameter(EMAIL_PARAM);
         AuthorizedUser sessionAuthUser = (AuthorizedUser) request.getSession().getAttribute(USER_ATTR);
-        RegistrationUserData sessionUserData = (RegistrationUserData) request.getSession().getAttribute(USER_DATA_ATTR);
+        RegistrationUserData dataToEdit = new RegistrationUserData();
 
         try {
             if (userName != null) {
                 sessionAuthUser.setName(userName);
-                sessionUserData.setName(userName);
+                dataToEdit.setName(userName);
             }
             if (phoneNumber != null) {
-                sessionUserData.setPhoneNumber(phoneNumber);
+                dataToEdit.setPhoneNumber(phoneNumber);
             }
             if (email != null) {
-                sessionUserData.setEmail(email);
+                dataToEdit.setEmail(email);
             }
+            dataToEdit.setLogin(sessionAuthUser.getLogin());
 
-            serviceProvider.getUserService().updateUser(sessionAuthUser.getLogin(), sessionUserData);
+            final RegistrationUserData updatedUserData = serviceProvider.getUserService().updateUser(dataToEdit);
+            request.getSession().setAttribute(USER_DATA_ATTR, updatedUserData);
 
             response.sendRedirect(PERSINAL_INFO_PAGE_ADDR);
         } catch (IOException e) {
             LOGGER.error("Error invalid address to redirect", e);
             throw new ServletException(e);
         } catch (ValidationException e) {
-            Criteria criteria = new Criteria();
-            criteria.add(SearchCriteria.Users.LOGIN.name(), sessionAuthUser.getLogin());
-            // rollback changes in session user data
-            sessionUserData = serviceProvider.getUserService().find(criteria).get(FOUND_USER);
-            request.getSession().setAttribute(USER_DATA_ATTR, sessionUserData);
-
             String errorMsg = e.getMessage();
             try {
                 request.getRequestDispatcher(String.format(VALIDATION_ERROR_PAGE_ADDR, errorMsg)).forward(request, response);

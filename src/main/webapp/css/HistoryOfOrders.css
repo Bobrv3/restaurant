@@ -65,14 +65,7 @@ td {
 }
 
 #goBackImg {
-    margin-left: 2%;
+    float: left;
     width: 2em;
     height: 2em;
-}
-
-.box {
-    display: flex;
-    flex-direction: row;
-    width: 59%;
-    justify-content: space-between;
 }

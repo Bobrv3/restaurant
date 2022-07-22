@@ -58,13 +58,5 @@ function editUserInfo(event) {
         input.name = input.previousElementSibling.id;
     }
 
-    if (input.name == 'name') {
-        input.previousElementSibling.innerHTML = input.value;
-    } else if (input.name == 'phoneNumber') {
-        input.previousElementSibling.innerHTML = input.value;
-    } else if (input.name == 'email') {
-        input.previousElementSibling.innerHTML = input.value;
-    } else if (input.name == 'role') {
-        input.previousElementSibling.innerHTML = input.value;
-    }
+
 }

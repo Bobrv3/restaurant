@@ -29,12 +29,10 @@
 
                 <div class="wrapper">
                     <main class="main">
-                        <div class="box">
-                            <a href="/showAccount">
-                                <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
-                            </a>
-                            <h1>${ordersInProcessingFmt}</h1>
-                        </div>
+
+                        <a href="/restaurant?command=move_to_account">
+                            <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                        </a>
 
                         <c:if test="${ordersInProcessing == null}">
                             <jsp:forward page="/restaurant">
@@ -49,6 +47,9 @@
                         </c:if>
                         <c:if test="${not empty ordersInProcessing}">
                             <table>
+                                <caption>
+                                    <h1>${ordersInProcessingFmt}</h1>
+                                </caption>
                                 <th>№</th>
                                 <th>${totalFmt}</th>
                                 <th>${dateFmt}</th>

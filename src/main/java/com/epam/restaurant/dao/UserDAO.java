@@ -1,8 +1,8 @@
 package com.epam.restaurant.dao;
 
-import com.epam.restaurant.bean.criteria.Criteria;
-import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.AuthorizedUser;
+import com.epam.restaurant.bean.RegistrationUserData;
+import com.epam.restaurant.bean.criteria.Criteria;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface UserDAO {
 
     List<RegistrationUserData> findByLoginPattern(String loginPattern) throws DAOException;
 
-    boolean updateUser(String login, RegistrationUserData userData) throws DAOException;
+    RegistrationUserData updateUser(RegistrationUserData userData) throws DAOException;
 }

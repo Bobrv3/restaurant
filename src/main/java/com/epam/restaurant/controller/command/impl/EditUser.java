@@ -50,7 +50,8 @@ public class EditUser implements Command {
             } else if (roleId != null) {
                 userData.setRoleId(Integer.parseInt(roleId));
             }
-            serviceProvider.getUserService().updateUser(login, userData);
+            userData.setLogin(login);
+            serviceProvider.getUserService().updateUser(userData);
 
             writer.println(SUCCESS_MSG_JSON);
         } catch (IOException e) {

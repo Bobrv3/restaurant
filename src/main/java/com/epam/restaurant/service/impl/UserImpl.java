@@ -80,11 +80,11 @@ public class UserImpl implements UserService {
     }
 
     @Override
-    public boolean updateUser(String login, RegistrationUserData userData) throws ServiceException {
+    public RegistrationUserData updateUser(RegistrationUserData userData) throws ServiceException {
         UserValidator.validateUserData(userData);
 
         try {
-            return userDAO.updateUser(login, userData);
+            return userDAO.updateUser(userData);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

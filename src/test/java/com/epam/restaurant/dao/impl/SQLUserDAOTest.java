@@ -28,7 +28,7 @@ class SQLUserDAOTest {
     private final char[] existing_password = newUser.getPassword();
 
     private final String non_existent_login = "jhgjhj";
-    private final char[] non_correct_password = new char[] {'1', '5', '8'};
+    private final char[] non_correct_password = new char[]{'1', '5', '8'};
 
     private Criteria criteria = new Criteria();
 
@@ -121,7 +121,8 @@ class SQLUserDAOTest {
         RegistrationUserData userData = new RegistrationUserData();
         userData.setName(userDataInDB.getName());
 
-        Assertions.assertTrue(userDAO.updateUser(userDataInDB.getLogin(), userData));
+        userData.setLogin(userDataInDB.getLogin());
+        Assertions.assertTrue(userDAO.updateUser(userData) != null);
     }
 
     @Test
@@ -131,7 +132,8 @@ class SQLUserDAOTest {
         RegistrationUserData userData = new RegistrationUserData();
         userData.setName(userDataInDB.getPhoneNumber());
 
-        Assertions.assertTrue(userDAO.updateUser(userDataInDB.getLogin(), userData));
+        userData.setLogin(userDataInDB.getLogin());
+        Assertions.assertTrue(userDAO.updateUser(userData) != null);
     }
 
     @Test
@@ -144,6 +146,7 @@ class SQLUserDAOTest {
         RegistrationUserData userData = new RegistrationUserData();
         userData.setName(userDataInDB.getEmail());
 
-        Assertions.assertTrue(userDAO.updateUser(userDataInDB.getLogin(), userData));
+        userData.setLogin(userDataInDB.getLogin());
+        Assertions.assertTrue(userDAO.updateUser(userData) != null);
     }
 }

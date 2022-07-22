@@ -98,21 +98,7 @@ button {
 }
 
 #goBackImg {
-    margin-left: 2%;
+    float: left;
     width: 2em;
     height: 2em;
-}
-
-.box {
-    display: flex;
-    flex-direction: row;
-    width: 56%;
-    justify-content: space-between;
-}
-
-.boxEmpty {
-    display: flex;
-    flex-direction: row;
-    width: 61%;
-    justify-content: space-between;
 }

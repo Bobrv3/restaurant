@@ -15,5 +15,5 @@ public interface UserService {
 
     List<RegistrationUserData> findByLoginPattern(String loginPattern) throws ServiceException;
 
-    boolean updateUser(String login, RegistrationUserData userData) throws ServiceException;
+    RegistrationUserData updateUser(RegistrationUserData userData) throws ServiceException;
 }

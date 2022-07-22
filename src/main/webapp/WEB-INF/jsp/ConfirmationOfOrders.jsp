@@ -32,14 +32,14 @@
                 <div class="wrapper">
                     <main class="main">
 
-                        <div class="box">
-                            <a href="/showAccount">
-                                <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
-                            </a>
-                            <h1>${confirmationOfOrdersFmt}</h1>
-                        </div>
+                        <a href="/showAccount">
+                            <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                        </a>
 
                         <table>
+                            <caption>
+                                <h1>${confirmationOfOrdersFmt}</h1>
+                            </caption>
                             <th>№</th>
                             <th>${totalFmt}</th>
                             <th>${dateFmt}</th>

@@ -3,6 +3,7 @@ package com.epam.restaurant.dao.impl;
 import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.bean.RegistrationUserData;
 import com.epam.restaurant.bean.criteria.Criteria;
+import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.UserDAO;
@@ -10,8 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,8 +36,9 @@ public class SQLUserDAO implements UserDAO {
 
     private static final String AND = "AND ";
     private static final String COMMA = ", ";
-    private static final String GET_METHOD_REGEX = "get.*";
     private static final String LOGIN_PATTERN = "{0}%";
+    private static final String SERIAL_VERSION_UID_FIELD_NAME = "serialVersionUID";
+    private static final int FOUND_USER = 0;
 
     @Override
     public AuthorizedUser signIn(String login, char[] password) throws DAOException {
@@ -57,7 +58,7 @@ public class SQLUserDAO implements UserDAO {
             }
             if (!BCrypt.checkpw(
                     Arrays.toString(password),                   // auth user psw
-                        resultSet.getString(4))) {   // psw from db
+                    resultSet.getString(4))) {   // psw from db
                 return new AuthorizedUser();
             }
 
@@ -86,7 +87,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public synchronized boolean signUp( RegistrationUserData userData) throws DAOException {
+    public synchronized boolean signUp(RegistrationUserData userData) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -233,7 +234,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean updateUser(String login, RegistrationUserData userData) throws DAOException {
+    public RegistrationUserData updateUser(RegistrationUserData userData) throws DAOException {
         Connection connection = null;
         PreparedStatement statement = null;
 
@@ -241,35 +242,34 @@ public class SQLUserDAO implements UserDAO {
             connection = connectionPool.takeConnection();
 
             StringBuilder queryBuilder = new StringBuilder(UPDATE_USER_BY_CRITERIA_QUERY);
-            if (userData.getName() != null) {
-                queryBuilder.append("name=?, ");
+
+            final Field[] fields = userData.getClass().getDeclaredFields();
+            List<String> values = new ArrayList<>();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                final Object value = field.get(userData);
+                if (value != null && !field.getName().equals(SERIAL_VERSION_UID_FIELD_NAME)) {
+                    queryBuilder.append(String.format("%s=?, ", field.getName().replaceAll("\\B[A-Z]", "_$0").toLowerCase()));
+                    values.add(value.toString());
+                }
+                field.setAccessible(false);
             }
-            if (userData.getPhoneNumber() != null) {
-                queryBuilder.append("phone_number=?, ");
-            }
-            if (userData.getEmail() != null) {
-                queryBuilder.append("email=?, ");
-            }
-            if (userData.getRoleId() != null) {
-                queryBuilder.append("role_id=?, ");
-            }
+
             queryBuilder = new StringBuilder(queryBuilder.substring(0, queryBuilder.length() - COMMA.length()));
-            queryBuilder.append(String.format(" where login='%s'", login));
+            queryBuilder.append(String.format(" where login='%s'", userData.getLogin()));
 
             statement = connection.prepareStatement(queryBuilder.toString());
 
-            int i=1;
-            for (Method method : userData.getClass().getMethods()) {
-                if (method.getName().matches(GET_METHOD_REGEX) && !method.getName().equals("getClass")){
-                    Object value = method.invoke(userData);
-                    if (value != null) {
-                        statement.setString(i, value.toString());
-                        i++;
-                    }
-                }
+            int i = 1;
+            for (String value : values) {
+                statement.setString(i, value);
+                i++;
             }
+            statement.executeUpdate();
 
-            return statement.executeUpdate() == 1;
+            Criteria criteria = new Criteria();
+            criteria.add(SearchCriteria.Users.LOGIN.name(), userData.getLogin());
+            return find(criteria).get(FOUND_USER);
 
         } catch (SQLException e) {
             if (e.getClass() == com.mysql.cj.jdbc.exceptions.MysqlDataTruncation.class) {
@@ -279,7 +279,7 @@ public class SQLUserDAO implements UserDAO {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);
-        } catch (InvocationTargetException | IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             LOGGER.error("Eror when try to update user info", e);
             throw new DAOException("Eror when try to update user info");
         } finally {

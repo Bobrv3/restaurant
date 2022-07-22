@@ -3,8 +3,10 @@ let categoryNameH;
 function showEditCategory(categoryID, event) {
     // close previous one
     Array.prototype.slice.call(document.querySelectorAll("form.CategoryName")).forEach(el => {
-        el.nextSibling.hidden = false;
-        el.remove()
+        if (el.nextSibling != null) {
+            el.nextSibling.hidden = false;
+            el.remove()
+        }
     })
 
     // create new one

@@ -21,7 +21,6 @@
             </head>
 
             <body>
-
                 <jsp:include page="/WEB-INF/jsp/Header.jsp" />
 
                 <c:if test="${userData == null}">
@@ -30,12 +29,11 @@
                     </jsp:forward>
                 </c:if>
 
-                <a href="/showAccount">
-                    <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
-                </a>
-
                 <div class="wrapper">
                     <main class="main">
+                        <a href="/restaurant?command=move_to_account">
+                            <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                        </a>
 
                         <h2>${personalInfoFmt}</h2>
 

@@ -27,17 +27,18 @@
                 <div class="wrapper">
                     <main class="main">
                         <c:if test="${order != null}">
-                            <div class="box">
-                                <a href="/showAccount">
-                                    <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
-                                </a>
-                                <h1>${yourOrder_lbl}:</h1>
-                            </div>
+
+                            <a href="/showAccount">
+                                <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                            </a>
 
                             <form action="restaurant" method="post" id="placeOrderForm">
                                 <input type="hidden" name="command" value="move_to_place_order">
 
                                 <table>
+                                    <caption>
+                                        <h1>${yourOrder_lbl}:</h1>
+                                    </caption>
                                     <c:forEach items="${order.getOrderList().keySet()}" var="orderedDish">
                                         <tr>
                                             <td>
@@ -79,13 +80,10 @@
                         </c:if>
 
                         <c:if test="${order == null}">
-                            <div class="boxEmpty">
-                                <a href="/showAccount">
-                                    <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
-                                </a>
-                                <h1>${orderIsEmptyFmt}</h1>
-                            </div>
-
+                            <a href="/showAccount">
+                                <img src="../../images/goBack.png" alt="goBack" id="goBackImg">
+                            </a>
+                            <h1>${orderIsEmptyFmt}</h1>
                         </c:if>
                     </main>
                 </div>

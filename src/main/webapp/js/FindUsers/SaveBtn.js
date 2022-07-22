@@ -24,7 +24,7 @@ function onUserSaved(response, change) {
     if (response.validationError) {
         alert(response.message);
     } else {
-        if (change.name = "role") {
+        if (change.name == "role") {
             editedDiv.firstElementChild.innerHTML = change.children[Number(change.value)].innerHTML;
         } else {
             editedDiv.firstElementChild.innerHTML = change.value;
