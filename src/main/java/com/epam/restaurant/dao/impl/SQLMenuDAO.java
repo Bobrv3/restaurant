@@ -39,7 +39,6 @@ public class SQLMenuDAO implements MenuDAO {
     private static final String ADD_CATEGORY_QUERY = "INSERT INTO categories(name, status) VALUES(?, 0)";
     private static final String ADD_PHOTO_QUERY = "INSERT INTO dish_photos(url, menu_dishes_id) VALUES(?, ?)";
     private static final int GENERATED_KEYS_COLUMN_INDX = 1;
-    private static final int NUM_OF_UPDATED_ROWS = 1;
 
     private static final String AND = "AND ";
 
@@ -294,8 +293,9 @@ public class SQLMenuDAO implements MenuDAO {
             statement.setString(1, newCategoryName);
             statement.setInt(2, editedCategoryId);
 
-            return statement.executeUpdate() == 1;
+            statement.executeUpdate();
 
+            return true;
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
         } catch (InterruptedException e) {
@@ -329,8 +329,9 @@ public class SQLMenuDAO implements MenuDAO {
             statement.setBigDecimal(3, price);
             statement.setInt(4, editedDishId);
 
-            return statement.executeUpdate() == 1;
+            statement.executeUpdate();
 
+            return true;
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a prepareStatement in edit category query", e);
         } catch (InterruptedException e) {
@@ -431,7 +432,9 @@ public class SQLMenuDAO implements MenuDAO {
             statement = connection.prepareStatement(REMOVE_CATEGORY_QUERY);
             statement.setInt(1, categoryId);
 
-            return statement.executeUpdate() == NUM_OF_UPDATED_ROWS;
+            statement.executeUpdate();
+
+            return  true;
         } catch (SQLException e) {
             throw new DAOException("Error when trying to create a prepareStatement in remove category query", e);
         } catch (InterruptedException e) {

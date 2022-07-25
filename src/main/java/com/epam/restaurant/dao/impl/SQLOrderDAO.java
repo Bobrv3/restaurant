@@ -26,8 +26,8 @@ public class SQLOrderDAO implements OrderDAO {
     private static final Logger LOGGER = LogManager.getLogger(SQLOrderDAO.class);
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-    private static final String INSERT_ORDER_QUERY = "INSERT INTO orders (date, order_status, user_id) VALUES (?, ?, ?)";
-    private static final String INSERT_ORDER_DETAIL_QUERY = "INSERT INTO order_details (orders_id, menu_dishes_id, quantity, methodOfReceiving) VALUES (?, ?, ?, ?)";
+    private static final String CREATE_ORDER_QUERY = "INSERT INTO orders (date, order_status, user_id) VALUES (?, ?, ?)";
+    private static final String CREATE_ORDER_DETAIL_QUERY = "INSERT INTO order_details (orders_id, menu_dishes_id, quantity, methodOfReceiving) VALUES (?, ?, ?, ?)";
     private static final String FIND_ORDER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, order_status FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where %s group by ord.id;";
     private static final String GET_ORDERS_WITHOUT_STATUS_INPROCESSING_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, order_status FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id where user_id=? AND order_status!='in processing' group by ord.id;";
     private static final String FIND_ORDER_WITH_USER_BY_CRITERIA_QUERY = "SELECT ord.id, SUM(ordd.quantity * m.price) as 'total',  ord.date, methodOfReceiving, u.name, phone_number, email FROM orders ord LEFT JOIN order_details ordd on ordd.orders_id = ord.id LEFT JOIN menu m on ordd.menu_dishes_id = m.dishes_id LEFT JOIN users u on user_id=u.id where %s group by ord.id;";
@@ -35,7 +35,6 @@ public class SQLOrderDAO implements OrderDAO {
     private static final String UPDATE_ORDER_STATUS_QUERY = "UPDATE orders SET order_status=? where id=?;";
 
     private static final String AND = "AND ";
-    private static final int NUM_OF_UPDATED_ROWS = 1;
 
     private static final String IN_PROCESSING = "in processing";
     private static final int GENERATED_KEYS = 1;
@@ -52,7 +51,7 @@ public class SQLOrderDAO implements OrderDAO {
                 connection = connectionPool.takeConnection();
             }
 
-            preparedStatement = connection.prepareStatement(INSERT_ORDER_QUERY, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement = connection.prepareStatement(CREATE_ORDER_QUERY, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(2, IN_PROCESSING);
             preparedStatement.setInt(3, userId);
@@ -89,7 +88,7 @@ public class SQLOrderDAO implements OrderDAO {
                 connection = connectionPool.takeConnection();
             }
 
-            preparedStatement = connection.prepareStatement(INSERT_ORDER_DETAIL_QUERY);
+            preparedStatement = connection.prepareStatement(CREATE_ORDER_DETAIL_QUERY);
             preparedStatement.setInt(1, oderId);
             preparedStatement.setInt(2, menuId);
             preparedStatement.setInt(3, quantity);
@@ -270,9 +269,9 @@ public class SQLOrderDAO implements OrderDAO {
             statement = connection.prepareStatement(UPDATE_ORDER_STATUS_QUERY);
             statement.setString(1, status);
             statement.setInt(2, orderID);
-            int num = statement.executeUpdate();
+            statement.executeUpdate();
 
-            return num == NUM_OF_UPDATED_ROWS;
+            return true;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new DAOException("Error when trying to take connection", e);

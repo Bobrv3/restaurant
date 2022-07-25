@@ -17,6 +17,6 @@ public final class SearchCriteria {
     }
 
     public static enum Orders{
-        ORDER_STATUS, USER_ID
+        ID, ORDER_STATUS, USER_ID
     }
 }
