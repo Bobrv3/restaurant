@@ -11,13 +11,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.MessageFormat;
 
-
+/**
+ * The {@code Controller} class is designed to process synchronous requests from the client and return results
+ * @see CommandProvider
+ */
 public class Controller extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(Controller.class);
     private static final CommandProvider commandProvider = CommandProvider.getInstance();
     private static final String PARAMETER_COMMAND = "command";
+    private static final String ERROR_PAGE_ADDR = "/errorPage?errorMsg=%s";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
@@ -32,12 +35,10 @@ public class Controller extends HttpServlet {
                 int lastIndx = e.getMessage().lastIndexOf(":");
                 if (lastIndx == -1) {
                     String errorMsg = e.getMessage();
-
-                    resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
-
+                    resp.sendRedirect(String.format(ERROR_PAGE_ADDR, errorMsg));
                 } else {
                     String errorMsg = e.getMessage().substring(lastIndx);
-                    resp.sendRedirect(MessageFormat.format("/errorPage?errorMsg={0}", errorMsg));
+                    resp.sendRedirect(String.format(ERROR_PAGE_ADDR, errorMsg));
                 }
             } catch (IOException ex) {
                 LOGGER.error("Error: invalid address to redirect");

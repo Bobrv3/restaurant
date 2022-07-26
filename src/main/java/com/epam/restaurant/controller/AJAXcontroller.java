@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The {@code AJAXcontroller} class is designed to process asynchronous requests from the client and return results
+ * @see CommandProvider
+ */
 @WebServlet("/ajaxController")
 public class AJAXcontroller extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(AJAXcontroller.class);
