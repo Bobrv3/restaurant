@@ -5,7 +5,6 @@ import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Menu;
 import com.epam.restaurant.bean.criteria.Criteria;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface MenuService {
@@ -20,9 +19,9 @@ public interface MenuService {
 
     boolean editCategory(Integer editedCategoryId, String newCategoryName) throws ServiceException;
 
-    boolean editDish(Integer editedDishId, String newDishName, String description, BigDecimal price, String photoLink) throws ServiceException;
+    boolean editDish(Dish dish) throws ServiceException;
 
-    int addDish(BigDecimal price, String name, String description, Integer categoryForAdd, String photoLink) throws ServiceException;
+    int addDish(Dish dish) throws ServiceException;
 
     int addCategory(String categoryName) throws ServiceException;
 

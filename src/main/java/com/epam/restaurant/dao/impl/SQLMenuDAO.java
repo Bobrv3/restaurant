@@ -311,7 +311,7 @@ public class SQLMenuDAO implements MenuDAO {
     }
 
     @Override
-    public boolean editDish(int editedDishId, String dishName, String description, BigDecimal price, String photoLink) throws DAOException {
+    public boolean editDish(Dish dish) throws DAOException {
         Connection connection = null;
         PreparedStatement statement = null;
 
@@ -319,15 +319,15 @@ public class SQLMenuDAO implements MenuDAO {
             connection = connectionPool.takeConnection();
 
             statement = connection.prepareStatement(EDIT_DISH_PHOTO_QUERY);
-            statement.setString(1, photoLink);
-            statement.setInt(2, editedDishId);
+            statement.setString(1, dish.getPhotoLink());
+            statement.setInt(2, dish.getId());
             statement.executeUpdate();
 
             statement = connection.prepareStatement(EDIT_DISH_QUERY);
-            statement.setString(1, dishName);
-            statement.setString(2, description);
-            statement.setBigDecimal(3, price);
-            statement.setInt(4, editedDishId);
+            statement.setString(1, dish.getName());
+            statement.setString(2, dish.getDescription());
+            statement.setBigDecimal(3, dish.getPrice());
+            statement.setInt(4, dish.getId());
 
             statement.executeUpdate();
 
@@ -347,7 +347,7 @@ public class SQLMenuDAO implements MenuDAO {
     }
 
     @Override
-    public int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photoLink) throws DAOException {
+    public int addDish(Dish dish) throws DAOException {
         Connection connection = null;
         ResultSet resultSet = null;
         PreparedStatement statement = null;
@@ -359,10 +359,10 @@ public class SQLMenuDAO implements MenuDAO {
             }
 
             statement = connection.prepareStatement(ADD_DISH_QUERY, Statement.RETURN_GENERATED_KEYS);
-            statement.setBigDecimal(1, price);
-            statement.setString(2, name);
-            statement.setString(3, description);
-            statement.setInt(4, categoryForAdd);
+            statement.setBigDecimal(1, dish.getPrice());
+            statement.setString(2, dish.getName());
+            statement.setString(3, dish.getDescription());
+            statement.setInt(4, dish.getCategoryId());
             statement.executeUpdate();
 
             resultSet = statement.getGeneratedKeys();
@@ -370,7 +370,7 @@ public class SQLMenuDAO implements MenuDAO {
             int addedDishId = resultSet.getInt(GENERATED_KEYS_COLUMN_INDX);
 
             statement = connection.prepareStatement(ADD_PHOTO_QUERY);
-            statement.setString(1, photoLink);
+            statement.setString(1, dish.getPhotoLink());
             statement.setInt(2, addedDishId);
             statement.executeUpdate();
 

@@ -2,6 +2,7 @@ package com.epam.restaurant.dao.impl;
 
 import com.epam.restaurant.bean.AuthorizedUser;
 import com.epam.restaurant.bean.RegistrationUserData;
+import com.epam.restaurant.bean.builder.RegistrationUserDataBuilder;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.dao.ConnectionPool;
@@ -162,13 +163,14 @@ public class SQLUserDAO implements UserDAO {
 
             List<RegistrationUserData> users = new ArrayList<>();
             while (resultSet.next()) {
-                RegistrationUserData user = new RegistrationUserData();
-                user.setId(resultSet.getInt(1));
-                user.setLogin(resultSet.getString(2));
-                user.setName(resultSet.getString(4));
-                user.setPhoneNumber(resultSet.getString(5));
-                user.setEmail(resultSet.getString(6));
-                user.setRoleId(resultSet.getInt(7));
+                RegistrationUserData user = new RegistrationUserDataBuilder()
+                        .setId(resultSet.getInt(1))
+                        .setLogin(resultSet.getString(2))
+                        .setName(resultSet.getString(4))
+                        .setPhoneNumber(resultSet.getString(5))
+                        .setEmail(resultSet.getString(6))
+                        .setRoleId(resultSet.getInt(7))
+                        .build();
                 users.add(user);
             }
 
@@ -207,13 +209,15 @@ public class SQLUserDAO implements UserDAO {
 
             List<RegistrationUserData> users = new ArrayList<>();
             while (resultSet.next()) {
-                RegistrationUserData user = new RegistrationUserData();
-                user.setId(resultSet.getInt(1));
-                user.setLogin(resultSet.getString(2));
-                user.setName(resultSet.getString(4));
-                user.setPhoneNumber(resultSet.getString(5));
-                user.setEmail(resultSet.getString(6));
-                user.setRoleId(resultSet.getInt(7));
+                RegistrationUserData user = new RegistrationUserDataBuilder()
+                        .setId(resultSet.getInt(1))
+                        .setLogin(resultSet.getString(2))
+                        .setName(resultSet.getString(4))
+                        .setPhoneNumber(resultSet.getString(5))
+                        .setEmail(resultSet.getString(6))
+                        .setRoleId(resultSet.getInt(7))
+                        .build();
+
                 users.add(user);
             }
 

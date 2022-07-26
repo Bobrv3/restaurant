@@ -1,6 +1,7 @@
 package com.epam.restaurant.dao.impl;
 
 import com.epam.restaurant.bean.Dish;
+import com.epam.restaurant.bean.builder.DishBuilder;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.dao.ConnectionPool;
@@ -168,7 +169,13 @@ class SQLMenuDAOTest {
 
     @Test
     void addDish_Success_true() throws DAOException, SQLException, InterruptedException {
-        int idOfAddedDish = menuDAO.addDish(new BigDecimal("14.50"), "New", "description", 2, "../../images/dishes/1.jpg");
+        int idOfAddedDish = menuDAO.addDish( new DishBuilder()
+                .setPrice(new BigDecimal("14.50"))
+                .setName("New")
+                .setDescription("description")
+                .setCategoryId(2)
+                .setPhotoLink("../../images/dishes/1.jpg")
+                .build());
         Assertions.assertTrue(idOfAddedDish > 0);
 
         statement.execute(String.format(DELETE_DISH_PHOTO_QUERY, idOfAddedDish));

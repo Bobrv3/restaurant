@@ -3,6 +3,7 @@ package com.epam.restaurant.dao.impl;
 import com.epam.restaurant.bean.Order;
 import com.epam.restaurant.bean.OrderForCooking;
 import com.epam.restaurant.bean.RegistrationUserData;
+import com.epam.restaurant.bean.builder.RegistrationUserDataBuilder;
 import com.epam.restaurant.bean.criteria.Criteria;
 import com.epam.restaurant.dao.ConnectionPool;
 import com.epam.restaurant.dao.DAOException;
@@ -235,10 +236,11 @@ public class SQLOrderDAO implements OrderDAO {
                 order.setDateTime(resultSet.getTimestamp(3));
                 order.setMethodOfReceiving(resultSet.getString(4));
 
-                RegistrationUserData userData = new RegistrationUserData();
-                userData.setName(resultSet.getString(5));
-                userData.setPhoneNumber(resultSet.getString(6));
-                userData.setEmail(resultSet.getString(7));
+                RegistrationUserData userData = new RegistrationUserDataBuilder()
+                        .setName(resultSet.getString(5))
+                        .setPhoneNumber(resultSet.getString(6))
+                        .setEmail(resultSet.getString(7))
+                        .build();
 
                 orderUserDataMap.put(order, userData);
             }

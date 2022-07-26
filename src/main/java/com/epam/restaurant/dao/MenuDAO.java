@@ -5,7 +5,6 @@ import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Menu;
 import com.epam.restaurant.bean.criteria.Criteria;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface MenuDAO {
@@ -22,10 +21,9 @@ public interface MenuDAO {
 
     boolean editCategory(int editedCategoryId, String newCategoryName) throws DAOException;
 
-    //TODO refactor
-    boolean editDish(int editedDishId, String newDishName, String description, BigDecimal price, String photoLink) throws DAOException;
+    boolean editDish(Dish dish) throws DAOException;
 
-    int addDish(BigDecimal price, String name, String description, int categoryForAdd, String photoLink) throws DAOException;
+    int addDish(Dish dish) throws DAOException;
 
     int addCategory(String categoryName) throws DAOException;
 

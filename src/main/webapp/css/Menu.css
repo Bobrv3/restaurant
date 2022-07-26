@@ -47,11 +47,11 @@ input[type=text] {
     transition-duration: 0.0s;
 }
 
-input[type=text]:hover {
+/* input[type=text]:hover {
     text-align: center;
     width: 1.5em;
     height: 1.5em;
-}
+} */
 
 #editedPrice {
     min-width: 33px;

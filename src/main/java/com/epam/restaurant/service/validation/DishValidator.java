@@ -6,7 +6,6 @@ import com.epam.restaurant.bean.criteria.SearchCriteria;
 import com.epam.restaurant.dao.DAOException;
 import com.epam.restaurant.dao.DAOProvider;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -16,22 +15,6 @@ public final class DishValidator {
     private static final Integer OK_STATUS = 0;
 
     private DishValidator() {
-    }
-
-    public static void validate(BigDecimal price, String name, String description, Integer categoryForAdd, String photoLink) throws ValidationException, DAOException {
-        if (price == null || !price.toString().matches(ValidationType.PRICE.getRegex())) {
-            throw new ValidationException(ValidationType.PRICE.getErrorMsg());
-        } else if (name == null || !name.matches(ValidationType.NAME.getRegex())) {
-            throw new ValidationException(ValidationType.NAME.getErrorMsg());
-        } else if (description == null) {
-            throw new ValidationException("DESCRIPTION shouldn't be null");
-        } else if (categoryForAdd == null || !categoryForAdd.toString().matches(ValidationType.ID.getRegex())) {
-            throw new ValidationException(ValidationType.ID.getErrorMsg());
-        } else if (photoLink == null) {
-            throw new ValidationException("PHOTO shouldn't be null");
-        }
-
-        checkAvailability(name, photoLink, ID_IS_MISSING);
     }
 
     public static void validate(Criteria criteria) throws ValidationException {
@@ -63,20 +46,20 @@ public final class DishValidator {
         }
     }
 
-    public static void validate(Integer editedDishId, String newDishName, String description, BigDecimal price, String photoLink) throws ValidationException, DAOException {
-        if (price == null || !price.toString().matches(ValidationType.PRICE.getRegex())) {
+    public static void validate(Dish dish) throws ValidationException, DAOException {
+        if (dish.getPrice() == null || !dish.getPrice().toString().matches(ValidationType.PRICE.getRegex())) {
             throw new ValidationException(ValidationType.PRICE.getErrorMsg());
-        } else if (newDishName == null || !newDishName.matches(ValidationType.NAME.getRegex())) {
+        } else if (dish.getName() == null || !dish.getName().matches(ValidationType.NAME.getRegex())) {
             throw new ValidationException(ValidationType.NAME.getErrorMsg());
-        } else if (description == null) {
+        } else if (dish.getDescription() == null) {
             throw new ValidationException("DESCRIPTION shouldn't be null");
-        } else if (editedDishId == null || !editedDishId.toString().matches(ValidationType.ID.getRegex())) {
+        } else if (!Integer.toString(dish.getId()).matches(ValidationType.ID.getRegex())) {
             throw new ValidationException(ValidationType.ID.getErrorMsg());
-        } else if (photoLink == null) {
+        } else if (dish.getPhotoLink() == null) {
             throw new ValidationException("PHOTO shouldn't be null");
         }
 
-        checkAvailability(newDishName, photoLink, editedDishId);
+        checkAvailability(dish.getName(), dish.getPhotoLink(), dish.getId());
     }
 
     /**
@@ -93,7 +76,7 @@ public final class DishValidator {
         criteria.add(SearchCriteria.Dishes.STATUS.name(), OK_STATUS);
 
         List<Dish> foundDishes = DAOProvider.getInstance().getMenuDAO().find(criteria);
-        if (!foundDishes.isEmpty() && id == null) {  // when  add new dish to menu
+        if (!foundDishes.isEmpty() && id == 0) {  // when  add new dish to menu
             throw new ValidationException("Dish with such NAME has already exist");
         } else if (!foundDishes.isEmpty() && foundDishes.get(FOUND_DISH_INDX).getId() != id) {  // when edit exist dish in menu
             throw new ValidationException("Dish with such NAME has already exist");
@@ -102,7 +85,7 @@ public final class DishValidator {
 
         criteria.add(SearchCriteria.Dishes.URL.name(), photoLink);
         foundDishes = DAOProvider.getInstance().getMenuDAO().find(criteria);
-        if (!foundDishes.isEmpty() && id == null) {  // when  add new dish to menu
+        if (!foundDishes.isEmpty() && id == 0) {  // when  add new dish to menu
             throw new ValidationException("Dish with such PHOTO has already exist");
         } else if (!foundDishes.isEmpty() && foundDishes.get(FOUND_DISH_INDX).getId() != id) {  // when edit exist dish in menu
             throw new ValidationException("Dish with such PHOTO has already exist");

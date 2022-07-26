@@ -11,11 +11,9 @@ import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
 import com.epam.restaurant.service.validation.CategoryValidator;
 import com.epam.restaurant.service.validation.DishValidator;
-import com.epam.restaurant.service.validation.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class MenuImpl implements MenuService {
@@ -75,11 +73,11 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public boolean editDish(Integer editedDishId, String newDishName, String description, BigDecimal price, String photoLink) throws ServiceException {
+    public boolean editDish(Dish dish) throws ServiceException {
         try {
-            DishValidator.validate(editedDishId, newDishName, description, price, photoLink);
+            DishValidator.validate(dish);
 
-            return menuDAO.editDish(editedDishId, newDishName, description, price, photoLink);
+            return menuDAO.editDish(dish);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -87,13 +85,13 @@ public class MenuImpl implements MenuService {
     }
 
     @Override
-    public int addDish(BigDecimal price, String name, String description, Integer categoryForAdd, String photoLink) throws ServiceException {
+    public int addDish(Dish dish) throws ServiceException {
         try {
-            DishValidator.validate(price, name, description, categoryForAdd, photoLink);
+            DishValidator.validate(dish);
             int id = 0;
 
             daoProvider.getTransactionDAO().startTransaction();
-            id = menuDAO.addDish(price, name, description, categoryForAdd, photoLink);
+            id = menuDAO.addDish(dish);
             daoProvider.getTransactionDAO().commit();
 
             return id;
