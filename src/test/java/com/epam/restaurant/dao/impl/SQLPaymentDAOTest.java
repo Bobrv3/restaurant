@@ -66,7 +66,7 @@ class SQLPaymentDAOTest {
     @Order(1)
     void createInvoice_idIsPositive_true() throws DAOException {
         int orderId = 1;
-        createdInvoiceId = paymentDAO.createInvoice(orderId);
+        createdInvoiceId = paymentDAO.createInvoice(orderId, true);
 
         Assertions.assertTrue(createdInvoiceId > 0);
 

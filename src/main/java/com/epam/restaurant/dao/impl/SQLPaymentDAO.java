@@ -27,11 +27,12 @@ public class SQLPaymentDAO implements PaymentDAO {
     private static final String GET_PAYMENT_METHODS_QUERY = "SELECT * FROM payment_methods";
 
     private static final String UNPAID = "unpaid";
+    private static final String PAID = "paid";
     private static final String SUCCESS = "success";
     private static final int GENERATED_KEY = 1;
 
     @Override
-    public int createInvoice(int orderId) throws DAOException {
+    public int createInvoice(int orderId, boolean isOnlinePay) throws DAOException {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         Connection connection = null;
@@ -43,8 +44,8 @@ public class SQLPaymentDAO implements PaymentDAO {
             }
 
             preparedStatement = connection.prepareStatement(INSERT_INVOICE_QUERY, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setTimestamp (1, new Timestamp(System.currentTimeMillis()));
-            preparedStatement.setString(2, UNPAID);
+            preparedStatement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setString(2, isOnlinePay ? PAID : UNPAID);
             preparedStatement.setInt(3, orderId);
             preparedStatement.executeUpdate();
 
@@ -121,7 +122,7 @@ public class SQLPaymentDAO implements PaymentDAO {
             }
 
             preparedStatement = connection.prepareStatement(INSERT_PAYMENT_QUERY, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setTimestamp (1, new Timestamp(System.currentTimeMillis()));
+            preparedStatement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(2, SUCCESS);
             preparedStatement.setInt(3, invoiceId);
             preparedStatement.setInt(4, paymentMethodId);

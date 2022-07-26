@@ -5,7 +5,9 @@ import com.epam.restaurant.bean.PaymentMethod;
 import java.util.List;
 
 public interface PaymentDAO {
-    int createInvoice(int orderId) throws DAOException;
+    int createInvoice(int orderId, boolean isOnlinePay) throws DAOException;
+
     List<PaymentMethod> getPaymentMethods() throws DAOException;
+
     int createPayment(int invoiceId, int paymentMethodId) throws DAOException;
 }

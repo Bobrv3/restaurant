@@ -21,13 +21,14 @@ public class OnlinePay implements Command {
     private static final String QUANTITY_OF_DISHES_ATTR = "quantityOfDishes";
     private static final String ORDER_ATTR = "order";
     private static final String FINISHING_THE_ORDER_ADDR = "/finishingTheOrder";
+    private static final boolean IS_ONLINE_PAY = true;
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         try {
             serviceProvider.getTransaction().startTransaction();
 
-            int invoiceId = PlaceOrder.setInvoice(request);
+            int invoiceId = PlaceOrder.setInvoice(request, IS_ONLINE_PAY);
 
             HttpSession session = request.getSession();
             int paymentMethodId = (Integer) session.getAttribute(PAYMENT_ATTR);

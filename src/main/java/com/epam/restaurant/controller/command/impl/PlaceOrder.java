@@ -29,6 +29,7 @@ public class PlaceOrder implements Command {
     private static final int CARD_ONLINE_ID = 2;
     private static final String FINISHING_THE_ORDER_ADDR = "/finishingTheOrder";
     private static final String ONLINE_PAY_ADDR = "/onlinePay";
+    private static final boolean IS_ONLINE_PAY = false;
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
@@ -45,7 +46,7 @@ public class PlaceOrder implements Command {
             } else {
                 serviceProvider.getTransaction().startTransaction();
 
-                setInvoice(request);
+                setInvoice(request, IS_ONLINE_PAY);
 
                 serviceProvider.getTransaction().commit();
 
@@ -64,7 +65,7 @@ public class PlaceOrder implements Command {
         }
     }
 
-    public static int setInvoice(HttpServletRequest request) throws ServiceException {
+    public static int setInvoice(HttpServletRequest request, boolean isOnlinePay) throws ServiceException {
         HttpSession session = request.getSession();
 
         // create order
@@ -84,7 +85,7 @@ public class PlaceOrder implements Command {
 
         // create invoice
         PaymentService paymentService = serviceProvider.getPaymentService();
-        int invoiceId = paymentService.createInvoice(orderId);
+        int invoiceId = paymentService.createInvoice(orderId, isOnlinePay);
 
         return invoiceId;
     }
