@@ -1,8 +1,10 @@
 package com.epam.restaurant.bean;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class PaymentMethod {
+public class PaymentMethod implements Serializable {
+    private static final long serialVersionUID = -3518737505016629342L;
     private int id;
     private String method;
 

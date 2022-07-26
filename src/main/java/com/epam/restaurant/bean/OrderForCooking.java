@@ -1,8 +1,10 @@
 package com.epam.restaurant.bean;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class OrderForCooking {
+public class OrderForCooking implements Serializable {
+    private static final long serialVersionUID = 2899503221119242930L;
     private long orderId;
     private String dishName;
     private int quantity;
