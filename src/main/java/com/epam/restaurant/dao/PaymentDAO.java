@@ -7,5 +7,5 @@ import java.util.List;
 public interface PaymentDAO {
     int createInvoice(int orderId) throws DAOException;
     List<PaymentMethod> getPaymentMethods() throws DAOException;
-    boolean createPayment(int invoiceId, int paymentMethodId) throws DAOException;
+    int createPayment(int invoiceId, int paymentMethodId) throws DAOException;
 }

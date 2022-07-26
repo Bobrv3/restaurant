@@ -28,7 +28,7 @@ public class SQLPaymentDAO implements PaymentDAO {
 
     private static final String UNPAID = "unpaid";
     private static final String SUCCESS = "success";
-    private static final int GENERATED_KEYS = 1;
+    private static final int GENERATED_KEY = 1;
 
     @Override
     public int createInvoice(int orderId) throws DAOException {
@@ -51,7 +51,7 @@ public class SQLPaymentDAO implements PaymentDAO {
             resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
 
-            return resultSet.getInt(GENERATED_KEYS);
+            return resultSet.getInt(GENERATED_KEY);
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -109,7 +109,7 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public boolean createPayment(int invoiceId, int paymentMethodId) throws DAOException {
+    public int createPayment(int invoiceId, int paymentMethodId) throws DAOException {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         Connection connection = null;
@@ -120,14 +120,17 @@ public class SQLPaymentDAO implements PaymentDAO {
                 connection = connectionPool.takeConnection();
             }
 
-            preparedStatement = connection.prepareStatement(INSERT_PAYMENT_QUERY);
+            preparedStatement = connection.prepareStatement(INSERT_PAYMENT_QUERY, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setTimestamp (1, new Timestamp(System.currentTimeMillis()));
             preparedStatement.setString(2, SUCCESS);
             preparedStatement.setInt(3, invoiceId);
             preparedStatement.setInt(4, paymentMethodId);
             preparedStatement.executeUpdate();
 
-            return true;
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            generatedKeys.next();
+
+            return generatedKeys.getInt(GENERATED_KEY);
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

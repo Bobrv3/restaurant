@@ -12,13 +12,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SQLOrderDAOTest {
     private static ConnectionPool connectionPool;
     private static final OrderDAO orderDAO = DAOProvider.getInstance().getOrderDAO();
@@ -27,6 +30,7 @@ class SQLOrderDAOTest {
     private static final String GET_ORDER_BY_ID = "SELECT * FROM orders WHERE id=%s";
     private static final String GET_COUNT_OF_COOKED_ORDER_BY_ID = "SELECT count(id) FROM orders WHERE user_id=%s AND order_status='cooked'";
     private static int createdDishId;
+    private static Criteria criteria;
     private static final int FOUND_ORDER_INDX = 0;
     private static final int ORDER_STATUS_INDX = 3;
     private static Connection connection;
@@ -48,6 +52,8 @@ class SQLOrderDAOTest {
     void setUp() throws SQLException, InterruptedException {
         connection = connectionPool.takeConnection();
         statement = connection.createStatement();
+
+        criteria = new Criteria();
     }
 
     @AfterEach
@@ -64,12 +70,14 @@ class SQLOrderDAOTest {
     }
 
     @Test
+    @org.junit.jupiter.api.Order(1)
     void createOrder_returnIdOfNewOrderMoreThan0_True() throws DAOException, InterruptedException, SQLException {
         createdDishId = orderDAO.createOrder(new Order(), 9);
         Assertions.assertTrue(createdDishId > 0);
     }
 
     @Test
+    @org.junit.jupiter.api.Order(2)
     void createOrderDetails_returnTrue() throws DAOException, SQLException {
         Assertions.assertTrue(orderDAO.createOrderDetails(createdDishId, 2, 3, "takeaway"));
 
@@ -85,7 +93,6 @@ class SQLOrderDAOTest {
         resultSet = statement.executeQuery(String.format(GET_ORDER_BY_ID, orderId));
         resultSet.next();
 
-        Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Orders.ID.name(), orderId);
 
         Assertions.assertEquals(resultSet.getTimestamp(2), orderDAO.find(criteria).get(FOUND_ORDER_INDX).getDateTime());
@@ -100,7 +107,6 @@ class SQLOrderDAOTest {
         resultSet = statement.executeQuery(String.format(GET_COUNT_OF_COOKED_ORDER_BY_ID, userId));
         resultSet.next();
 
-        Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Orders.USER_ID.name(), userId);
         criteria.add(SearchCriteria.Orders.ORDER_STATUS.name(), cookedStatus);
 
@@ -109,7 +115,6 @@ class SQLOrderDAOTest {
 
     @Test
     void findOrdersWithUsersInfo_SizeOfListMoreThan0_true() throws DAOException {
-        Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Orders.ORDER_STATUS.toString(), "cooked");
 
         Assertions.assertTrue(orderDAO.findOrdersWithUsersInfo(criteria).size() > 0);
@@ -131,7 +136,6 @@ class SQLOrderDAOTest {
 
     @Test
     void findOrdersWithDishInfo_SizeOfListMoreThan0_true() throws DAOException {
-        Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Orders.ORDER_STATUS.name(), "cooked");
 
         Assertions.assertTrue(orderDAO.findOrdersWithDishInfo(criteria).size() > 0);

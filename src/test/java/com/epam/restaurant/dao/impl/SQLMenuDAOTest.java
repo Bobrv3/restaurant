@@ -35,6 +35,7 @@ class SQLMenuDAOTest {
     private static final String DELETE_CATEGORY_QUERY = "DELETE FROM categories WHERE id=%s";
     private static final String DELETE_DISH_QUERY = "DELETE FROM menu WHERE dishes_id=%s";
     private static final String DELETE_DISH_PHOTO_QUERY = "DELETE FROM dish_photos WHERE menu_dishes_id=%s";
+    private Criteria criteria;
     private static Connection connection;
     private static Statement statement;
     private static ResultSet resultSet;
@@ -55,6 +56,8 @@ class SQLMenuDAOTest {
     void setUp() throws SQLException, InterruptedException {
         connection = connectionPool.takeConnection();
         statement = connection.createStatement();
+
+        criteria = new Criteria();
     }
 
     @AfterEach
@@ -72,7 +75,6 @@ class SQLMenuDAOTest {
 
     @Test
     void getMenu_Success_true() throws DAOException {
-        Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), 2);
 
         Dish dishWithSecondId = menuDAO.find(criteria).get(0);
@@ -92,8 +94,6 @@ class SQLMenuDAOTest {
 
     @Test
     void find_DishWithCriteriaNoExist_emptyList_true() throws DAOException {
-        Criteria criteria = new Criteria();
-
         String noExistDishName = "sfsdfsdfsgs";
         criteria.add(SearchCriteria.Dishes.NAME.toString(), noExistDishName);
 
@@ -102,7 +102,6 @@ class SQLMenuDAOTest {
 
     @Test
     void find_DishWithCriteriaExist_true() throws DAOException, SQLException, InterruptedException {
-        Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.STATUS.toString(), "0");
 
         ResultSet resultSet = statement.executeQuery(GET_NUM_OF_OK_STATUS_DISHES_QUERY);
@@ -121,7 +120,6 @@ class SQLMenuDAOTest {
         resultSet.next();
         int currentStatus = resultSet.getInt(1);
 
-        Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), dishToRemove);
 
         int numOfRemovedDishes = 1;
@@ -134,8 +132,6 @@ class SQLMenuDAOTest {
 
     @Test
     void editCategory_ResultOfUpdateMoreThan0_true() throws DAOException {
-        Criteria criteria = new Criteria();
-
         int editedCategoryId = 2;
         criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), editedCategoryId);
 
