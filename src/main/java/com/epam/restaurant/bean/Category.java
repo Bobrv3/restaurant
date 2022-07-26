@@ -1,7 +1,6 @@
 package com.epam.restaurant.bean;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class Category implements Serializable {
     private static final long serialVersionUID = 5094551711860514907L;
@@ -44,15 +43,26 @@ public class Category implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return id == category.id && Objects.equals(name, category.name) && Objects.equals(status, category.status);
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Category that = (Category) o;
+        return id == that.id
+                && ((name == that.name) || (name != null && name.equals(that.name)))
+                && ((status == that.status) || (status != null && status.equals(that.status)));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, status);
+        final int prime = 31;
+        int result = id;
+        result = prime * result + (name != null ? name.hashCode() : 0);
+        result = prime * result + (status != null ? status.hashCode() : 0);
+        return result;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.epam.restaurant.bean;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class AuthorizedUser implements Serializable {
     private static final long serialVersionUID = 3350492538842423262L;
@@ -44,15 +43,26 @@ public class AuthorizedUser implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         AuthorizedUser that = (AuthorizedUser) o;
-        return roleId == that.roleId && Objects.equals(login, that.login) && Objects.equals(name, that.name);
+        return roleId == that.roleId
+                && ((login == that.login) || (login != null && login.equals(that.login)))
+                && ((name == that.name) || (name != null && name.equals(that.name)));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login, name, roleId);
+        final int prime = 31;
+        int result = roleId;
+        result = prime * result + (login != null ? login.hashCode() : 0);
+        result = prime * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 
     @Override

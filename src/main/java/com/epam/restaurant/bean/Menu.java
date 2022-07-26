@@ -3,7 +3,6 @@ package com.epam.restaurant.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Menu implements Serializable {
     private static final long serialVersionUID = -1445447307917783855L;
@@ -34,15 +33,20 @@ public class Menu implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Menu menu = (Menu) o;
-        return Objects.equals(dishes, menu.dishes);
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Menu that = (Menu) o;
+        return (dishes == that.dishes) || (dishes != null && dishes.equals(that.dishes));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dishes);
+        return dishes != null ? dishes.hashCode() : 0;
     }
 
     @Override

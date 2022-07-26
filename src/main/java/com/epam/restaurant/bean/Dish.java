@@ -2,7 +2,6 @@ package com.epam.restaurant.bean;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 public class Dish implements Serializable {
     private static final long serialVersionUID = 8271867801723000721L;
@@ -75,15 +74,31 @@ public class Dish implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Dish dish = (Dish) o;
-        return id == dish.id && categoryId == dish.categoryId && Objects.equals(price, dish.price) && Objects.equals(name, dish.name) && Objects.equals(description, dish.description) && Objects.equals(photoLink, dish.photoLink);
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Dish that = (Dish) o;
+        return id == that.id
+                && categoryId == that.categoryId
+                && ((price == that.price) || (price != null && price.equals(that.price)))
+                && ((name == that.name) || (name != null && name.equals(that.name)))
+                && ((description == that.description) || (description != null && description.equals(that.description)))
+                && ((photoLink == that.photoLink) || (photoLink != null && photoLink.equals(that.photoLink)));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, price, name, description, categoryId, photoLink);
+        final int prime = 31;
+        int result = id + categoryId;
+        result = prime * result + (price != null ? price.hashCode() : 0);
+        result = prime * result + (name != null ? name.hashCode() : 0);
+        result = prime * result + (description != null ? description.hashCode() : 0);
+        result = prime * result + (photoLink != null ? photoLink.hashCode() : 0);
+        return result;
     }
 
     @Override

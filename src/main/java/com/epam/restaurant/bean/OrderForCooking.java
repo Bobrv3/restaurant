@@ -1,7 +1,6 @@
 package com.epam.restaurant.bean;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class OrderForCooking implements Serializable {
     private static final long serialVersionUID = 2899503221119242930L;
@@ -54,20 +53,33 @@ public class OrderForCooking implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderForCooking order = (OrderForCooking) o;
-        return orderId == order.orderId && quantity == order.quantity && Objects.equals(dishName, order.dishName) && Objects.equals(methodOfReceiving, order.methodOfReceiving);
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        OrderForCooking that = (OrderForCooking) o;
+        return orderId == that.orderId
+                && quantity == that.quantity
+                && ((dishName == that.dishName) || (dishName != null && dishName.equals(that.dishName)))
+                && ((methodOfReceiving == that.methodOfReceiving) || (methodOfReceiving != null && methodOfReceiving.equals(that.methodOfReceiving)));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, dishName, quantity, methodOfReceiving);
+        final int prime = 31;
+        int result = (int) (orderId ^ (orderId >>> 32));
+        result = prime * result + (dishName != null ? dishName.hashCode() : 0);
+        result = prime * result + (methodOfReceiving != null ? methodOfReceiving.hashCode() : 0);
+        result = prime * result + quantity;
+        return result;
     }
 
     @Override
     public String toString() {
-        return "OrderForCooking{" +
+        return getClass().getSimpleName() + " {" +
                 "orderId=" + orderId +
                 ", dishName='" + dishName + '\'' +
                 ", quantity=" + quantity +

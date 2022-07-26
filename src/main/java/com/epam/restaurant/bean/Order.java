@@ -5,12 +5,11 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class Order implements Serializable {
     private static final long serialVersionUID = -2174330731093191175L;
     private long id = 0;
-    private Map<Dish, Integer> orderList = new HashMap<>();
+    private Map<Dish, Integer> orderList = new HashMap<>(); // dish-amount
     private BigDecimal totalPrice;
     private Timestamp dateTime;
     private String methodOfReceiving;
@@ -79,15 +78,32 @@ public class Order implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-        return id == order.id && Objects.equals(orderList, order.orderList) && Objects.equals(totalPrice, order.totalPrice) && Objects.equals(dateTime, order.dateTime) && Objects.equals(methodOfReceiving, order.methodOfReceiving) && Objects.equals(status, order.status);
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Order that = (Order) o;
+        return id == that.id
+                && ((orderList == that.orderList) || (orderList != null && orderList.equals(that.orderList)))
+                && ((totalPrice == that.totalPrice) || (totalPrice != null && totalPrice.equals(that.totalPrice)))
+                && ((dateTime == that.dateTime) || (dateTime != null && dateTime.equals(that.dateTime)))
+                && ((methodOfReceiving == that.methodOfReceiving) || (methodOfReceiving != null && methodOfReceiving.equals(that.methodOfReceiving)))
+                && ((status == that.status) || (status != null && status.equals(that.status)));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, orderList, totalPrice, dateTime, methodOfReceiving, status);
+        final int prime = 31;
+        int result = (int) (id ^ (id >>> 32));
+        result = prime * result + (orderList != null ? orderList.hashCode() : 0);
+        result = prime * result + (totalPrice != null ? totalPrice.hashCode() : 0);
+        result = prime * result + (dateTime != null ? dateTime.hashCode() : 0);
+        result = prime * result + (methodOfReceiving != null ? methodOfReceiving.hashCode() : 0);
+        result = prime * result + (status != null ? status.hashCode() : 0);
+        return result;
     }
 
     @Override

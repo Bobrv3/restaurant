@@ -1,7 +1,6 @@
 package com.epam.restaurant.bean;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class PaymentMethod implements Serializable {
     private static final long serialVersionUID = -3518737505016629342L;
@@ -34,20 +33,29 @@ public class PaymentMethod implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         PaymentMethod that = (PaymentMethod) o;
-        return id == that.id && Objects.equals(method, that.method);
+        return id == that.id
+                && ((method == that.method) || (method != null && method.equals(that.method)));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, method);
+        final int prime = 31;
+        int result = id;
+        result = prime * result + (method != null ? method.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
-        return "PaymentMethod{" +
+        return getClass().getSimpleName() + " {" +
                 "id=" + id +
                 ", method='" + method + '\'' +
                 '}';
