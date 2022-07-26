@@ -15,15 +15,6 @@
     <location>/WEB-INF/jsp/Error.jsp</location>
   </error-page>
 
-  <filter>
-    <filter-name>CharsetFilter</filter-name>
-    <filter-class>com.epam.restaurant.controller.util.CharsetFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>CharsetFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-
   <servlet>
     <servlet-name>Home</servlet-name>
     <jsp-file>/index.jsp</jsp-file>

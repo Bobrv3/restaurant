@@ -1,4 +1,4 @@
-package com.epam.restaurant.controller.util;
+package com.epam.restaurant.controller.filter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,14 +9,16 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
+@WebFilter("/*")
 public class CharsetFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(CharsetFilter.class);
     private static final String ENCODING = "utf-8";
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         LOGGER.info("CharsetFilter is initialized");
     }
 

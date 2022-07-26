@@ -126,7 +126,7 @@ class SQLUserDAOTest {
     @Test
     void updateUserPhone_succsesfull_true() throws DAOException {
         RegistrationUserData userData = new RegistrationUserData();
-        userData.setName(existentUser.getPhoneNumber());
+        userData.setPhoneNumber(existentUser.getPhoneNumber());
 
         userData.setLogin(existentUser.getLogin());
         Assertions.assertEquals(existentUser.getPhoneNumber(),userDAO.updateUser(userData).getPhoneNumber());
