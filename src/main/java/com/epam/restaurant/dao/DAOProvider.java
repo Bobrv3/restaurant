@@ -7,6 +7,9 @@ import com.epam.restaurant.dao.impl.SQLUserDAO;
 import com.epam.restaurant.dao.util.TransactionDAO;
 import com.epam.restaurant.dao.util.TransactionImpl;
 
+/**
+ * The ${@code DAOProvider} class provides implementations of DAO-level interfaces
+ */
 public class DAOProvider {
     private static final DAOProvider instance = new DAOProvider();
     private final UserDAO userDAOImpl = new SQLUserDAO();

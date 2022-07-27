@@ -2,6 +2,7 @@ package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Menu;
+import com.epam.restaurant.bean.builder.DishBuilder;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class EditDish implements Command {
     private static final Logger LOGGER = LogManager.getLogger(EditDish.class);
-    private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
+    private static final MenuService menuService = ServiceProvider.getInstance().getMenuService();
 
     private static final String DISH_NAME_PARAM = "dishName";
     private static final String EDITED_DISH_ID_PARAM = "editedDishId";
@@ -30,7 +31,6 @@ public class EditDish implements Command {
     private static final String PRICE_PARAM = "price";
     private static final String PHOTO_LINK_PARAM = "photoLink";
     private static final String MENU_ATTR = "menu";
-    private static final int CATEGORY_NOT_USED = -1;
     private static final String PATH_TO_PHOTO = "../../images/dishes/{0}";
     private static final String JSON_UTF8_TYPE = "application/json; charset=UTF-8";
     private static final String ERROR_MSG_JSON = "{\"validationError\": \"true\", \"message\": \"%s\"}";
@@ -48,13 +48,20 @@ public class EditDish implements Command {
             BigDecimal price = new BigDecimal(request.getParameter(PRICE_PARAM));
             String photoLink = MessageFormat.format(PATH_TO_PHOTO, request.getParameter(PHOTO_LINK_PARAM));
 
-            editCategoryInDB(editedDishId, newDishName, description, price, photoLink);
+            Dish editedDish = new DishBuilder()
+                    .setId(editedDishId)
+                    .setPrice(price)
+                    .setName(newDishName)
+                    .setDescription(description)
+                    .setPhotoLink(photoLink)
+                    .build();
 
-            editDishInSession(request, editedDishId, newDishName, description, price, photoLink);
+            menuService.editDish(editedDish);
+            editDishInSession(request, editedDish);
 
             response.setContentType(JSON_UTF8_TYPE);
-            // todo переделать здесь либо в editdish.js
-            writer.println(new Gson().toJson(new Dish(editedDishId, price, newDishName, description, CATEGORY_NOT_USED, photoLink)));
+
+            writer.println(new Gson().toJson(editedDish));
         } catch (IOException e) {
             try {
                 LOGGER.error("Error to get writer when try to Edit Dish in Menu", e);
@@ -70,25 +77,18 @@ public class EditDish implements Command {
         }
     }
 
-    // todo через билдер
-    private void editDishInSession(HttpServletRequest request, int editedDishId, String newDishName, String description, BigDecimal price, String photoLink) {
+    private void editDishInSession(HttpServletRequest request, Dish editedDish) {
         Menu menu = (Menu) request.getSession().getAttribute(MENU_ATTR);
         List<Dish> dishes = menu.getDishes();
 
         for (Dish dish : dishes) {
-            if (dish.getId() == editedDishId) {
-                dish.setName(newDishName);
-                dish.setDescription(description);
-                dish.setPrice(price.setScale(1));
-                dish.setPhotoLink(photoLink);
+            if (dish.getId() == editedDish.getId()) {
+                dish.setName(editedDish.getName());
+                dish.setDescription(editedDish.getDescription());
+                dish.setPrice(editedDish.getPrice().setScale(1));
+                dish.setPhotoLink(editedDish.getPhotoLink());
                 break;
             }
         }
-    }
-
-    private void editCategoryInDB(int editedDishId, String newDishName, String description, BigDecimal price, String photoLink) throws ServiceException {
-        MenuService menuService = serviceProvider.getMenuService();
-
-        menuService.editDish(editedDishId, newDishName, description, price, photoLink);
     }
 }

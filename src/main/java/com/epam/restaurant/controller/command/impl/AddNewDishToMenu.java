@@ -2,6 +2,7 @@ package com.epam.restaurant.controller.command.impl;
 
 import com.epam.restaurant.bean.Dish;
 import com.epam.restaurant.bean.Menu;
+import com.epam.restaurant.bean.builder.DishBuilder;
 import com.epam.restaurant.controller.command.Command;
 import com.epam.restaurant.service.MenuService;
 import com.epam.restaurant.service.ServiceException;
@@ -20,9 +21,12 @@ import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.List;
 
+/**
+ * The ${@code AddNewDishToMenu} class provides adding a new dish to the menu and database
+ */
 public class AddNewDishToMenu implements Command {
     private static final Logger LOGGER = LogManager.getLogger(AddNewDishToMenu.class);
-    private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
+    private static final MenuService menuService = ServiceProvider.getInstance().getMenuService();
 
     private static final String CATEGORY_FOR_ADD_PARAM = "categoryForAdd";
     private static final String DISH_NAME_PARAM = "dishName";
@@ -34,6 +38,13 @@ public class AddNewDishToMenu implements Command {
     private static final String JSON_UTF8_TYPE = "application/json; charset=UTF-8";
     private static final String ERROR_MSG_JSON = "{\"validationError\": \"true\", \"message\": \"%s\"}";
 
+    /**
+     * Provides the addition of a new dish to the session menu and adds it to the database
+     * @param request client request
+     * @param response response to the client
+     * @throws ServiceException if an error occurred at the service level
+     * @throws ServletException if an error occurred during execute command
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         PrintWriter writer = null;
@@ -47,8 +58,13 @@ public class AddNewDishToMenu implements Command {
             BigDecimal price = new BigDecimal(request.getParameter(PRICE_PARAM));
             String photoLink = MessageFormat.format(PATH_TO_PHOTO, request.getParameter(PHOTO_LINK_PARAM));
 
-            MenuService menuService = serviceProvider.getMenuService();
-            int newDishId = menuService.addDish(price, dishName, description, categoryForAdd, photoLink);
+            int newDishId = menuService.addDish(new DishBuilder()
+                    .setPrice(price)
+                    .setName(dishName)
+                    .setDescription(description)
+                    .setCategoryId(categoryForAdd)
+                    .setPhotoLink(photoLink)
+                    .build());
 
             Menu menu = (Menu) request.getSession().getAttribute(MENU_ATTR);
             List<Dish> dishes = menu.getDishes();

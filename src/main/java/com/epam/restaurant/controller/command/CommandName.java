@@ -1,5 +1,9 @@
 package com.epam.restaurant.controller.command;
 
+/**
+ * Enumeration of available commands to be executed by the controller
+ * @see CommandProvider
+ */
 public enum CommandName {
     NONAME_COMMAND,
     AUTHORIZATION,

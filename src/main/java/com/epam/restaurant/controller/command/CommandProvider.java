@@ -37,6 +37,9 @@ import org.apache.logging.log4j.Logger;
 import java.util.EnumMap;
 import java.util.Map;
 
+/**
+ * The ${@code CommandProvider} class provides a mapping between the command name and its class
+ */
 public final class CommandProvider {
     private static final Logger LOGGER = LogManager.getLogger(CommandProvider.class);
     private static final CommandProvider instance = new CommandProvider();

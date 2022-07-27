@@ -49,7 +49,7 @@ public class EditPersonalInfo implements Command {
             }
             dataToEdit.setLogin(sessionAuthUser.getLogin());
 
-            final RegistrationUserData updatedUserData = serviceProvider.getUserService().updateUser(dataToEdit);
+            RegistrationUserData updatedUserData = serviceProvider.getUserService().updateUser(dataToEdit);
             request.getSession().setAttribute(USER_DATA_ATTR, updatedUserData);
 
             response.sendRedirect(PERSINAL_INFO_PAGE_ADDR);

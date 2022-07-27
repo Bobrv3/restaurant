@@ -12,6 +12,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
+/**
+ * The ${@code CharsetFilter} class is used to set the encoding value for requests and responses
+ */
 @WebFilter("/*")
 public class CharsetFilter implements Filter {
     private static final Logger LOGGER = LogManager.getLogger(CharsetFilter.class);

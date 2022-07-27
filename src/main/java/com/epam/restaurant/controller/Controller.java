@@ -23,7 +23,7 @@ public class Controller extends HttpServlet {
     private static final String ERROR_PAGE_ADDR = "/errorPage?errorMsg=%s";
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Command command = commandProvider.getCommand(req.getParameter(PARAMETER_COMMAND).toUpperCase());
 
         try {
@@ -31,23 +31,19 @@ public class Controller extends HttpServlet {
         } catch (ServiceException | ServletException e) {
             LOGGER.error(e.getMessage(), e);
 
-            try {
-                int lastIndx = e.getMessage().lastIndexOf(":");
-                if (lastIndx == -1) {
-                    String errorMsg = e.getMessage();
-                    resp.sendRedirect(String.format(ERROR_PAGE_ADDR, errorMsg));
-                } else {
-                    String errorMsg = e.getMessage().substring(lastIndx);
-                    resp.sendRedirect(String.format(ERROR_PAGE_ADDR, errorMsg));
-                }
-            } catch (IOException ex) {
-                LOGGER.error("Error: invalid address to redirect");
+            int lastIndx = e.getMessage().lastIndexOf(":");
+            if (lastIndx == -1) {
+                String errorMsg = e.getMessage();
+                resp.sendRedirect(String.format(ERROR_PAGE_ADDR, errorMsg));
+            } else {
+                String errorMsg = e.getMessage().substring(lastIndx);
+                resp.sendRedirect(String.format(ERROR_PAGE_ADDR, errorMsg));
             }
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         doGet(req, resp);
     }
 }

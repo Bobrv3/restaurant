@@ -7,6 +7,9 @@ import com.epam.restaurant.service.impl.UserImpl;
 import com.epam.restaurant.service.util.TransactionImpl;
 import com.epam.restaurant.service.util.TransactionService;
 
+/**
+ * The ${@code ServiceProvider} class provides implementations of service-level interfaces
+ */
 public class ServiceProvider {
     private static final ServiceProvider instance = new ServiceProvider();
     private final UserService userService = new UserImpl();

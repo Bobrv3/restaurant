@@ -15,6 +15,7 @@ import java.io.IOException;
 
 /**
  * The {@code AJAXcontroller} class is designed to process asynchronous requests from the client and return results
+ *
  * @see CommandProvider
  */
 @WebServlet("/ajaxController")
@@ -24,7 +25,7 @@ public class AJAXcontroller extends HttpServlet {
     private static final String PARAMETER_COMMAND = "command";
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Command command = commandProvider.getCommand(req.getParameter(PARAMETER_COMMAND).toUpperCase());
 
         try {
@@ -32,22 +33,18 @@ public class AJAXcontroller extends HttpServlet {
         } catch (ServiceException | ServletException e) {
             LOGGER.error(e.getMessage(), e);
 
-            try {
-                int lastIndx = e.getMessage().lastIndexOf(":");
-                if (lastIndx == -1) {
-                    resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-                } else {
-                    String errorMsg = e.getMessage().substring(lastIndx);
-                    resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMsg);
-                }
-            } catch (IOException ex) {
-                LOGGER.error("IOError when trying to send error..");
+            int lastIndx = e.getMessage().lastIndexOf(":");
+            if (lastIndx == -1) {
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            } else {
+                String errorMsg = e.getMessage().substring(lastIndx);
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMsg);
             }
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         doGet(req, resp);
     }
 }

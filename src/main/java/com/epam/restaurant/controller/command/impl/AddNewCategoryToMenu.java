@@ -17,9 +17,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+/**
+ * The ${@code AddNewCategoryToMenu} class provides adding a new category to the menu and database
+ */
 public class AddNewCategoryToMenu implements Command {
     private static final Logger LOGGER = LogManager.getLogger(AddNewCategoryToMenu.class);
-    private static final ServiceProvider serviceProvider = ServiceProvider.getInstance();
+    private static final MenuService menuService = ServiceProvider.getInstance().getMenuService();
 
     private static final String CATEGORY_NAME = "categoryName";
     private static final String CATEGORIES_ATTR = "categories";
@@ -27,6 +30,13 @@ public class AddNewCategoryToMenu implements Command {
     private static final String JSON_UTF8_TYPE = "application/json; charset=UTF-8";
     private static final String ERROR_MSG_JSON = "{\"validationError\": \"true\", \"message\": \"%s\"}";
 
+    /**
+     * Provides the addition of a new category to the session menu and adds it to the database
+     * @param request client request
+     * @param response response to the client
+     * @throws ServiceException if an error occurred at the service level
+     * @throws ServletException if an error occurred during execute command
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         String categoryName = request.getParameter(CATEGORY_NAME);
@@ -35,11 +45,10 @@ public class AddNewCategoryToMenu implements Command {
         try {
             writer = response.getWriter();
 
-            MenuService menuService = serviceProvider.getMenuService();
             int categoryId = menuService.addCategory(categoryName);
+            Category createdCategory = new Category(categoryId, categoryName, OK_STATUS);
 
             List<Category> categories = (List<Category>) request.getSession().getAttribute(CATEGORIES_ATTR);
-            Category createdCategory = new Category(categoryId, categoryName, OK_STATUS);
             categories.add(createdCategory);
 
             response.setContentType(JSON_UTF8_TYPE);

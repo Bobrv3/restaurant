@@ -18,12 +18,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Map;
 
+/**
+ * The ${@code AddDishToOrder} class provides adding a dish to an order
+ */
 public class AddDishToOrder implements Command {
     private static final Logger LOGGER = LogManager.getLogger(AddDishToOrder.class);
-    private static final ServiceProvider serviceProvider =  ServiceProvider.getInstance();
+    private static final MenuService menuService =  ServiceProvider.getInstance().getMenuService();
 
     private static final String ORDER_ATTR = "order";
     private static final String QUANTITY_OF_DISHES_ATTR = "quantityOfDishes";
@@ -35,6 +37,13 @@ public class AddDishToOrder implements Command {
 
     private static final int FOUND_DISH = 0;
 
+    /**
+     * Provides the adding of the specified number of dishes to the order, and puts it in the session
+     * @param request client request
+     * @param response response to the client
+     * @throws ServiceException if an error occurred at the service level
+     * @throws ServletException if an error occurred during execute command
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ServletException {
         HttpSession session = request.getSession();
@@ -42,19 +51,14 @@ public class AddDishToOrder implements Command {
 
         order = checkOrderExist(session, order);
 
-        String dishId = request.getParameter(DISH_ID_PARAM);
-
-        Criteria criteria = new Criteria();
-        criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), dishId);
-
         PrintWriter writer = null;
         try {
             writer = response.getWriter();
 
-            MenuService menuService = serviceProvider.getMenuService();
-            List<Dish> dishes = menuService.find(criteria);
+            Criteria criteria = new Criteria();
+            criteria.add(SearchCriteria.Dishes.DISHES_ID.toString(), request.getParameter(DISH_ID_PARAM));
 
-            Dish dish = dishes.get(FOUND_DISH);
+            Dish dish = menuService.find(criteria).get(FOUND_DISH);
             Integer newQuantity = Integer.parseInt(request.getParameter(QUANTITY_PARAM));
 
             if (order.getOrderList().containsKey(dish)) {
@@ -85,6 +89,12 @@ public class AddDishToOrder implements Command {
         }
     }
 
+    /**
+     * Checks if the user had an order earlier and returns it, otherwise creates a new one
+     * @param session current session between client and server
+     * @param order the current customer order stored in the session
+     * @return an existing client order in the session, otherwise creates a new one
+     */
     private Order checkOrderExist(HttpSession session, Order order) {
         if (order == null) {
             order = new Order();
@@ -96,6 +106,12 @@ public class AddDishToOrder implements Command {
         return order;
     }
 
+    /**
+     * Sets the number of dishes per session. It is necessary to display the number of dishes in the order on the
+     * user's page
+     * @param orderList contains a map of dishes and their quantities
+     * @param session current session between client and server
+     */
     private void setQuantityOfDishesToSession(Map<Dish, Integer> orderList, HttpSession session) {
         Integer count = 0;
 

@@ -23,7 +23,7 @@ public class OrderImpl implements OrderService {
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
     private static final UserDAO userDAO = daoProvider.getUserDAO();
     private static final OrderDAO orderDAO = daoProvider.getOrderDAO();
-
+    //TODO validation
     @Override
     public int createOder(Order order, String userLogin) throws ServiceException {
         Criteria criteria = new Criteria();
