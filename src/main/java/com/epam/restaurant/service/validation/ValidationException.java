@@ -2,6 +2,9 @@ package com.epam.restaurant.service.validation;
 
 import com.epam.restaurant.service.ServiceException;
 
+/**
+ * The ${@code ValidationException} occurs in case of validation error
+ */
 public class ValidationException extends ServiceException {
     public ValidationException() {
     }

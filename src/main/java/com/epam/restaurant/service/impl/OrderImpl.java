@@ -11,6 +11,7 @@ import com.epam.restaurant.dao.OrderDAO;
 import com.epam.restaurant.dao.UserDAO;
 import com.epam.restaurant.service.OrderService;
 import com.epam.restaurant.service.ServiceException;
+import com.epam.restaurant.service.validation.OrderValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,9 +24,11 @@ public class OrderImpl implements OrderService {
     private static final DAOProvider daoProvider = DAOProvider.getInstance();
     private static final UserDAO userDAO = daoProvider.getUserDAO();
     private static final OrderDAO orderDAO = daoProvider.getOrderDAO();
-    //TODO validation
+
     @Override
     public int createOder(Order order, String userLogin) throws ServiceException {
+        OrderValidator.validate(order, userLogin);
+
         Criteria criteria = new Criteria();
         criteria.add(SearchCriteria.Users.LOGIN.toString(), userLogin);
 
@@ -43,6 +46,8 @@ public class OrderImpl implements OrderService {
 
     @Override
     public boolean createOderDetail(int oderId, int menuId, Integer quantity, String methodOfReceiving) throws ServiceException {
+        OrderValidator.validate(oderId, menuId, quantity, methodOfReceiving);
+
         try {
             return orderDAO.createOrderDetails(oderId, menuId, quantity, methodOfReceiving);
         } catch (DAOException e) {
@@ -52,6 +57,8 @@ public class OrderImpl implements OrderService {
 
     @Override
     public List<Order> getHistoryOfOrders(int userId) throws ServiceException {
+        OrderValidator.validate(userId);
+
         try {
             return orderDAO.getHistoryOfOrders(userId);
         } catch (DAOException e) {
@@ -61,6 +68,8 @@ public class OrderImpl implements OrderService {
 
     @Override
     public Map<Order, RegistrationUserData> findOrdersWithUsersInfo(Criteria criteria) throws ServiceException {
+        OrderValidator.validate(criteria);
+
         try {
             return orderDAO.findOrdersWithUsersInfo(criteria);
         } catch (DAOException e) {
@@ -79,6 +88,8 @@ public class OrderImpl implements OrderService {
 
     @Override
     public List<OrderForCooking> findOrdersWithDishInfo(Criteria criteria) throws ServiceException {
+        OrderValidator.validate(criteria);
+
         try {
             return orderDAO.findOrdersWithDishInfo(criteria);
         } catch (DAOException e) {
@@ -88,6 +99,8 @@ public class OrderImpl implements OrderService {
 
     @Override
     public List<Order> find(Criteria orderCriteria) throws ServiceException {
+        OrderValidator.validate(orderCriteria);
+
         try {
             return orderDAO.find(orderCriteria);
         } catch (DAOException e) {
