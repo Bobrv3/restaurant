@@ -92,6 +92,6 @@
 
             </body>
 
-            <script src="../../js/Menu/AddReduceBtn.js"></script>
+            <script src="../../js/CurrentOrder/CurrentOrder.js"></script>
 
             </html>
