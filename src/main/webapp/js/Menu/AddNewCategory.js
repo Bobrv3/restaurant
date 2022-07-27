@@ -1,4 +1,9 @@
-function showCategoryEditFormForAdd() {
+var gSaveFmt;
+var gAddFmt;
+function showCategoryEditFormForAdd(saveFmt, addFmt) {
+    gSaveFmt = saveFmt;
+    gAddFmt = addFmt;
+
     document.querySelector('#create-category-txtbtn').hidden = true;
 
     const textInp = document.createElement('input');
@@ -77,14 +82,14 @@ function onCategoryCreated(response) {
 
         const table = document.createElement('table');
         table.innerHTML =
-            `<tr>
+            `<tr id="addNewDishTr${categoryId}">
                 <td colspan="5">
-                    <a href="/home?createDish=true&categoryForAdd=${categoryId}">
-                        <img src="../../images/addContent.png" alt="add dish" id="imgAddContent">
-                    </a>
+                    <input type="image" src="../../images/addContent.png" alt="add dish" id="imgAddContent">
                 </td>
             </tr>`;
         main.insertBefore(table, createCategoryForm);
+
+        document.querySelector(`#addNewDishTr${categoryId}`).addEventListener("click", () => { showCreateDishFrom(categoryId, gSaveFmt, gAddFmt) })
 
         createCategoryForm.hidden = false;
         document.querySelector('#editCategoryForm').remove();

@@ -89,7 +89,7 @@
             <h2 id="create-category-txtbtn" class="CategoryName">
                 ${addCategoryFmt}
                 <input id="add-category-btn" type="image" src="../../images/addContent.png"
-                    onclick="showCategoryEditFormForAdd()">
+                    onclick="showCategoryEditFormForAdd(`${saveFmt}`, `${btnAddFmt}`)">
             </h2>
         </c:if>
 
