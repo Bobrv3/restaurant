@@ -25,6 +25,6 @@ Restaurant system. The Client makes an order from the Menu. The administrator co
 ### Database scheme
 
 <p align="center">
-  <img src="https://github.com/Bobrv3/restaurant/blob/main/resources/db_scheme.png" width="1000" title="hover text">
+  <img src="https://github.com/Bobrv3/restaurant/blob/src/main/resources/db_scheme.png" width="1000" title="hover text">
 
 </p>
